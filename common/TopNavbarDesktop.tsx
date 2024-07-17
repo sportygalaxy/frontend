@@ -21,8 +21,10 @@ import { Button } from "@/components/ui/button";
 import { RoutesEnum } from "@/constants/routeEnums";
 import HeaderActiveLink from "./HeaderActiveLink";
 import Logo from "./Logo";
+import useToggle from "@/hooks/useToggle";
 
 const TopNavbarDesktop = () => {
+  const [openUploadModal, toggleUploadModal] = useToggle();
   const { isMd } = useBreakpoint();
 
   const iconSize = {
@@ -73,8 +75,9 @@ const TopNavbarDesktop = () => {
     console.log("Search icon clicked");
   };
 
-  const handleClearClick = () => {
+  const handleCameraClick = () => {
     setInputValue("");
+    toggleUploadModal();
     console.log("Clear icon clicked");
   };
 
@@ -131,7 +134,7 @@ const TopNavbarDesktop = () => {
         <Search
           placeholder="Search.."
           onSearchClick={handleSearchClick}
-          onClearClick={handleClearClick}
+          onClearClick={handleCameraClick}
           value={inputValue}
           onChange={handleChange}
         />
@@ -168,7 +171,7 @@ const TopNavbarDesktop = () => {
       </section>
 
       {/* Upload modal */}
-      {/* <Upload /> */}
+      <Upload onClose={toggleUploadModal} open={openUploadModal} />
     </div>
   );
 };

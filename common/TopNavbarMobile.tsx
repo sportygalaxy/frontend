@@ -3,16 +3,19 @@ import { Search } from "@/components/search";
 import { useState } from "react";
 import Upload from "./Upload";
 import Logo from "./Logo";
+import useToggle from "@/hooks/useToggle";
 
 const TopNavbarMobile = () => {
+  const [openUploadModal, toggleUploadModal] = useToggle();
   const [inputValue, setInputValue] = useState("");
 
   const handleSearchClick = () => {
     console.log("Search icon clicked");
   };
 
-  const handleClearClick = () => {
+  const handleCameraClick = () => {
     setInputValue("");
+    toggleUploadModal();
     console.log("Clear icon clicked");
   };
 
@@ -38,12 +41,13 @@ const TopNavbarMobile = () => {
       <Search
         placeholder="Search.."
         onSearchClick={handleSearchClick}
-        onClearClick={handleClearClick}
+        onClearClick={handleCameraClick}
         value={inputValue}
         onChange={handleChange}
+        onClose={toggleUploadModal}
       />
 
-      <Upload />
+      <Upload onClose={toggleUploadModal} open={openUploadModal} />
     </div>
   );
 };

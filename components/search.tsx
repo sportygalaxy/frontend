@@ -15,6 +15,7 @@ interface SearchProps {
   placeholder?: string;
   onSearchClick?: () => void;
   onClearClick?: () => void;
+  onClose?: () => void;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
