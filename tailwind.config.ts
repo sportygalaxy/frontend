@@ -28,6 +28,9 @@ const config = {
       },
     },
     extend: {
+      height: {
+        "full-minus-80": "calc(100% - 80px)",
+      },
       colors: {
         border: "var(--border)",
         input: "var(--input)",
@@ -72,12 +75,14 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       borderWidth: {
+        "1": "1px", // Custom border width
         "3": "3px", // Custom border width
         "6": "6px", // Another custom border width
       },
       borderColor: {
         dark: "var(--grey)", // Custom border color
         light: "var(--light-grey)", // Another custom border color
+        grey: "var(--border-grey)", // Another custom border color
       },
       keyframes: {
         "accordion-down": {
@@ -92,6 +97,10 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        "dark-gradient":
+          "linear-gradient(264.39deg, rgba(0, 0, 0, 0) 35.33%, #000000 90.47%), url('https://s3-alpha-sig.figma.com/img/2761/03b9/636f37b60127439bafce63d7fbcf674d?Expires=1722211200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jdi3VeQNsf9ZPkj5jFY44ExO06epxnhNCSj3JxOukCwk48~okmdtNy52~9QAgxZJ48pZMSCBWHvSs3q3VIIhqQXycDAIMu4wpqbvp4o5ACokQYwzkjRq8TQOXAYLex5gNHieFrTYJvnxuEC6DZSX47GwBXA9OTPoH9sjN9FR7CMkNVh-BVQhlHBybM23KjDHcVAj2WGt6hQfMEUdQJxAsLzL3OmCmAEwKw3nwv41xlpBijH5VQ0T~NLYJdNcvsjHPG6hPWaaW9JjJG7jH8XtNIid0-IQgy~T3ZhH17NL5tP-fWlU4VbTDwqNUsQzBCRADo15fdGT02XgKQwd8AVBwQ__')",
       },
       screens: {
         xs: "445px",

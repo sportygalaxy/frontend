@@ -19,16 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jost.className}relative grid grid-cols-12 gap-0 auto-rows-max w-full`}
+        className={`${jost.className} relative grid grid-cols-12 gap-0 auto-rows-max w-full`}
       >
         <header className="col-span-12 mx-auto w-full flex justify-center items-center">
           <Navbar />
         </header>
-        <main className="col-span-12 auto-rows-auto bg-slate-300">
-          main
+        <main className="col-span-12 auto-rows-auto w-full h-full-minus-80 sm:h-full overflow-auto sm:overflow-hidden">
           {children}
         </main>
-        <footer className="col-span-12 mx-auto w-full flex justify-center items-center bg-white absolute bottom-0 h-16">
+
+        <footer className="col-span-12 mx-auto w-full flex justify-center items-center">
           <Footer />
         </footer>
       </body>

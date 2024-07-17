@@ -14,14 +14,16 @@ import UserIcon from "@/assets/icons/pack/User";
 import LogoIcon from "@/assets/icons/pack/Logo";
 import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
+import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
+import GalleryIcon from "@/assets/icons/pack/Gallery";
+import Upload from "./Upload";
+import { Button } from "@/components/ui/button";
+import { RoutesEnum } from "@/constants/routeEnums";
+import HeaderActiveLink from "./HeaderActiveLink";
+import Logo from "./Logo";
 
 const TopNavbarDesktop = () => {
   const { isMd } = useBreakpoint();
-
-  const logoSize = {
-    width: isMd ? "123" : "49",
-    height: isMd ? "114" : "45",
-  };
 
   const iconSize = {
     width: isMd ? "26" : "20",
@@ -32,16 +34,19 @@ const TopNavbarDesktop = () => {
 
   const NavLink = [
     {
+      id: 1,
       name: "Contact us",
-      path: "contact",
+      path: RoutesEnum.CONTACT,
     },
     {
+      id: 2,
       name: "About us",
-      path: "about",
+      path: RoutesEnum.ABOUT_US,
     },
     {
+      id: 3,
       name: "FAQ",
-      path: "faq",
+      path: RoutesEnum.FAQ,
     },
   ];
 
@@ -78,15 +83,15 @@ const TopNavbarDesktop = () => {
   };
 
   return (
-    <div className="wrapper flex-col w-full">
+    <div className="relative wrapper flex-col w-full">
       <section className="flex gap-4 py-4 items-center justify-between">
         <ol className="flex gap-6 md:gap-16">
           {NavLink.map((link) => (
             <li
-              key={link.name}
+              key={link.id}
               className={cn("text-primary font-normal", selectFontSize)}
             >
-              {link.name}
+              <HeaderActiveLink href={link.path} text={link.name} />
             </li>
           ))}
         </ol>
@@ -121,7 +126,7 @@ const TopNavbarDesktop = () => {
       </section>
 
       <section className="flex items-center justify-between gap-8">
-        <LogoIcon {...logoSize} />
+        <Logo />
 
         <Search
           placeholder="Search.."
@@ -131,7 +136,8 @@ const TopNavbarDesktop = () => {
           onChange={handleChange}
         />
 
-        <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+        {/* logged in */}
+        {/* <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
           {CtaLink.map((cta) => (
             <span
               key={cta.name}
@@ -140,8 +146,29 @@ const TopNavbarDesktop = () => {
               {cta.icon}
             </span>
           ))}
+        </div> */}
+
+        {/* logged out */}
+        <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+          <Button
+            className="text-mobile-xl md:text-xl px-4 lg:px-14"
+            variant="tertiary"
+            size="lg"
+          >
+            Sign in
+          </Button>
+          <Button
+            className="text-mobile-xl md:text-xl text-white px-4 lg:px-14"
+            variant="default"
+            size="lg"
+          >
+            Sign up
+          </Button>
         </div>
       </section>
+
+      {/* Upload modal */}
+      {/* <Upload /> */}
     </div>
   );
 };

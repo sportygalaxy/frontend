@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CameraIcon from "@/assets/icons/pack/Camera";
 import SearchIcon from "@/assets/icons/pack/Search";
 import {
@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import useBreakpoint from "@/hooks/useBreakpoint";
+import GalleryIcon from "@/assets/icons/pack/Gallery";
 
 interface SearchProps {
   placeholder?: string;
@@ -31,10 +32,10 @@ export const Search: React.FC<SearchProps> = ({
     height: isMd ? "24" : "19",
   };
   return (
-    <div className="relative flex items-center border border-none rounded-2xl px-4 md:px-7 py-2 md:py-3 bg-secondary-foreground">
-      <div className="hidden md:block">
+    <div className="flex items-center border border-none rounded-2xl px-4 md:px-7 py-2 md:py-3 bg-secondary-foreground">
+      <div className="md:block md:flex-2 mr-5">
         <Select>
-          <SelectTrigger className="text-mobile-xl md:text-xl font-bold flex flex-1 px-4">
+          <SelectTrigger className="text-mobile-xl md:text-xl font-bold flex flex-1 px-4 rounded-3xl">
             <SelectValue placeholder="Products" />
           </SelectTrigger>
           <SelectContent className="bg-white border border-dark">
