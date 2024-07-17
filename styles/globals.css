@@ -33,7 +33,7 @@ html {
     --destructive: #ff4c4c; /* hsl(0, 84.2%, 60.2%) */
     --destructive-foreground: #f5fbff; /* hsl(210, 40%, 98%) */
     --border: #d6e0eb; /* hsl(214.3, 31.8%, 91.4%) */
-    --border-grey: #e0e0e0; 
+    --border-grey: #e0e0e0;
     --input: #d6e0eb; /* hsl(214.3, 31.8%, 91.4%) */
     --ring: #000; /* hsl(222.2, 84%, 4.9%) */
     --radius: 0.5rem;
@@ -77,12 +77,12 @@ html {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#fcfbfc] text-foreground;
   }
 }
 
 .wrapper {
-  @apply mx-4 sm:mx-8 lg:mx-[100px] max-w-[1920px];
+  @apply mx-4 sm:mx-8 lg:mx-[100px] [@media(min-width:2213px)]:mx-auto max-w-[1920px];
 }
 
 .desktop-view {
@@ -94,5 +94,5 @@ html {
 }
 
 .mobile-view {
-  @apply block md:hidden;
+  @apply flex md:hidden;
 }

@@ -72,13 +72,12 @@ const TopNavbarDesktop = () => {
   const [inputValue, setInputValue] = useState("");
 
   const handleSearchClick = () => {
-    console.log("Search icon clicked");
+    //
   };
 
   const handleCameraClick = () => {
     setInputValue("");
     toggleUploadModal();
-    console.log("Clear icon clicked");
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

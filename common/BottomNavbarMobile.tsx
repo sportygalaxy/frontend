@@ -29,7 +29,7 @@ const BottomNavbarMobile = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between w-full px-9 bg-yellow-400">
+      <div className="flex items-center justify-between w-full px-9 bg-primary-foreground">
         {CtaLink.map((cta) => (
           <div className="flex flex-col items-center justify-between h-10">
             {cta.icon}

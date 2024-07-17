@@ -12,7 +12,7 @@ const Upload: FC<props> = (props) => {
   return (
     <div>
       {open ? (
-        <section className="absolute flex flex-col items-center justify-center top-[124px] sm:top-[104px] md:top-[143px] w-full bg-secondary-foreground rounded-2xl px-3 md:px-24 max-w-[800px] h-[234px] sm:h-[352px] md:h-[452px] inset-0 mx-auto z-10">
+        <section className="absolute flex flex-col items-center justify-center top-[146px] sm:top-[104px] md:top-[143px] w-full bg-secondary-foreground rounded-2xl px-3 md:px-24 max-w-[800px] h-[234px] sm:h-[352px] md:h-[452px] inset-0 mx-auto z-10">
           <p className="font-bold text-primary text-mobile-xl md:text-xl opacity-50">
             Find product inspiration with image search
           </p>

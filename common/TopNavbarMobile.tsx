@@ -10,13 +10,12 @@ const TopNavbarMobile = () => {
   const [inputValue, setInputValue] = useState("");
 
   const handleSearchClick = () => {
-    console.log("Search icon clicked");
+    //
   };
 
   const handleCameraClick = () => {
     setInputValue("");
     toggleUploadModal();
-    console.log("Clear icon clicked");
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,14 +37,16 @@ const TopNavbarMobile = () => {
         </p>
       </div>
 
-      <Search
-        placeholder="Search.."
-        onSearchClick={handleSearchClick}
-        onClearClick={handleCameraClick}
-        value={inputValue}
-        onChange={handleChange}
-        onClose={toggleUploadModal}
-      />
+      <div className="mt-7">
+        <Search
+          placeholder="Search.."
+          onSearchClick={handleSearchClick}
+          onClearClick={handleCameraClick}
+          value={inputValue}
+          onChange={handleChange}
+          onClose={toggleUploadModal}
+        />
+      </div>
 
       <Upload onClose={toggleUploadModal} open={openUploadModal} />
     </div>
