@@ -6,6 +6,7 @@ import DownSharpArrowIcon from "@/assets/icons/pack/DownSharpArrow";
 import Divider from "@/common/Divider";
 import Introduction from "./_components/Introduction";
 import Featured from "./_components/Featured";
+import Categories from "./_components/Categories";
 
 export default function LandingPage() {
   return (
@@ -18,19 +19,21 @@ export default function LandingPage() {
         <Title />
       </div>
 
-      <div className="wrapper mt-5 sm:mt-0">
-        <Products />
-      </div>
+      <>
+        <div className="wrapper mt-5 sm:mt-0">
+          <Products />
+        </div>
 
-      <div className="tablet-view wrapper mt-20 flex items-center justify-center">
-        <Button
-          className="font-medium text-mobile-xl md:text-xl py-4 px-4 lg:px-14"
-          variant="outline"
-          size="lg"
-        >
-          Sell All <DownSharpArrowIcon className="ml-2" />
-        </Button>
-      </div>
+        <div className="tablet-view wrapper mt-20 flex items-center justify-center">
+          <Button
+            className="font-medium text-mobile-xl md:text-xl py-4 px-14"
+            variant="outline"
+            size="lg"
+          >
+            Sell All <DownSharpArrowIcon className="ml-2" />
+          </Button>
+        </div>
+      </>
 
       <div className="tablet-view wrapper mt-8 xl:mt-10">
         <Divider />
@@ -43,7 +46,7 @@ export default function LandingPage() {
         />
       </div>
 
-      <div className="wrapper mt-28">
+      <div className="tablet-view wrapper mt-28">
         <Featured />
       </div>
 
@@ -53,10 +56,28 @@ export default function LandingPage() {
           subtitle="Get ready to take your game to the next level with our highly
         anticipated upcoming sports collection! Designed for athletes of all
         levels, our new range combines cutting-edge technology, premium
-        materials, and stylish designs to help you perform at your best."
-          caption="collection"
+        materials, and stylish designs to help you perform at your best. "
+          caption="collection."
         />
       </div>
+
+      <>
+        <div className="tablet-view wrapper mt-28">
+          <Categories />
+        </div>
+
+        <div className="tablet-view wrapper mt-28 flex items-center justify-center">
+          <Button
+            className="font-medium text-mobile-xl md:text-xl py-4 px-14"
+            variant="outline"
+            size="lg"
+          >
+            Sell All <DownSharpArrowIcon className="ml-2" />
+          </Button>
+        </div>
+      </>
+
+      
     </>
   );
 }
