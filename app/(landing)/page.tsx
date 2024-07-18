@@ -4,6 +4,8 @@ import Products from "./_components/Products";
 import { Button } from "@/components/ui/button";
 import DownSharpArrowIcon from "@/assets/icons/pack/DownSharpArrow";
 import Divider from "@/common/Divider";
+import Introduction from "./_components/Introduction";
+import Featured from "./_components/Featured";
 
 export default function LandingPage() {
   return (
@@ -12,7 +14,7 @@ export default function LandingPage() {
         <Hero />
       </div>
 
-      <div className="wrapper mt-5 sm:mt-0">
+      <div className="wrapper mt-9 sm:mt-0">
         <Title />
       </div>
 
@@ -30,8 +32,30 @@ export default function LandingPage() {
         </Button>
       </div>
 
-      <div className="tablet-view wrapper mt-10">
+      <div className="tablet-view wrapper mt-8 xl:mt-10">
         <Divider />
+      </div>
+
+      <div className="mt-24">
+        <Introduction
+          title="Our Varied Collections"
+          subtitle="Enhance your training sessions with our cutting-edge sports equipment. From ergonomic weights to resistance bands and smart fitness trackers, our collection includes everything you need to optimize your performance and track your progress."
+        />
+      </div>
+
+      <div className="wrapper mt-28">
+        <Featured />
+      </div>
+
+      <div className="mt-32">
+        <Introduction
+          title="Introducing our Exclusive coming soon"
+          subtitle="Get ready to take your game to the next level with our highly
+        anticipated upcoming sports collection! Designed for athletes of all
+        levels, our new range combines cutting-edge technology, premium
+        materials, and stylish designs to help you perform at your best."
+          caption="collection"
+        />
       </div>
     </>
   );

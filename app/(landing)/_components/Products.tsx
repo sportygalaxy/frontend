@@ -11,7 +11,7 @@ const Products: FC<Props> = (props) => {
   const products = [
     {
       id: 1,
-      title: "Product 1",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$19.99",
       image:
@@ -19,7 +19,7 @@ const Products: FC<Props> = (props) => {
     },
     {
       id: 2,
-      title: "Product 2",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$19.99",
       image:
@@ -27,7 +27,7 @@ const Products: FC<Props> = (props) => {
     },
     {
       id: 3,
-      title: "Product 2",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$19.99",
       image:
@@ -35,7 +35,7 @@ const Products: FC<Props> = (props) => {
     },
     {
       id: 4,
-      title: "Product 4",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$19.99",
       image:
@@ -43,28 +43,28 @@ const Products: FC<Props> = (props) => {
     },
     {
       id: 5,
-      title: "Product 5",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$29.99",
       image: "https://via.placeholder.com/350",
     },
     {
       id: 6,
-      title: "Product 6",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$29.99",
       image: "https://via.placeholder.com/350",
     },
     {
       id: 7,
-      title: "Product 7",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$29.99",
       image: "https://via.placeholder.com/150",
     },
     {
       id: 8,
-      title: "Product 8",
+      title: "T5x treadmil",
       description: "Yiaoxing",
       price: "$29.99",
       image: "https://via.placeholder.com/150",
@@ -86,9 +86,9 @@ export default Products;
 const ProductCard = ({ product }: any) => {
   return (
     <Card
-      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none`}
+      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none cursor-pointer group`}
     >
-      <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7]">
+      <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7] overflow-hidden">
         <Image
           fill
           sizes="100%"
@@ -100,14 +100,14 @@ const ProductCard = ({ product }: any) => {
           }}
           src={product.image}
           alt={product.title}
-          className="w-full transition-[transform] hover:scale-110"
+          className="w-full transition-[transform] duration-1000 hover:scale-110"
           priority
           // blurDataURL="data:..."
           // placeholder="blur"
         />
       </CardHeader>
       <CardContent className="text-left mt-8 p-0">
-        <p className="font-medium text-mobile-3xl sm:text-3xl">
+        <p className="font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold">
           {product.title}
         </p>
 

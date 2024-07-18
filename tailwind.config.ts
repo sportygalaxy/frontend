@@ -101,6 +101,8 @@ const config = {
       backgroundImage: {
         "dark-gradient":
           "linear-gradient(264.39deg, rgba(0, 0, 0, 0) 35.33%, #000000 90.47%), url('https://s3-alpha-sig.figma.com/img/2761/03b9/636f37b60127439bafce63d7fbcf674d?Expires=1722211200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jdi3VeQNsf9ZPkj5jFY44ExO06epxnhNCSj3JxOukCwk48~okmdtNy52~9QAgxZJ48pZMSCBWHvSs3q3VIIhqQXycDAIMu4wpqbvp4o5ACokQYwzkjRq8TQOXAYLex5gNHieFrTYJvnxuEC6DZSX47GwBXA9OTPoH9sjN9FR7CMkNVh-BVQhlHBybM23KjDHcVAj2WGt6hQfMEUdQJxAsLzL3OmCmAEwKw3nwv41xlpBijH5VQ0T~NLYJdNcvsjHPG6hPWaaW9JjJG7jH8XtNIid0-IQgy~T3ZhH17NL5tP-fWlU4VbTDwqNUsQzBCRADo15fdGT02XgKQwd8AVBwQ__')",
+        "grey-gradient":
+          "linear-gradient(180.77deg, rgba(0, 0, 0, 0) 64.59%, rgba(0, 0, 0, 0.7) 97.05%)",
       },
       screens: {
         xs: "445px",
@@ -127,6 +129,7 @@ const config = {
         "mobile-3xl": "1.25rem", // 20px
         "4xl": "2.25rem", // 36px
         "5xl": "3rem", // 48px
+        "mobile-5xl": "1.75rem", // 28px
         "6xl": "4rem", // 64px
       },
     },
