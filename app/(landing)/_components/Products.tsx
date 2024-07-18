@@ -102,6 +102,8 @@ const ProductCard = ({ product }: any) => {
           alt={product.title}
           className="w-full transition-[transform] hover:scale-110"
           priority
+          // blurDataURL="data:..."
+          // placeholder="blur"
         />
       </CardHeader>
       <CardContent className="text-left mt-8 p-0">

@@ -90,7 +90,7 @@ html {
 }
 
 .tablet-view {
-  @apply hidden sm:block;
+  @apply hidden sm:flex;
 }
 
 .mobile-view {

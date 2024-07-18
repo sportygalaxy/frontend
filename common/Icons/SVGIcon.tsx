@@ -47,6 +47,11 @@ export interface SVGIconProps {
 
   strokeLinejoin?: "inherit" | "round" | "miter" | "bevel" | undefined;
   fillRule?: "evenodd" | "nonzero" | undefined;
+
+  /**
+   * The css class styling
+   */
+  className?: string;
 }
 
 /**
@@ -64,6 +69,7 @@ const SVGIcon: FC<SVGIconProps> = ({
   strokeWidth,
   strokeLinejoin,
   fillRule,
+  className = "",
 }) => {
   return (
     <svg
@@ -77,6 +83,7 @@ const SVGIcon: FC<SVGIconProps> = ({
       width={width}
       xmlns={xmlns}
       fillRule={fillRule}
+      className={className}
     >
       {children}
     </svg>
