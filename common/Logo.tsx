@@ -7,8 +7,8 @@ import { FC } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  color: string;
-  isFooter: boolean;
+  color?: string;
+  isFooter?: boolean;
 }
 const Logo: FC<Props> = (props) => {
   const { color = "black", isFooter = false, ...rest } = props;

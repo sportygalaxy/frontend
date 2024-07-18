@@ -8,8 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import useBreakpoint from "@/hooks/useBreakpoint";
-import GalleryIcon from "@/assets/icons/pack/Gallery";
+import Camera from "@/common/Camera";
 
 interface SearchProps {
   placeholder?: string;
@@ -27,11 +26,6 @@ export const Search: React.FC<SearchProps> = ({
   value,
   onChange,
 }) => {
-  const { isMd } = useBreakpoint();
-  const iconSize = {
-    width: isMd ? "24" : "20",
-    height: isMd ? "24" : "19",
-  };
   return (
     <div className="flex items-center border border-none rounded-2xl px-4 md:px-7 py-2 md:py-3 bg-secondary-foreground">
       <div className="md:block md:flex-2 mr-5">
@@ -55,10 +49,10 @@ export const Search: React.FC<SearchProps> = ({
       />
       <div className="flex items-center gap-6">
         <div onClick={onSearchClick} className="cursor-pointer text-gray-500">
-          <SearchIcon {...iconSize} />
+          <SearchIcon />
         </div>
         <div onClick={onClearClick} className="cursor-pointer text-gray-500">
-          <CameraIcon {...iconSize} />
+          <Camera />
         </div>
       </div>
     </div>

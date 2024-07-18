@@ -7,14 +7,14 @@ const ProfileIcon: FC<ProfileIconType> = ({ ...props }) => (
   <SVGIcon width="23" height="22" viewBox="0 0 23 22" fill="none" {...props}>
     <path
       d="M11.6467 9.96418C11.5551 9.95501 11.4451 9.95501 11.3442 9.96418C9.16255 9.89084 7.43005 8.10334 7.43005 5.90334C7.43005 3.65751 9.24505 1.83334 11.5001 1.83334C13.7459 1.83334 15.5701 3.65751 15.5701 5.90334C15.5609 8.10334 13.8284 9.89084 11.6467 9.96418Z"
-      stroke="#808080"
+      stroke={props?.color}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M7.06329 13.3467C4.84495 14.8317 4.84495 17.2517 7.06329 18.7275C9.58412 20.4142 13.7183 20.4142 16.2391 18.7275C18.4575 17.2425 18.4575 14.8225 16.2391 13.3467C13.7275 11.6692 9.59329 11.6692 7.06329 13.3467Z"
-      stroke="#808080"
+      stroke={props?.color}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
