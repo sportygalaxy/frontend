@@ -5,6 +5,7 @@ import NotificationIcon from "@/assets/icons/pack/Notification";
 import ProfileIcon from "@/assets/icons/pack/Profile";
 import HeaderBottomActiveLink from "./HeaderBottomActiveLink";
 import { FC } from "react";
+import { RoutesEnum } from "@/constants/routeEnums";
 
 interface CtaLink {
   id: number;
@@ -19,25 +20,25 @@ const BottomNavbarMobile:FC = () => {
       id: 1,
       name: "Home",
       Icon: (props) => <HomeIcon {...props} />,
-      path: "/",
+      path: RoutesEnum.LANDING_PAGE,
     },
     {
       id: 2,
       name: "Cart",
       Icon: (props) => <CartIcon {...props} />,
-      path: "/cart",
+      path: RoutesEnum.CART,
     },
     {
       id: 3,
       name: "Notification",
       Icon: (props) => <NotificationIcon {...props} />,
-      path: "/notification",
+      path: RoutesEnum.NOTIFICATION,
     },
     {
       id: 4,
       name: "Profile",
       Icon: (props) => <ProfileIcon {...props} />,
-      path: "/profile",
+      path: RoutesEnum.PROFILE,
     },
   ];
 
