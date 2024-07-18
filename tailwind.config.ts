@@ -111,6 +111,9 @@ const config = {
         "2xl": "1440px",
         "3xl": "1720px",
       },
+      fontWeight: {
+        normal: "400",
+      },
       fontSize: {
         xs: "0.75rem", // 12px
         sm: "0.875rem", // 14px
