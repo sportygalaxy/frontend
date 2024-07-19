@@ -1,6 +1,8 @@
 import Add from "@/common/Add";
 import CardGrid from "@/common/CardGrid";
+import TooltipWrapper from "@/components/tooltip";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React, { FC } from "react";
 
@@ -84,6 +86,8 @@ const Products: FC<Props> = (props) => {
 export default Products;
 
 const ProductCard = ({ product }: any) => {
+  const cardTextTruncate =
+    "overflow-hidden text-ellipsis whitespace-nowrap truncate max-w-44 sm:max-w-72";
   return (
     <Card
       className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none cursor-pointer group`}
@@ -107,16 +111,36 @@ const ProductCard = ({ product }: any) => {
         />
       </CardHeader>
       <CardContent className="text-left mt-8 p-0">
-        <p className="font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold">
-          {product.title}
-        </p>
+        <TooltipWrapper
+          component={
+            <p
+              className={cn(
+                "font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold",
+                cardTextTruncate
+              )}
+            >
+              {product.title}
+            </p>
+          }
+          title={product.title}
+        />
 
         <div className="flex items-end justify-between mt-3">
           <div>
-            <p className="font-light text-mobile-2xl sm:text-2xl text-primary opacity-50">
+            <p
+              className={cn(
+                "font-light text-mobile-2xl sm:text-2xl text-primary opacity-50",
+                cardTextTruncate
+              )}
+            >
               {product.description}
             </p>
-            <p className="mt-2 font-medium text-mobile-3xl sm:text-3xl">
+            <p
+              className={cn(
+                "mt-2 font-medium text-mobile-3xl sm:text-3xl",
+                cardTextTruncate
+              )}
+            >
               {product.price}
             </p>
           </div>
