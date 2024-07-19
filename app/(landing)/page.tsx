@@ -7,6 +7,7 @@ import Divider from "@/common/Divider";
 import Introduction from "./_components/Introduction";
 import Featured from "./_components/Featured";
 import Categories from "./_components/Categories";
+import NewsLetter from "./_components/NewsLetter";
 
 export default function LandingPage() {
   return (
@@ -77,7 +78,9 @@ export default function LandingPage() {
         </div>
       </>
 
-      
+      <div className="mt-24">
+        <NewsLetter />
+      </div>
     </>
   );
 }
