@@ -6,7 +6,7 @@ const EMAIL = "support@sportygalaxy.com";
 const ADDRESS = "";
 const ADDRESS_LINK =
   "";
-export const logoUrl = "/public/images/logo/sg_logo.svg"; // https://www.sportygalaxy.com/logo.png
+export const logoUrl = "https://i.ibb.co/Fmm8v5h/Frame-2610515.png"; // "/images/logo/sg_logo.svg"; // https://www.sportygalaxy.com/logo.png
 
 export const NAV_CONSTANT = {
   PHONE_NUMBER,
