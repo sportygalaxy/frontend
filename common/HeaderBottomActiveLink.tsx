@@ -12,7 +12,11 @@ type props = {
 
 const isActive = (pathname: string, link: string) => pathname === link;
 
-const HeaderBottomActiveLink: React.FC<props> = ({ href: link = "/", text, Icon }) => {
+const HeaderBottomActiveLink: React.FC<props> = ({
+  href: link = "/",
+  text,
+  Icon,
+}) => {
   const pathname = usePathname();
   return (
     <Link
@@ -23,7 +27,7 @@ const HeaderBottomActiveLink: React.FC<props> = ({ href: link = "/", text, Icon 
       <p
         className={`${
           isActive(pathname, link)
-            ? "text-primary font-bold"
+            ? "text-primary font-light"
             : "text-secondary font-light"
         } text-xs`}
       >

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CartIcon from "@/assets/icons/pack/Cart";
 import HomeIcon from "@/assets/icons/pack/Home";
 import NotificationIcon from "@/assets/icons/pack/Notification";
@@ -14,7 +14,7 @@ interface CtaLink {
   path: string;
 }
 
-const BottomNavbarMobile:FC = () => {
+const BottomNavbarMobile: FC = () => {
   const CtaLink: CtaLink[] = [
     {
       id: 1,
@@ -46,7 +46,7 @@ const BottomNavbarMobile:FC = () => {
     <>
       <div className="flex items-center justify-between w-full px-9 bg-primary-foreground">
         {CtaLink.map((cta) => (
-          <div key={cta.id}>
+          <div key={cta.id} className="">
             <HeaderBottomActiveLink
               href={cta.path}
               text={cta.name}
