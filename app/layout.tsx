@@ -3,14 +3,43 @@ import { Jost } from "next/font/google";
 import "../styles/globals.css";
 import Navbar from "@/common/Navbar";
 import Footer from "@/common/Footer";
-
-const jost = Jost({ subsets: ["latin"] });
+import TopLoader from "@/common/Loaders/TopLoader";
+import {
+  appDescription,
+  appSeoKeywords,
+  appTitle,
+  webBaseUrl,
+} from "@/api/constants";
+import getPageTitle from "@/helpers/getPageTitle";
+import { logoUrl, NAV_CONSTANT } from "@/constants/appConstants";
+import Script from "next/script";
+import getScriptJson from "@/helpers/getScriptJson";
 
 export const metadata: Metadata = {
-  title: "Sporty Galaxy",
-  description:
-    "Enhance your training sessions with our cutting-edge sports equipment",
+  metadataBase: new URL(webBaseUrl),
+  title: getPageTitle(),
+  description: appDescription,
+  keywords: appSeoKeywords,
+  creator: "Sportygalaxy",
+  openGraph: {
+    title: appTitle,
+    description: appDescription,
+    images: [logoUrl],
+    url: webBaseUrl,
+    type: "website",
+    siteName: appTitle,
+  },
+  twitter: {
+    card: "summary",
+    title: appTitle,
+    description: appDescription,
+    images: [logoUrl],
+    creator: "",
+    site: "",
+  },
 };
+
+const jost = Jost({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -26,6 +55,28 @@ export default function RootLayout({
           <Navbar />
         </header>
         <main className="col-span-12 auto-rows-auto w-full h-full-minus-80 sm:h-full overflow-auto sm:overflow-hidden">
+          <Script
+            id="schema-organization"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: getScriptJson({
+                "@context": "https://schema.org",
+                "@type": "Organization", // Use 'Organization' or 'LocalBusiness' depending on your needs
+                name: appTitle,
+                alternateName: "Sporty Galaxy",
+                url: webBaseUrl,
+                logo: logoUrl,
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: NAV_CONSTANT.PHONE_NUMBER,
+                  contactType: "customer service",
+                  availableLanguage: "en",
+                },
+                sameAs: [],
+              }),
+            }}
+          />
+          <TopLoader />
           {children}
         </main>
 

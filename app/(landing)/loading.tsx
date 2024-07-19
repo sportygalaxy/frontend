@@ -1,3 +1,9 @@
+import AppLoader from "@/common/Loaders/AppLoader";
+
 export default function Loading() {
-  return <div className="w-vw h-vh mx-auto hx-auto font-bold">loading...</div>;
+  return (
+    <div className="flex w-full h-dvh mx-auto hx-auto font-bold">
+      <AppLoader />
+    </div>
+  );
 }
