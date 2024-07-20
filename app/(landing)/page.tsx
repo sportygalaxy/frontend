@@ -1,30 +1,50 @@
-import Title from "@/common/Title";
-import Hero from "./_components/Hero";
-import Products from "./_components/Products";
-import { Button } from "@/components/ui/button";
+import { DesktopTitle, MobileTitle } from "@/common/Title";
 import DownSharpArrowIcon from "@/assets/icons/pack/DownSharpArrow";
+import { Button } from "@/components/ui/button";
 import Divider from "@/common/Divider";
+
+import Hero from "./_components/Hero";
 import Introduction from "./_components/Introduction";
-import Featured from "./_components/Featured";
-import Categories from "./_components/Categories";
 import NewsLetter from "./_components/NewsLetter";
+
+import Products from "@/components/product/Products";
+import Featured from "@/components/featured/Featured";
+import Categories from "@/components/category/Categories";
+// import SlowApiComponent from "@/components/SlowApiComponent";
+// import SlowApiApp from "@/components/SlowApiApp";
 
 export default function LandingPage() {
   return (
     <>
+      {" "}
+      {/* <SlowApiComponent /> */}
+      {/* <SlowApiApp /> */}
       <div className="relative">
         <Hero />
       </div>
-
-      <div className="wrapper mt-9 sm:mt-0">
-        <Title />
-      </div>
-
       <>
-        <div className="wrapper mt-5 sm:mt-0">
+        <div className="wrapper mt-9 sm:mt-0">
+          <DesktopTitle title="NEW ARRIVAL." />
+        </div>
+        <div className="tablet-view wrapper mt-5 sm:mt-0">
           <Products />
         </div>
-
+      </>
+      <>
+        <div className="wrapper mt-9 sm:mt-0">
+          <MobileTitle title="Best selling" path="" />
+        </div>
+        <div className="mobile-view wrapper mt-5 sm:mt-0">
+          <Products isMobile />
+        </div>
+        <div className="wrapper mt-9 sm:mt-0">
+          <MobileTitle title="Recently viewed" path="" />
+        </div>
+        <div className="mobile-view wrapper mt-5 sm:mt-0">
+          <Products isMobile />
+        </div>
+      </>
+      <>
         <div className="tablet-view wrapper mt-20 flex items-center justify-center">
           <Button
             className="font-medium text-mobile-xl md:text-xl py-4 px-14"
@@ -35,22 +55,18 @@ export default function LandingPage() {
           </Button>
         </div>
       </>
-
       <div className="tablet-view wrapper mt-8 xl:mt-10">
         <Divider />
       </div>
-
       <div className="mt-24">
         <Introduction
           title="Our Varied Collections"
           subtitle="Enhance your training sessions with our cutting-edge sports equipment. From ergonomic weights to resistance bands and smart fitness trackers, our collection includes everything you need to optimize your performance and track your progress."
         />
       </div>
-
       <div className="tablet-view wrapper mt-28">
         <Featured />
       </div>
-
       <div className="mt-32">
         <Introduction
           title="Introducing our Exclusive coming soon"
@@ -61,7 +77,6 @@ export default function LandingPage() {
           caption="collection."
         />
       </div>
-
       <>
         <div className="tablet-view wrapper mt-28">
           <Categories />
@@ -77,7 +92,6 @@ export default function LandingPage() {
           </Button>
         </div>
       </>
-
       <div className="mt-24">
         <NewsLetter />
       </div>
