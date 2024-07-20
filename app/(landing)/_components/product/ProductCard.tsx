@@ -1,0 +1,103 @@
+"use client";
+import Add from "@/common/Add";
+import LucideIcon from "@/common/Icons/LucideIcon";
+import TooltipWrapper from "@/components/tooltip";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import useToggle from "@/hooks/useToggle";
+import { cn } from "@/lib/utils";
+import { TProduct } from "@/types/product";
+import Image from "next/image";
+import React, { FC } from "react";
+
+interface Props {
+  product: TProduct;
+}
+
+const ProductCard: FC<Props> = ({ product }) => {
+  const [indicateAddToCart, toggleIndicateAddToCart] = useToggle();
+  const cardTextTruncate =
+    "overflow-hidden text-ellipsis whitespace-nowrap truncate max-w-44 sm:max-w-72";
+  return (
+    <Card
+      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none cursor-pointer group`}
+    >
+      <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7] overflow-hidden">
+        <Image
+          fill
+          sizes="100%"
+          style={{
+            objectFit: "cover",
+            objectPosition: "50% 50%",
+            display: "block",
+            margin: "0 auto",
+          }}
+          src={product.image}
+          alt={product.title}
+          className="w-full transition-[transform] duration-1000 hover:scale-110"
+          priority
+          // blurDataURL="data:..."
+          // placeholder="blur"
+        />
+      </CardHeader>
+      <CardContent className="text-left mt-8 p-0">
+        <TooltipWrapper
+          component={
+            <p
+              className={cn(
+                "font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold",
+                cardTextTruncate
+              )}
+            >
+              {product.title}
+            </p>
+          }
+          title={product.title}
+        />
+
+        <div className="flex items-end justify-between mt-3">
+          <div>
+            <p
+              className={cn(
+                "font-light text-mobile-2xl sm:text-2xl text-primary opacity-50",
+                cardTextTruncate
+              )}
+            >
+              {product.description}
+            </p>
+            <p
+              className={cn(
+                "mt-2 font-medium text-mobile-3xl sm:text-3xl",
+                cardTextTruncate
+              )}
+            >
+              {product.price}
+            </p>
+          </div>
+
+          <div className="mb-1" onClick={() => toggleIndicateAddToCart()}>
+            {indicateAddToCart ? (
+              <div className="">
+                <LucideIcon
+                  className="mobile-view"
+                  name="circle-check"
+                  size="25"
+                  color="var(--success)"
+                />
+                <LucideIcon
+                  className="tablet-view"
+                  name="circle-check"
+                  size="44"
+                  color="var(--success)"
+                />
+              </div>
+            ) : (
+              <Add />
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ProductCard;
