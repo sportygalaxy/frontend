@@ -32,11 +32,12 @@ export default function LandingPage() {
         <div className="mobile-tablet-view wrapper mt-5 sm:mt-0">
           <Products isMobile />
         </div>
+
         <div className="wrapper mt-9 sm:mt-0">
           <MobileTitle title="Recently viewed" path="" />
         </div>
         <div className="mobile-tablet-view wrapper mt-5 sm:mt-0">
-          <Products isMobile />
+          <Products isMobile isHorizontalScroll />
         </div>
       </>
       <>

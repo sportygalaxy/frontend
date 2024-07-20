@@ -3,22 +3,31 @@ import React, { FC } from "react";
 import ProductCard from "./ProductCard";
 import { TProduct } from "@/types/product";
 import { PRODUCTS } from "@/data";
+import { ScrollAreaHorizontal } from "../scroll";
 
 interface Props {
   isMobile?: boolean;
+  isHorizontalScroll?: boolean;
 }
 
-const Products: FC<Props> = ({ isMobile = false }) => {
+const Products: FC<Props> = ({
+  isMobile = false,
+  isHorizontalScroll = false,
+}) => {
   const products: TProduct[] = PRODUCTS || [];
 
-  const productList = isMobile ? products?.slice(0, 4) : products;
+  const productList: TProduct[] = isMobile ? products?.slice(0, 4) : products;
   return (
     <div className="w-full">
-      <CardGrid oneLineScroll>
-        {productList.map((product: TProduct) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </CardGrid>
+      {isHorizontalScroll ? (
+        <ScrollAreaHorizontal data={productList} component={ProductCard} />
+      ) : (
+        <CardGrid oneLineScroll>
+          {productList.map((product: TProduct) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </CardGrid>
+      )}
     </div>
   );
 };

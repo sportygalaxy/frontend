@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['lucide-react'],
+  transpilePackages: ["lucide-react"],
   images: {
     remotePatterns: [
       {
@@ -10,6 +10,10 @@ const nextConfig = {
       {
         // protocol: "https",
         hostname: "s3-alpha-sig.figma.com",
+      },
+      {
+        // protocol: "https",
+        hostname: "images.unsplash.com",
       },
     ],
   },

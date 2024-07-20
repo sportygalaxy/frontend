@@ -10,10 +10,13 @@ import Image from "next/image";
 import React, { FC } from "react";
 
 interface Props {
-  product: TProduct;
+  product?: TProduct;
 }
 
-const ProductCard: FC<Props> = ({ product }) => {
+const ProductCard: FC<Props> = (props) => {
+  const { product } = props;
+  // const { image, title } = product;
+  console.log("product", product);
   const [indicateAddToCart, toggleIndicateAddToCart] = useToggle();
   const cardTextTruncate =
     "overflow-hidden text-ellipsis whitespace-nowrap truncate max-w-44 sm:max-w-72";
@@ -31,8 +34,8 @@ const ProductCard: FC<Props> = ({ product }) => {
             display: "block",
             margin: "0 auto",
           }}
-          src={product.image}
-          alt={product.title}
+          src={product?.image || ""}
+          alt={product?.title || ""}
           className="w-full transition-[transform] duration-1000 hover:scale-110"
           priority
           // blurDataURL="data:..."
@@ -48,10 +51,10 @@ const ProductCard: FC<Props> = ({ product }) => {
                 cardTextTruncate
               )}
             >
-              {product.title}
+              {product?.title || ""}
             </p>
           }
-          title={product.title}
+          title={product?.title || ""}
         />
 
         <div className="flex items-end justify-between mt-3">
@@ -62,7 +65,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 cardTextTruncate
               )}
             >
-              {product.description}
+              {product?.description || ""}
             </p>
             <p
               className={cn(
@@ -70,7 +73,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 cardTextTruncate
               )}
             >
-              {product.price}
+              {product?.price || ""}
             </p>
           </div>
 
