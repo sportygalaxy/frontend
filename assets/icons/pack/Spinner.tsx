@@ -13,12 +13,12 @@ const SpinnerIcon: FC<SpinnerIconType> = ({ ...props }) => (
   >
     <defs>
       <linearGradient id="spinner-secondHalf">
-        <stop offset="0%" stop-opacity="0" stop-color={props.color} />
-        <stop offset="100%" stop-opacity="0.5" stop-color={props.color} />
+        <stop offset="0%" stopOpacity="0" stopColor={props.color} />
+        <stop offset="100%" stopOpacity="0.5" stopColor={props.color} />
       </linearGradient>
       <linearGradient id="spinner-firstHalf">
-        <stop offset="0%" stop-opacity="1" stop-color={props.color} />
-        <stop offset="100%" stop-opacity="0.5" stop-color={props.color} />
+        <stop offset="0%" stopOpacity="1" stopColor={props.color} />
+        <stop offset="100%" stopOpacity="0.5" stopColor={props.color} />
       </linearGradient>
     </defs>
 

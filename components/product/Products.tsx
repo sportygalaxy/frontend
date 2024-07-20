@@ -11,7 +11,7 @@ interface Props {
 const Products: FC<Props> = ({ isMobile = false }) => {
   const products: TProduct[] = PRODUCTS || [];
 
-  const productList = isMobile ? products?.slice(0, 2) : products;
+  const productList = isMobile ? products?.slice(0, 4) : products;
   return (
     <div className="w-full">
       <CardGrid oneLineScroll>

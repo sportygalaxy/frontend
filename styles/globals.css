@@ -98,6 +98,12 @@ html {
   @apply hidden sm:flex;
 }
 
+
+
+.mobile-tablet-view {
+  @apply flex sm:hidden;
+}
+
 .mobile-view {
   @apply flex md:hidden;
 }

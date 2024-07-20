@@ -10,15 +10,10 @@ import NewsLetter from "./_components/NewsLetter";
 import Products from "@/components/product/Products";
 import Featured from "@/components/featured/Featured";
 import Categories from "@/components/category/Categories";
-// import SlowApiComponent from "@/components/SlowApiComponent";
-// import SlowApiApp from "@/components/SlowApiApp";
 
 export default function LandingPage() {
   return (
     <>
-      {" "}
-      {/* <SlowApiComponent /> */}
-      {/* <SlowApiApp /> */}
       <div className="relative">
         <Hero />
       </div>
@@ -34,13 +29,13 @@ export default function LandingPage() {
         <div className="wrapper mt-9 sm:mt-0">
           <MobileTitle title="Best selling" path="" />
         </div>
-        <div className="mobile-view wrapper mt-5 sm:mt-0">
+        <div className="mobile-tablet-view wrapper mt-5 sm:mt-0">
           <Products isMobile />
         </div>
         <div className="wrapper mt-9 sm:mt-0">
           <MobileTitle title="Recently viewed" path="" />
         </div>
-        <div className="mobile-view wrapper mt-5 sm:mt-0">
+        <div className="mobile-tablet-view wrapper mt-5 sm:mt-0">
           <Products isMobile />
         </div>
       </>
