@@ -1,18 +1,17 @@
 "use client";
 import { FC, PropsWithChildren, ReactNode } from "react";
-import { TProduct } from "@/types/product";
 
-type Props = {
+type ScrollAreaHorizontalProps<T> = {
   children?: ReactNode;
-  component?: React.FC<{ product?: TProduct }>;
-  data: TProduct[];
-} & PropsWithChildren;
+  component?: FC<{ item: T }>;
+  data: T[];
+} & PropsWithChildren<{}>;
 
-export const ScrollAreaHorizontal: FC<Props> = ({
+export const ScrollAreaHorizontal = <T,>({
   data,
   children,
   component: Component,
-}) => {
+}: ScrollAreaHorizontalProps<T>) => {
   return (
     <>
       <style jsx>{`
@@ -32,12 +31,12 @@ export const ScrollAreaHorizontal: FC<Props> = ({
       `}</style>
       <div className="wrapper overflow-x-auto whitespace-nowrap py-6 custom-scrollbar">
         <div className="inline-flex space-x-6">
-          {data?.map((product) => (
+          {data?.map((item, index) => (
             <div
-              key={product.id}
+              key={index}
               className="relative w-[190px] md:w-[300px] h-[360px] md:h-[510px] flex-shrink-0 flex items-center justify-center bg-grey-gradient border-light rounded-md overflow-hidden group"
             >
-              {Component ? <Component product={product} /> : children}
+              {Component ? <Component item={item} /> : children}
             </div>
           ))}
         </div>

@@ -24,7 +24,7 @@ const Products: FC<Props> = ({
       ) : (
         <CardGrid oneLineScroll>
           {productList.map((product: TProduct) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} item={product} />
           ))}
         </CardGrid>
       )}
