@@ -3,7 +3,7 @@ import React from "react";
 
 const NewsLetter = () => {
   return (
-    <div className="tablet-view bg-[#292D32] py-20 flex items-start justify-center">
+    <div className="w-full bg-[#292D32] py-20 flex items-start justify-center bg-fixed">
       <div className="bg-primary rounded-3xl max-w-4xl py-20 px-36 flex flex-col items-center justify-center gap-24">
         <div className="flex flex-col items-center justify-center">
           <p className="text-mobile-3xl md:text-3xl font-normal text-secondary">

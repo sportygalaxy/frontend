@@ -1,6 +1,7 @@
 "use client";
 import Add from "@/common/Add";
 import LucideIcon from "@/common/Icons/LucideIcon";
+import LinkComponent from "@/common/Link";
 import TooltipWrapper from "@/components/tooltip";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import useToggle from "@/hooks/useToggle";
@@ -18,64 +19,81 @@ const ProductCard: FC<{ item: TProduct }> = (props) => {
   const [indicateAddToCart, toggleIndicateAddToCart] = useToggle();
   const cardTextTruncate =
     "overflow-hidden text-ellipsis whitespace-nowrap truncate max-w-44 sm:max-w-72";
+
+  const contentProps = {
+    href: `/product/${item.id}`,
+    className: "w-full cursor-pointer",
+  };
+
   return (
     <Card
-      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none cursor-pointer group`}
+      key={item.id}
+      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none group`}
     >
-      <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7] overflow-hidden">
-        <Image
-          fill
-          sizes="100%"
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-            display: "block",
-            margin: "0 auto",
-          }}
-          src={item?.image || ""}
-          alt={item?.title || ""}
-          className="w-full transition-[transform] duration-1000 hover:scale-110"
-          priority
-          // blurDataURL="data:..."
-          // placeholder="blur"
-        />
-      </CardHeader>
+      <LinkComponent {...contentProps}>
+        <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7] overflow-hidden">
+          <Image
+            fill
+            sizes="100%"
+            style={{
+              objectFit: "cover",
+              objectPosition: "50% 50%",
+              display: "block",
+              margin: "0 auto",
+            }}
+            src={item?.image || ""}
+            alt={item?.title || ""}
+            className="w-full transition-[transform] duration-1000 hover:scale-110"
+            priority
+            // blurDataURL="data:..."
+            // placeholder="blur"
+          />
+        </CardHeader>
+      </LinkComponent>
+
       <CardContent className="text-left mt-8 p-0">
-        <TooltipWrapper
-          component={
-            <p
-              className={cn(
-                "font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold",
-                cardTextTruncate
-              )}
-            >
-              {item?.title || ""}
-            </p>
-          }
-          title={item?.title || ""}
-        />
+        <LinkComponent {...contentProps}>
+          <TooltipWrapper
+            component={
+              <p
+                className={cn(
+                  "font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold",
+                  cardTextTruncate
+                )}
+              >
+                {item?.title || ""}
+              </p>
+            }
+            title={item?.title || ""}
+          />
+        </LinkComponent>
 
         <div className="flex items-end justify-between mt-3">
-          <div>
-            <p
-              className={cn(
-                "font-light text-mobile-2xl sm:text-2xl text-primary opacity-50",
-                cardTextTruncate
-              )}
-            >
-              {item?.description || ""}
-            </p>
-            <p
-              className={cn(
-                "mt-2 font-medium text-mobile-3xl sm:text-3xl",
-                cardTextTruncate
-              )}
-            >
-              {item?.price || ""}
-            </p>
-          </div>
+          <LinkComponent {...contentProps}>
+            <>
+              <p
+                className={cn(
+                  "font-light text-mobile-2xl sm:text-2xl text-primary opacity-50",
+                  cardTextTruncate
+                )}
+              >
+                {item?.description || ""}
+              </p>
+              <p
+                className={cn(
+                  "mt-2 font-medium text-mobile-3xl sm:text-3xl",
+                  cardTextTruncate
+                )}
+              >
+                {item?.price || ""}
+              </p>
+            </>
+          </LinkComponent>
 
-          <div className="mb-1" onClick={() => toggleIndicateAddToCart()}>
+          <div
+            className="mb-1 cursor-pointer"
+            onClick={() => toggleIndicateAddToCart()}
+          >
             {indicateAddToCart ? (
               <div className="">
                 <LucideIcon

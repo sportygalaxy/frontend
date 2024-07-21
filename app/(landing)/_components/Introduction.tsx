@@ -16,7 +16,7 @@ const Introduction: React.FC<props> = ({
   return (
     <div
       className={cn(
-        "tablet-view wrapper flex items-center justify-between gap-28 md:gap-64",
+        "w-full flex items-center justify-between gap-28 md:gap-64",
         className
       )}
     >

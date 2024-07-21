@@ -14,6 +14,8 @@ import getPageTitle from "@/helpers/getPageTitle";
 import { logoUrl, NAV_CONSTANT } from "@/constants/appConstants";
 import Script from "next/script";
 import getScriptJson from "@/helpers/getScriptJson";
+import { Suspense } from "react";
+import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 
 export const metadata: Metadata = {
   metadataBase: new URL(webBaseUrl),
@@ -49,11 +51,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jost.className} relative grid grid-cols-12 gap-0 auto-rows-max w-full`}
+        className={`${jost.className} relative grid grid-cols-12 gap-0 auto-rows-max`}
       >
-        <header className="col-span-12 mx-auto w-full flex justify-center items-center">
-          <Navbar />
-        </header>
+        <Navbar />
+
         <main className="col-span-12 auto-rows-auto w-full h-full-minus-80 sm:h-full overflow-auto sm:overflow-hidden">
           <Script
             id="schema-organization"
@@ -77,7 +78,15 @@ export default function RootLayout({
             }}
           />
           <TopLoader />
-          {children}
+          <Suspense
+            fallback={
+              <div className="w-screen h-screen">
+                <SportygalaxyLoadingIndicator />
+              </div>
+            }
+          >
+            {children}
+          </Suspense>
         </main>
 
         <footer className="col-span-12 mx-auto w-full flex justify-center items-center">
