@@ -22,6 +22,7 @@ import { RoutesEnum } from "@/constants/routeEnums";
 import HeaderActiveLink from "./HeaderActiveLink";
 import Logo from "./Logo";
 import useToggle from "@/hooks/useToggle";
+import CartAddToCartDrawer from "@/components/cart/CartAddToCartDrawer";
 
 const TopNavbarDesktop = () => {
   const [openUploadModal, toggleUploadModal] = useToggle();
@@ -30,6 +31,7 @@ const TopNavbarDesktop = () => {
   const iconSize = {
     width: isMd ? "26" : "20",
     height: isMd ? "27" : "20",
+    color: "grey",
   };
 
   const selectFontSize = "text-mobile-xl md:text-xl";
@@ -54,16 +56,19 @@ const TopNavbarDesktop = () => {
 
   const CtaLink = [
     {
+      id: 1,
       name: "Notification",
       icon: <NotificationIcon {...iconSize} />,
       path: "notification",
     },
     {
+      id: 2,
       name: "Profile",
       icon: <UserIcon {...iconSize} />,
       path: "profile",
     },
     {
+      id: 3,
       name: "Cart",
       icon: <CartIcon {...iconSize} />,
       path: "cart",
@@ -130,6 +135,7 @@ const TopNavbarDesktop = () => {
       <section className="flex items-center justify-between gap-8">
         <Logo />
 
+        {/* <CartAddToCartDrawer item={[]} /> */}
         <Search
           placeholder="Search.."
           onSearchClick={handleSearchClick}
@@ -138,35 +144,35 @@ const TopNavbarDesktop = () => {
           onChange={handleChange}
         />
 
-        {/* logged in */}
-        {/* <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
-          {CtaLink.map((cta) => (
-            <span
-              key={cta.name}
-              className="p-2 md:p-4 border border-secondary rounded-full"
+        {true ? (
+          <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+            {CtaLink.map((cta) => (
+              <span
+                key={cta.id}
+                className="p-2 md:p-4 border border-secondary rounded-full"
+              >
+                {cta.icon}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+            <Button
+              className="text-mobile-xl md:text-xl px-4 lg:px-14"
+              variant="tertiary"
+              size="lg"
             >
-              {cta.icon}
-            </span>
-          ))}
-        </div> */}
-
-        {/* logged out */}
-        <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
-          <Button
-            className="text-mobile-xl md:text-xl px-4 lg:px-14"
-            variant="tertiary"
-            size="lg"
-          >
-            Sign in
-          </Button>
-          <Button
-            className="text-mobile-xl md:text-xl text-white px-4 lg:px-14"
-            variant="default"
-            size="lg"
-          >
-            Sign up
-          </Button>
-        </div>
+              Sign in
+            </Button>
+            <Button
+              className="text-mobile-xl md:text-xl text-white px-4 lg:px-14"
+              variant="default"
+              size="lg"
+            >
+              Sign up
+            </Button>
+          </div>
+        )}
       </section>
 
       {/* Upload modal */}
