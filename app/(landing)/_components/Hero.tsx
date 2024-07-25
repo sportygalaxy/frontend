@@ -4,7 +4,7 @@ import React from "react";
 const Hero = () => {
   return (
     <>
-      <div className="tablet-view relative mt-7 w-full h-full bg-dark-gradient bg-cover bg-no-repeat py-44">
+      <div className="desktop-tablet-view relative mt-7 w-full h-full bg-dark-gradient bg-cover bg-no-repeat py-44">
         <div className="wrapper flex flex-col gap-10">
           <div className="flex flex-col gap-1">
             <p className="text-primary-foreground text-6xl font-bold max-w-[367px]">

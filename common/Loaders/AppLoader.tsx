@@ -10,7 +10,7 @@ const AppLoader: FC<AppLoaderProps> = ({ className = "" }) => {
     <div
       aria-busy="true"
       aria-label="loading"
-      className={`flex-1 w-full h-full flex items-center justify-center bg-background ${className}`}
+      className={`flex-1 w-full h-full flex items-center justify-center bg-background py-40 ${className}`}
     >
       <SportygalaxyLoadingIndicator />
     </div>

@@ -52,6 +52,11 @@ export interface SVGIconProps {
    * The css class styling
    */
   className?: string;
+
+  /**
+   * The icon size
+   */
+  size?: number;
 }
 
 /**
@@ -70,6 +75,7 @@ const SVGIcon: FC<SVGIconProps> = ({
   strokeLinejoin,
   fillRule,
   className = "",
+  size = 24,
 }) => {
   return (
     <svg

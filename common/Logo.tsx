@@ -14,7 +14,7 @@ const Logo: FC<Props> = (props) => {
   const { color = "black", isFooter = false, ...rest } = props;
   return (
     <Link className="flex items-center" href={RoutesEnum.LANDING_PAGE}>
-      <div className={cn(isFooter ? "tablet-view" : "desktop-view")}>
+      <div className={cn(isFooter ? "desktop-tablet-view" : "desktop-view")}>
         <LogoIcon color={color} />
       </div>
       <div className="mobile-view">

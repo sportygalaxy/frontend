@@ -94,16 +94,16 @@ html {
   @apply hidden md:block;
 }
 
-.tablet-view {
-  @apply hidden sm:flex;
-}
-
-
-
-.mobile-tablet-view {
-  @apply flex sm:hidden;
-}
-
 .mobile-view {
   @apply flex md:hidden;
 }
+
+.desktop-tablet-view {
+  @apply hidden sm:flex;
+}
+
+.mobile-desktop-tablet-view {
+  @apply flex sm:hidden;
+}
+
+

@@ -9,7 +9,7 @@ const Title: FC<Props> = (props) => {
 
   return (
     <>
-      <div className="tablet-view mt-20 flex items-end gap-1 w-full">
+      <div className="desktop-tablet-view mt-20 flex items-end gap-1 w-full">
         <h1 className="min-w-[190px] text-3xl font-bold">NEW ARRIVAL.</h1>
         <Divider />
       </div>
@@ -35,7 +35,7 @@ interface DesktopTitleProps {
 }
 export const DesktopTitle = ({ title }: DesktopTitleProps) => {
   return (
-    <div className="tablet-view mt-20 flex items-end gap-1 w-full">
+    <div className="desktop-tablet-view mt-20 flex items-end gap-1 w-full">
       <h1 className="min-w-[190px] text-3xl font-bold">{title}</h1>
       <Divider />
     </div>

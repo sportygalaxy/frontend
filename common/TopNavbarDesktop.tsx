@@ -12,7 +12,6 @@ import NotificationIcon from "@/assets/icons/pack/Notification";
 import CartIcon from "@/assets/icons/pack/Cart";
 import UserIcon from "@/assets/icons/pack/User";
 import LogoIcon from "@/assets/icons/pack/Logo";
-import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
 import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 import GalleryIcon from "@/assets/icons/pack/Gallery";
@@ -26,11 +25,8 @@ import CartAddToCartDrawer from "@/components/cart/CartAddToCartDrawer";
 
 const TopNavbarDesktop = () => {
   const [openUploadModal, toggleUploadModal] = useToggle();
-  const { isMd } = useBreakpoint();
 
   const iconSize = {
-    width: isMd ? "26" : "20",
-    height: isMd ? "27" : "20",
     color: "grey",
   };
 
@@ -58,7 +54,20 @@ const TopNavbarDesktop = () => {
     {
       id: 1,
       name: "Notification",
-      icon: <NotificationIcon {...iconSize} />,
+      icon: (
+        <>
+          <NotificationIcon
+            className="desktop-tablet-view"
+            size={27}
+            {...iconSize}
+          />
+          <NotificationIcon
+            className="mobile-desktop-tablet-view"
+            size={20}
+            {...iconSize}
+          />
+        </>
+      ),
       path: "notification",
     },
     {
