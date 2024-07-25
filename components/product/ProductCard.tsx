@@ -1,11 +1,15 @@
 "use client";
+import MinusIcon from "@/assets/icons/pack/Minus";
 import Add from "@/common/Add";
 import LucideIcon from "@/common/Icons/LucideIcon";
 import LinkComponent from "@/common/Link";
+import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import TooltipWrapper from "@/components/tooltip";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { useHydration } from "@/hooks/useHydration";
 import useToggle from "@/hooks/useToggle";
 import { cn } from "@/lib/utils";
+import useCartStore from "@/store/cartStore";
 import { TProduct } from "@/types/product";
 import Image from "next/image";
 import React, { FC } from "react";
@@ -15,6 +19,9 @@ interface Props {
 }
 
 const ProductCard: FC<{ item: TProduct }> = (props) => {
+  const hydrated = useHydration();
+
+  const { addToCart, removeFromCart, cart } = useCartStore();
   const { item } = props;
   const [indicateAddToCart, toggleIndicateAddToCart] = useToggle();
   const cardTextTruncate =
@@ -25,6 +32,13 @@ const ProductCard: FC<{ item: TProduct }> = (props) => {
     className: "w-full cursor-pointer",
   };
 
+  if (!hydrated) {
+    return <SportygalaxyLoadingIndicator />;
+  }
+
+  function isItemInCart(itemId: number): any {
+    return cart.some((item) => item.id === itemId);
+  }
   return (
     <Card
       key={item.id}
@@ -85,7 +99,7 @@ const ProductCard: FC<{ item: TProduct }> = (props) => {
                   cardTextTruncate
                 )}
               >
-                {item?.price || ""}
+                ${item?.price || ""}
               </p>
             </>
           </LinkComponent>
@@ -94,23 +108,23 @@ const ProductCard: FC<{ item: TProduct }> = (props) => {
             className="mb-1 cursor-pointer"
             onClick={() => toggleIndicateAddToCart()}
           >
-            {indicateAddToCart ? (
-              <div className="">
-                <LucideIcon
-                  className="mobile-view"
-                  name="circle-check"
-                  size="25"
+            {isItemInCart(item.id) ? (
+              <div className="" onClick={() => removeFromCart(item.id)}>
+                <MinusIcon
+                  className="mobile-desktop-tablet-view"
+                  size={25}
                   color="var(--success)"
                 />
-                <LucideIcon
-                  className="tablet-view"
-                  name="circle-check"
-                  size="44"
+                <MinusIcon
+                  className="desktop-tablet-view"
+                  size={44}
                   color="var(--success)"
                 />
               </div>
             ) : (
-              <Add />
+              <div onClick={() => addToCart(item)}>
+                <Add />
+              </div>
             )}
           </div>
         </div>

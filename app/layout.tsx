@@ -16,6 +16,7 @@ import Script from "next/script";
 import getScriptJson from "@/helpers/getScriptJson";
 import { Suspense } from "react";
 import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
+import ReactQueryProvider from "./ReactQueryProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(webBaseUrl),
@@ -85,7 +86,7 @@ export default function RootLayout({
               </div>
             }
           >
-            {children}
+            <ReactQueryProvider>{children}</ReactQueryProvider>
           </Suspense>
         </main>
 
