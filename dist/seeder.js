@@ -10,14 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
-const crypto_1 = require("crypto");
 const prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         // Create some users
         const user1 = yield prisma.user.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 firstName: "John",
                 lastName: "Doe",
                 email: "john.doe@example.com",
@@ -28,7 +26,6 @@ function main() {
         });
         const user2 = yield prisma.user.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 firstName: "Jane",
                 lastName: "Smith",
                 email: "jane.smith@example.com",
@@ -40,14 +37,12 @@ function main() {
         // Create some categories
         const category1 = yield prisma.category.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 name: "Sports Equipment",
                 description: "Various sports equipment",
             },
         });
         const category2 = yield prisma.category.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 name: "Apparel",
                 description: "Sportswear and apparel",
             },
@@ -55,7 +50,6 @@ function main() {
         // Create some subcategories
         const subcategory1 = yield prisma.subcategory.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 name: "Basketball",
                 description: "Basketball equipment",
                 categoryId: category1.id,
@@ -63,16 +57,47 @@ function main() {
         });
         const subcategory2 = yield prisma.subcategory.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 name: "Running",
                 description: "Running gear and accessories",
                 categoryId: category2.id,
             },
         });
+        // Create sizes
+        const size1 = yield prisma.size.create({
+            data: {
+                name: "Small",
+            },
+        });
+        const size2 = yield prisma.size.create({
+            data: {
+                name: "Medium",
+            },
+        });
+        // Create colors
+        const color1 = yield prisma.color.create({
+            data: {
+                name: "Red",
+            },
+        });
+        const color2 = yield prisma.color.create({
+            data: {
+                name: "Blue",
+            },
+        });
+        // Create types
+        const type1 = yield prisma.type.create({
+            data: {
+                name: "Outdoor",
+            },
+        });
+        const type2 = yield prisma.type.create({
+            data: {
+                name: "Indoor",
+            },
+        });
         // Create some products
         const product1 = yield prisma.product.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 name: "Basketball",
                 description: "A high-quality basketball",
                 price: 29.99,
@@ -83,7 +108,6 @@ function main() {
         });
         const product2 = yield prisma.product.create({
             data: {
-                id: (0, crypto_1.randomUUID)(),
                 name: "Running Shoes",
                 description: "Comfortable running shoes",
                 price: 49.99,
@@ -91,6 +115,28 @@ function main() {
                 categoryId: category2.id,
                 subcategoryId: subcategory2.id,
             },
+        });
+        // Associate products with sizes
+        yield prisma.productOnSize.createMany({
+            data: [
+                { productId: product1.id, sizeId: size1.id },
+                { productId: product1.id, sizeId: size2.id },
+                { productId: product2.id, sizeId: size2.id },
+            ],
+        });
+        // Associate products with colors
+        yield prisma.productOnColor.createMany({
+            data: [
+                { productId: product1.id, colorId: color1.id },
+                { productId: product2.id, colorId: color2.id },
+            ],
+        });
+        // Associate products with types
+        yield prisma.productOnType.createMany({
+            data: [
+                { productId: product1.id, typeId: type1.id },
+                { productId: product2.id, typeId: type2.id },
+            ],
         });
         console.log("Seeding completed");
     });

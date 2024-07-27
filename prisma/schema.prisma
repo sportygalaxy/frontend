@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
   binaryTargets   = ["native"]
@@ -16,7 +10,7 @@ datasource db {
 }
 
 model User {
-  id         String  @id
+  id         String  @id @default(uuid())
   firstName  String
   lastName   String
   email      String  @unique
@@ -67,6 +61,33 @@ model Subcategory {
   @@map("subcategories")
 }
 
+model Size {
+  id   String @id @default(uuid())
+  name String
+
+  products ProductOnSize[]
+
+  @@map("sizes")
+}
+
+model Color {
+  id   String @id @default(uuid())
+  name String
+
+  products ProductOnColor[]
+
+  @@map("colors")
+}
+
+model Type {
+  id   String @id @default(uuid())
+  name String
+
+  products ProductOnType[]
+
+  @@map("types")
+}
+
 model Product {
   id            String    @id @default(uuid())
   name          String
@@ -79,11 +100,47 @@ model Product {
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
 
-  category    Category    @relation(fields: [categoryId], references: [id])
-  subcategory Subcategory @relation(fields: [subcategoryId], references: [id])
+  category    Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategory Subcategory      @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  sizes       ProductOnSize[]
+  colors      ProductOnColor[]
+  types       ProductOnType[]
   orders      OrderItem[]
 
   @@map("products")
+}
+
+model ProductOnSize {
+  productId String
+  sizeId    String
+
+  product Product @relation(fields: [productId], references: [id])
+  size    Size    @relation(fields: [sizeId], references: [id])
+
+  @@id([productId, sizeId])
+  @@map("product_on_size")
+}
+
+model ProductOnColor {
+  productId String
+  colorId   String
+
+  product Product @relation(fields: [productId], references: [id])
+  color   Color   @relation(fields: [colorId], references: [id])
+
+  @@id([productId, colorId])
+  @@map("product_on_color")
+}
+
+model ProductOnType {
+  productId String
+  typeId    String
+
+  product Product @relation(fields: [productId], references: [id])
+  type    Type    @relation(fields: [typeId], references: [id])
+
+  @@id([productId, typeId])
+  @@map("product_on_type")
 }
 
 model Order {
