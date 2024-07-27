@@ -12,6 +12,7 @@ const constants_1 = require("./src/constants");
 const EnvKeys_1 = require("./src/common/EnvKeys");
 const error_1 = require("./src/middleware/error");
 const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
+const product_route_1 = __importDefault(require("./src/routes/product.route"));
 const app = (0, express_1.default)();
 const apiPath = "/api/v1";
 app.use((0, cors_1.default)({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -21,6 +22,7 @@ if (EnvKeys_1.EnvKeys.isLocal()) {
     app.use((0, morgan_1.default)("dev"));
 }
 app.use(`${apiPath}/auth`, auth_route_1.default);
+app.use(`${apiPath}/products`, product_route_1.default);
 app.use(error_1.errorHandler);
 const PORT = process.env.PORT || constants_1.DEFAULT_PORT;
 app.listen(PORT, () => {

@@ -8,6 +8,7 @@ import { EnvKeys } from "./src/common/EnvKeys";
 import { errorHandler } from "./src/middleware/error";
 
 import authRoute from "./src/routes/auth.route";
+import productRoute from "./src/routes/product.route";
 
 const app: Express = express();
 const apiPath = "/api/v1";
@@ -21,6 +22,7 @@ if (EnvKeys.isLocal()) {
 }
 
 app.use(`${apiPath}/auth`, authRoute);
+app.use(`${apiPath}/products`, productRoute);
 
 app.use(errorHandler);
 

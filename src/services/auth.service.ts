@@ -129,7 +129,14 @@ export class AuthService {
     _next: NextFunction
   ) {
     try {
-      const payload = { email, firstName, lastName, phone, address, isVerified };
+      const payload = {
+        email,
+        firstName,
+        lastName,
+        phone,
+        address,
+        isVerified,
+      };
       const canRegister = await this.canRegister({ ...payload }, _next);
 
       if (!canRegister?.isCanRegister) {

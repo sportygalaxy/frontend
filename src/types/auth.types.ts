@@ -23,7 +23,6 @@ export interface LoginUserDto {
 // export type CanRegisterResponse = {
 //   id: string;
 //   email: string;
-//   username: string;
 //   avatar: string | null;
 //   createdAt: Date;
 // };

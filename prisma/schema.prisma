@@ -93,15 +93,15 @@ model Product {
   name          String
   description   String?
   price         Float
-  stock         Int
+  stock         Int?
   categoryId    String
   subcategoryId String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
 
-  category    Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  subcategory Subcategory      @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  category    Category         @relation(fields: [categoryId], references: [id])
+  subcategory Subcategory      @relation(fields: [subcategoryId], references: [id])
   sizes       ProductOnSize[]
   colors      ProductOnColor[]
   types       ProductOnType[]
@@ -114,7 +114,7 @@ model ProductOnSize {
   productId String
   sizeId    String
 
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   size    Size    @relation(fields: [sizeId], references: [id])
 
   @@id([productId, sizeId])
@@ -125,7 +125,7 @@ model ProductOnColor {
   productId String
   colorId   String
 
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   color   Color   @relation(fields: [colorId], references: [id])
 
   @@id([productId, colorId])
@@ -136,7 +136,7 @@ model ProductOnType {
   productId String
   typeId    String
 
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   type    Type    @relation(fields: [typeId], references: [id])
 
   @@id([productId, typeId])

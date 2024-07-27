@@ -103,7 +103,14 @@ class AuthService {
     register(_a, _next_1) {
         return __awaiter(this, arguments, void 0, function* ({ email, password, firstName, lastName, phone, address, isVerified, }, _next) {
             try {
-                const payload = { email, firstName, lastName, phone, address, isVerified };
+                const payload = {
+                    email,
+                    firstName,
+                    lastName,
+                    phone,
+                    address,
+                    isVerified,
+                };
                 const canRegister = yield this.canRegister(Object.assign({}, payload), _next);
                 if (!(canRegister === null || canRegister === void 0 ? void 0 : canRegister.isCanRegister)) {
                     return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_EXISTS_WITH_EMAIL_OR_USERNAME, constants_1.HTTP_STATUS_CODE[400].code));
