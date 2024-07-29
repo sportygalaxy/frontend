@@ -14,9 +14,10 @@ import prisma from "../lib/prisma";
 const productService = new ProductService();
 
 export const getProducts = asyncHandler(async (req, res, next) => {
-  const products = await prisma.product.findMany({
-    where: {},
-  });
+  const query = req.query;
+  const products = await productService.getProducts(query, next);
+
+  if (!products) return;
 
   res.status(200).json({
     message: "Fetch products successfully",
@@ -25,46 +26,9 @@ export const getProducts = asyncHandler(async (req, res, next) => {
   });
 });
 
-export const getProduct = asyncHandler(async (req, res) => {
+export const getProduct = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: {
-      category: true,
-      subcategory: true,
-      sizes: {
-        select: {
-          size: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      colors: {
-        select: {
-          color: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      types: {
-        select: {
-          type: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-      orders: true,
-    },
-  });
+  const product = await productService.getProduct(id, next);
 
   if (!product) return;
 
@@ -157,11 +121,9 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
 
   await productService.deleteProduct({ id }, next);
 
-  res
-    .status(200)
-    .json({
-      message: "Product deleted successfully",
-      data: null,
-      success: true,
-    });
+  res.status(200).json({
+    message: "Product deleted successfully",
+    data: null,
+    success: true,
+  });
 });

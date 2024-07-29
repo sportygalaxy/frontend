@@ -22,6 +22,87 @@ const update_product_attributes_1 = require("../helpers/update-product-attribute
 class ProductService {
     /**
      *
+     * @param _query
+     * @param _next
+     * @returns products list
+     */
+    getProducts(_query, _next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const products = yield prisma_1.default.product.findMany({
+                    where: Object.assign({}, (_query && _query)),
+                });
+                if (!products) {
+                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code));
+                }
+                return products;
+            }
+            catch (err) {
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_GETS_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
+            }
+        });
+    }
+    /**
+     *
+     * @param _id productId
+     * @param _next
+     * @returns product details
+     */
+    getProduct(_id, _next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const product = yield prisma_1.default.product.findUnique({
+                    where: { id: _id },
+                    include: {
+                        category: true,
+                        subcategory: true,
+                        sizes: {
+                            select: {
+                                size: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                    },
+                                },
+                            },
+                        },
+                        colors: {
+                            select: {
+                                color: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                    },
+                                },
+                            },
+                        },
+                        types: {
+                            select: {
+                                type: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                    },
+                                },
+                            },
+                        },
+                        orders: true,
+                    },
+                });
+                if (!product) {
+                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code));
+                }
+                return product;
+            }
+            catch (err) {
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_GETS_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
+            }
+        });
+    }
+    /**
+     *
      * @param _payload name, description, price, stock, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
      * @param _next
      * @returns product
@@ -156,6 +237,13 @@ class ProductService {
             }
         });
     }
+    /**
+     *
+     * @param _id productId
+     * @param _payload sizeIds[] | colorIds[] | typeIds[]
+     * @param _next
+     * @returns
+     */
     updateProductAttributes(_id, _payload, _next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { sizeIds = [], colorIds = [], typeIds = [] } = _payload;
@@ -191,7 +279,8 @@ class ProductService {
                 return null;
             }
             catch (err) {
-                return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_DELETE_FAILED, constants_1.HTTP_STATUS_CODE[400].code));
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_DELETE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
             }
         });
     }

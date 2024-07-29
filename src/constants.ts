@@ -15,6 +15,7 @@ export const ERROR_MESSAGES = {
   INVALID_IDENTIFIER: "Invalid Identifier Received",
   INVALID_PAYLOAD: "Invalid payload",
   PRODUCT_NOT_FOUND: "Sorry, product not found",
+  PRODUCT_GETS_FOUND: "Sorry, failed to retrive products",
   PRODUCT_DELETE_FAILED: "Sorry, failed to delete product",
   PRODUCT_CREATE_FAILED: "Sorry, failed to create product",
   PRODUCT_UPDATE_FAILED: "Sorry, failed to update product",

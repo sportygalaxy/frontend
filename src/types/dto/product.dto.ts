@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const getProductsSchema = z.object({});
+
+export type GetProductsSchemaDTO = z.infer<typeof getProductsSchema>;
+
+export const getProductSchema = z.object({});
+
+export type GetProductSchemaDTO = z.infer<typeof getProductSchema>;
+
 export const createProductSchema = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
@@ -50,4 +58,6 @@ export const updateProductSizeSchema = z.object({
   sizeIds: z.array(z.string()).optional(),
 });
 
-export type UpdateProductSizeSchemaDTO = z.infer<typeof updateProductSizeSchema>;
+export type UpdateProductSizeSchemaDTO = z.infer<
+  typeof updateProductSizeSchema
+>;

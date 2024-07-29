@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProductSizeSchema = exports.updateProductSchema = exports.updateAllProductSchema = exports.createProductSchema = void 0;
+exports.updateProductSizeSchema = exports.updateProductSchema = exports.updateAllProductSchema = exports.createProductSchema = exports.getProductSchema = exports.getProductsSchema = void 0;
 const zod_1 = require("zod");
+exports.getProductsSchema = zod_1.z.object({});
+exports.getProductSchema = zod_1.z.object({});
 exports.createProductSchema = zod_1.z.object({
     id: zod_1.z.string().uuid().optional(),
     name: zod_1.z.string(),

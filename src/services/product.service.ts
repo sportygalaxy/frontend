@@ -5,6 +5,8 @@ import { NextFunction } from "express";
 import {
   CreateProductDTO,
   CreateProductResponse,
+  GetProductDTO,
+  GetProductsDTO,
   ProductAttributeUpdateResponse,
   UpdateProductDTO,
   UpdateProductResponse,
@@ -12,11 +14,109 @@ import {
   UpdateProductSizeResponse,
 } from "../types/product.types";
 import { createProductSchema } from "../types/dto/product.dto";
-import { capitalizeFirstLetter } from "../utils";
 import { validateData } from "../helpers/validation";
 import { updateProductAttribute } from "../helpers/update-product-attributes";
 
 export class ProductService {
+  /**
+   *
+   * @param _query
+   * @param _next
+   * @returns products list
+   */
+  async getProducts(_query: GetProductsDTO, _next: NextFunction) {
+    try {
+      const products = await prisma.product.findMany({
+        where: {
+          ...(_query && _query),
+        },
+      });
+
+      if (!products) {
+        return _next(
+          new ErrorResponse(
+            ERROR_MESSAGES.PRODUCT_NOT_FOUND,
+            HTTP_STATUS_CODE[400].code
+          )
+        );
+      }
+
+      return products;
+    } catch (err) {
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.PRODUCT_GETS_FOUND,
+        HTTP_STATUS_CODE[400].code
+      );
+    }
+  }
+
+  /**
+   *
+   * @param _id productId
+   * @param _next
+   * @returns product details
+   */
+  async getProduct(_id: string, _next: NextFunction) {
+    try {
+      const product = await prisma.product.findUnique({
+        where: { id: _id },
+        include: {
+          category: true,
+          subcategory: true,
+          sizes: {
+            select: {
+              size: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          colors: {
+            select: {
+              color: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          types: {
+            select: {
+              type: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          orders: true,
+        },
+      });
+
+      if (!product) {
+        return _next(
+          new ErrorResponse(
+            ERROR_MESSAGES.PRODUCT_NOT_FOUND,
+            HTTP_STATUS_CODE[400].code
+          )
+        );
+      }
+
+      return product;
+    } catch (err) {
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.PRODUCT_GETS_FOUND,
+        HTTP_STATUS_CODE[400].code
+      );
+    }
+  }
+
   /**
    *
    * @param _payload name, description, price, stock, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
@@ -210,6 +310,13 @@ export class ProductService {
     }
   }
 
+  /**
+   *
+   * @param _id productId
+   * @param _payload sizeIds[] | colorIds[] | typeIds[]
+   * @param _next
+   * @returns
+   */
   async updateProductAttributes(
     _id: string,
     _payload: any,
@@ -273,11 +380,10 @@ export class ProductService {
 
       return null;
     } catch (err) {
-      return _next(
-        new ErrorResponse(
-          ERROR_MESSAGES.PRODUCT_DELETE_FAILED,
-          HTTP_STATUS_CODE[400].code
-        )
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.PRODUCT_DELETE_FAILED,
+        HTTP_STATUS_CODE[400].code
       );
     }
   }

@@ -1,10 +1,48 @@
 import {
   CreateProductSchemaDTO,
+  GetProductSchemaDTO,
+  GetProductsSchemaDTO,
   UpdateAllProductSchemaDTO,
   UpdateProductSchemaDTO,
   UpdateProductSizeSchemaDTO,
 } from "./dto/product.dto";
 import { ApiResponse } from "./global.types";
+
+// export interface GetProductsDTO {}
+
+export interface GetProductsResponse {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  stock: number | null;
+  categoryId: string;
+  subcategoryId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}
+
+export type GetProductsDTO = GetProductsSchemaDTO;
+export type GetProductsApiResponse = ApiResponse<GetProductsResponse>;
+
+// export interface GetProductsDTO {}
+
+export interface GetProductResponse {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  stock: number | null;
+  categoryId: string;
+  subcategoryId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}
+
+export type GetProductDTO = GetProductSchemaDTO;
+export type GetProductApiResponse = ApiResponse<GetProductResponse>;
 
 // export interface CreateProductDTO {
 //   name: string;
@@ -108,10 +146,10 @@ export type UpdateProductSizeDTO = UpdateProductSizeSchemaDTO;
 export type UpdateProductSizeApiResponse =
   ApiResponse<UpdateProductSizeResponse>;
 
-
-  export type AttributeId = "sizeId" | "colorId" | "typeId";
-  export interface ProductAttributeUpdate<T extends AttributeId> {
-    productId: string;
-    attributeId: T;
-  }
-  export type ProductAttributeUpdateResponse = ProductAttributeUpdate<AttributeId>[];
+export type AttributeId = "sizeId" | "colorId" | "typeId";
+export interface ProductAttributeUpdate<T extends AttributeId> {
+  productId: string;
+  attributeId: T;
+}
+export type ProductAttributeUpdateResponse =
+  ProductAttributeUpdate<AttributeId>[];
