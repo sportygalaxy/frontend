@@ -22,6 +22,11 @@ exports.ERROR_MESSAGES = {
     PRODUCT_DELETE_FAILED: "Sorry, failed to delete product",
     PRODUCT_CREATE_FAILED: "Sorry, failed to create product",
     PRODUCT_UPDATE_FAILED: "Sorry, failed to update product",
+    PRODUCT_SIZE_NOT_FOUND: "Sorry, product size not found",
+    PRODUCT_SIZE_GETS_FOUND: "Sorry, failed to retrive product sizes",
+    PRODUCT_SIZE_DELETE_FAILED: "Sorry, failed to delete product size",
+    PRODUCT_SIZE_CREATE_FAILED: "Sorry, failed to create product size",
+    PRODUCT_SIZE_UPDATE_FAILED: "Sorry, failed to update product size",
 };
 exports.ENVIRONMENTS = {
     local: "local",
