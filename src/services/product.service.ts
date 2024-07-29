@@ -327,7 +327,7 @@ export class ProductService {
     let updatedProducts: ProductAttributeUpdateResponse = [];
 
     try {
-      if (sizeIds.length > 0) {
+      if (sizeIds.length >= 0) {
         const updatedSizes = await updateProductAttribute(
           _id,
           "size",
@@ -337,7 +337,7 @@ export class ProductService {
         updatedProducts = updatedProducts.concat(updatedSizes);
       }
 
-      if (colorIds.length > 0) {
+      if (colorIds.length >= 0) {
         const updatedColors = await updateProductAttribute(
           _id,
           "color",
@@ -347,7 +347,7 @@ export class ProductService {
         updatedProducts = updatedProducts.concat(updatedColors);
       }
 
-      if (typeIds.length > 0) {
+      if (typeIds.length >= 0) {
         const updatedTypes = await updateProductAttribute(
           _id,
           "type",

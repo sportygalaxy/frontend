@@ -28,6 +28,38 @@ export async function updateProductAttribute(
   }
 
   try {
+    // Find all existing relations for the product
+    const existingRelations = await prismaModel.findMany({
+      where: {
+        productId: _id,
+      },
+    });
+
+    const existingIds = existingRelations.map(
+      (relation: any) => relation[`${attribute}Id`]
+    );
+
+    // Delete relations not in the new ids
+    for (const existingId of existingIds) {
+      if (!ids.includes(existingId)) {
+        await prismaModel.deleteMany({
+          where: {
+            productId: _id,
+            [`${attribute}Id`]: existingId,
+          },
+        });
+      }
+    }
+
+    if (existingIds.length === 0) {
+      await prismaModel.deleteMany({
+        where: {
+          productId: _id,
+        },
+      });
+    }
+
+    // Create or update relations for ids in the new array
     for (const id of ids) {
       const whereClause: any = {
         [`productId_${attribute}Id`]: {
@@ -41,27 +73,24 @@ export async function updateProductAttribute(
       });
 
       if (!productOnAttribute) {
-        throw new ErrorResponse(
-          ERROR_MESSAGES.PRODUCT_NOT_FOUND,
-          HTTP_STATUS_CODE[400].code
-        );
+        // Create if it doesn't exist
+        const createdProductOnAttribute = await prismaModel.create({
+          data: {
+            productId: _id,
+            [`${attribute}Id`]: id,
+          },
+        });
+        updatedProducts.push(createdProductOnAttribute);
+      } else {
+        // Update if it exists
+        const updatedProductOnAttribute = await prismaModel.update({
+          where: whereClause,
+          data: {
+            [`${attribute}Id`]: id,
+          },
+        });
+        updatedProducts.push(updatedProductOnAttribute);
       }
-
-      const updatedProductOnAttribute = await prismaModel.update({
-        where: whereClause,
-        data: {
-          [`${attribute}Id`]: id,
-        },
-      });
-
-      if (!updatedProductOnAttribute) {
-        throw new ErrorResponse(
-          ERROR_MESSAGES.PRODUCT_UPDATE_FAILED,
-          HTTP_STATUS_CODE[400].code
-        );
-      }
-
-      updatedProducts.push(updatedProductOnAttribute);
     }
 
     return updatedProducts;

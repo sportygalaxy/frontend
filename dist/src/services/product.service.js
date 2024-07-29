@@ -249,15 +249,15 @@ class ProductService {
             const { sizeIds = [], colorIds = [], typeIds = [] } = _payload;
             let updatedProducts = [];
             try {
-                if (sizeIds.length > 0) {
+                if (sizeIds.length >= 0) {
                     const updatedSizes = yield (0, update_product_attributes_1.updateProductAttribute)(_id, "size", sizeIds, _next);
                     updatedProducts = updatedProducts.concat(updatedSizes);
                 }
-                if (colorIds.length > 0) {
+                if (colorIds.length >= 0) {
                     const updatedColors = yield (0, update_product_attributes_1.updateProductAttribute)(_id, "color", colorIds, _next);
                     updatedProducts = updatedProducts.concat(updatedColors);
                 }
-                if (typeIds.length > 0) {
+                if (typeIds.length >= 0) {
                     const updatedTypes = yield (0, update_product_attributes_1.updateProductAttribute)(_id, "type", typeIds, _next);
                     updatedProducts = updatedProducts.concat(updatedTypes);
                 }

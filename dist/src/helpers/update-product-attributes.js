@@ -34,6 +34,32 @@ function updateProductAttribute(_id, attribute, ids, _next) {
             throw new Error(`Model ${modelName} not found in Prisma client.`);
         }
         try {
+            // Find all existing relations for the product
+            const existingRelations = yield prismaModel.findMany({
+                where: {
+                    productId: _id,
+                },
+            });
+            const existingIds = existingRelations.map((relation) => relation[`${attribute}Id`]);
+            // Delete relations not in the new ids
+            for (const existingId of existingIds) {
+                if (!ids.includes(existingId)) {
+                    yield prismaModel.deleteMany({
+                        where: {
+                            productId: _id,
+                            [`${attribute}Id`]: existingId,
+                        },
+                    });
+                }
+            }
+            if (existingIds.length === 0) {
+                yield prismaModel.deleteMany({
+                    where: {
+                        productId: _id,
+                    },
+                });
+            }
+            // Create or update relations for ids in the new array
             for (const id of ids) {
                 const whereClause = {
                     [`productId_${attribute}Id`]: {
@@ -45,18 +71,25 @@ function updateProductAttribute(_id, attribute, ids, _next) {
                     where: whereClause,
                 });
                 if (!productOnAttribute) {
-                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
+                    // Create if it doesn't exist
+                    const createdProductOnAttribute = yield prismaModel.create({
+                        data: {
+                            productId: _id,
+                            [`${attribute}Id`]: id,
+                        },
+                    });
+                    updatedProducts.push(createdProductOnAttribute);
                 }
-                const updatedProductOnAttribute = yield prismaModel.update({
-                    where: whereClause,
-                    data: {
-                        [`${attribute}Id`]: id,
-                    },
-                });
-                if (!updatedProductOnAttribute) {
-                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_UPDATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
+                else {
+                    // Update if it exists
+                    const updatedProductOnAttribute = yield prismaModel.update({
+                        where: whereClause,
+                        data: {
+                            [`${attribute}Id`]: id,
+                        },
+                    });
+                    updatedProducts.push(updatedProductOnAttribute);
                 }
-                updatedProducts.push(updatedProductOnAttribute);
             }
             return updatedProducts;
         }
