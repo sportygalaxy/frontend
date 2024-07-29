@@ -18,12 +18,13 @@ const prisma_1 = __importDefault(require("../lib/prisma"));
 const utils_1 = require("../utils");
 const errorResponse_1 = require("../utils/errorResponse");
 /**
+ * Updates product attribute relationships for a given attribute type.
  *
- * @param _id productId
- * @param attribute size | color | type
- * @param ids sizeIds[] | colorIds[] | typeIds[]
- * @param _next
- * @returns A Facade to update size, color, type
+ * @param _id - The product ID.
+ * @param attribute - The attribute type (size, color, type).
+ * @param ids - An array of IDs corresponding to the attribute type.
+ * @param _next - The next function for error handling.
+ * @returns A promise that resolves to an array of updated product attributes.
  */
 function updateProductAttribute(_id, attribute, ids, _next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -40,38 +41,18 @@ function updateProductAttribute(_id, attribute, ids, _next) {
                     productId: _id,
                 },
             });
-            const existingIds = existingRelations.map((relation) => relation[`${attribute}Id`]);
-            // Delete relations not in the new ids
-            for (const existingId of existingIds) {
-                if (!ids.includes(existingId)) {
-                    yield prismaModel.deleteMany({
-                        where: {
-                            productId: _id,
-                            [`${attribute}Id`]: existingId,
-                        },
-                    });
-                }
-            }
-            if (existingIds.length === 0) {
-                yield prismaModel.deleteMany({
-                    where: {
-                        productId: _id,
-                    },
-                });
-            }
-            // Create or update relations for ids in the new array
+            const existingIds = new Set(existingRelations === null || existingRelations === void 0 ? void 0 : existingRelations.map((relation) => relation[`${attribute}Id`]));
+            // Remove relations not in the new IDs
+            const idsToRemove = [...existingIds].filter((existingId) => !ids.includes(existingId));
+            yield prismaModel.deleteMany({
+                where: {
+                    productId: _id,
+                    [`${attribute}Id`]: { in: idsToRemove },
+                },
+            });
+            // Create or update relations for IDs in the new array
             for (const id of ids) {
-                const whereClause = {
-                    [`productId_${attribute}Id`]: {
-                        productId: _id,
-                        [`${attribute}Id`]: id,
-                    },
-                };
-                const productOnAttribute = yield prismaModel.findUnique({
-                    where: whereClause,
-                });
-                if (!productOnAttribute) {
-                    // Create if it doesn't exist
+                if (!existingIds.has(id)) {
                     const createdProductOnAttribute = yield prismaModel.create({
                         data: {
                             productId: _id,
@@ -81,9 +62,13 @@ function updateProductAttribute(_id, attribute, ids, _next) {
                     updatedProducts.push(createdProductOnAttribute);
                 }
                 else {
-                    // Update if it exists
                     const updatedProductOnAttribute = yield prismaModel.update({
-                        where: whereClause,
+                        where: {
+                            [`productId_${attribute}Id`]: {
+                                productId: _id,
+                                [`${attribute}Id`]: id,
+                            },
+                        },
                         data: {
                             [`${attribute}Id`]: id,
                         },

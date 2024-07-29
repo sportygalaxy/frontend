@@ -5,13 +5,22 @@ import { ProductAttributeUpdateResponse } from "../types/product.types";
 import { capitalizeFirstLetter } from "../utils";
 import { ErrorResponse } from "../utils/errorResponse";
 
+type BaseRelation = {
+  productId: string;
+};
+
+type RelationT<T extends string> = BaseRelation & {
+  [key in T]: string;
+};
+
 /**
+ * Updates product attribute relationships for a given attribute type.
  *
- * @param _id productId
- * @param attribute size | color | type
- * @param ids sizeIds[] | colorIds[] | typeIds[]
- * @param _next
- * @returns A Facade to update size, color, type
+ * @param _id - The product ID.
+ * @param attribute - The attribute type (size, color, type).
+ * @param ids - An array of IDs corresponding to the attribute type.
+ * @param _next - The next function for error handling.
+ * @returns A promise that resolves to an array of updated product attributes.
  */
 export async function updateProductAttribute(
   _id: string,
@@ -35,45 +44,27 @@ export async function updateProductAttribute(
       },
     });
 
-    const existingIds = existingRelations.map(
-      (relation: any) => relation[`${attribute}Id`]
+    const existingIds = new Set(
+      existingRelations?.map(
+        (relation: RelationT<string>) => relation[`${attribute}Id`]
+      )
     );
 
-    // Delete relations not in the new ids
-    for (const existingId of existingIds) {
-      if (!ids.includes(existingId)) {
-        await prismaModel.deleteMany({
-          where: {
-            productId: _id,
-            [`${attribute}Id`]: existingId,
-          },
-        });
-      }
-    }
+    // Remove relations not in the new IDs
+    const idsToRemove = [...existingIds].filter(
+      (existingId) => !ids.includes(existingId as string)
+    );
 
-    if (existingIds.length === 0) {
-      await prismaModel.deleteMany({
-        where: {
-          productId: _id,
-        },
-      });
-    }
+    await prismaModel.deleteMany({
+      where: {
+        productId: _id,
+        [`${attribute}Id`]: { in: idsToRemove },
+      },
+    });
 
-    // Create or update relations for ids in the new array
+    // Create or update relations for IDs in the new array
     for (const id of ids) {
-      const whereClause: any = {
-        [`productId_${attribute}Id`]: {
-          productId: _id,
-          [`${attribute}Id`]: id,
-        },
-      };
-
-      const productOnAttribute = await prismaModel.findUnique({
-        where: whereClause,
-      });
-
-      if (!productOnAttribute) {
-        // Create if it doesn't exist
+      if (!existingIds.has(id)) {
         const createdProductOnAttribute = await prismaModel.create({
           data: {
             productId: _id,
@@ -82,9 +73,13 @@ export async function updateProductAttribute(
         });
         updatedProducts.push(createdProductOnAttribute);
       } else {
-        // Update if it exists
         const updatedProductOnAttribute = await prismaModel.update({
-          where: whereClause,
+          where: {
+            [`productId_${attribute}Id`]: {
+              productId: _id,
+              [`${attribute}Id`]: id,
+            },
+          },
           data: {
             [`${attribute}Id`]: id,
           },

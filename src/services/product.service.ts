@@ -311,53 +311,35 @@ export class ProductService {
   }
 
   /**
+   * Updates product attributes such as size, color, and type.
    *
-   * @param _id productId
-   * @param _payload sizeIds[] | colorIds[] | typeIds[]
-   * @param _next
-   * @returns
+   * @param _id - The product ID.
+   * @param _payload - An object containing arrays of sizeIds, colorIds, and typeIds.
+   * @param _next - The next function for error handling.
+   * @returns A promise that resolves to an array of updated product attributes.
    */
   async updateProductAttributes(
     _id: string,
-    _payload: any,
+    _payload: { sizeIds?: string[]; colorIds?: string[]; typeIds?: string[] },
     _next: NextFunction
   ): Promise<ProductAttributeUpdateResponse> {
     const { sizeIds = [], colorIds = [], typeIds = [] } = _payload;
 
-    let updatedProducts: ProductAttributeUpdateResponse = [];
-
     try {
-      if (sizeIds.length >= 0) {
-        const updatedSizes = await updateProductAttribute(
-          _id,
-          "size",
-          sizeIds,
-          _next
-        );
-        updatedProducts = updatedProducts.concat(updatedSizes);
-      }
+      const updatedProducts = await Promise.all([
+        sizeIds.length >= 0
+          ? updateProductAttribute(_id, "size", sizeIds, _next)
+          : [],
+        colorIds.length >= 0
+          ? updateProductAttribute(_id, "color", colorIds, _next)
+          : [],
+        typeIds.length >= 0
+          ? updateProductAttribute(_id, "type", typeIds, _next)
+          : [],
+      ]);
 
-      if (colorIds.length >= 0) {
-        const updatedColors = await updateProductAttribute(
-          _id,
-          "color",
-          colorIds,
-          _next
-        );
-        updatedProducts = updatedProducts.concat(updatedColors);
-      }
-
-      if (typeIds.length >= 0) {
-        const updatedTypes = await updateProductAttribute(
-          _id,
-          "type",
-          typeIds,
-          _next
-        );
-        updatedProducts = updatedProducts.concat(updatedTypes);
-      }
-
-      return updatedProducts;
+      // Flatten the array of arrays into a single array
+      return updatedProducts.flat();
     } catch (err: any) {
       _next(err);
       throw new ErrorResponse(

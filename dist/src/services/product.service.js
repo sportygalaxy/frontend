@@ -238,30 +238,30 @@ class ProductService {
         });
     }
     /**
+     * Updates product attributes such as size, color, and type.
      *
-     * @param _id productId
-     * @param _payload sizeIds[] | colorIds[] | typeIds[]
-     * @param _next
-     * @returns
+     * @param _id - The product ID.
+     * @param _payload - An object containing arrays of sizeIds, colorIds, and typeIds.
+     * @param _next - The next function for error handling.
+     * @returns A promise that resolves to an array of updated product attributes.
      */
     updateProductAttributes(_id, _payload, _next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { sizeIds = [], colorIds = [], typeIds = [] } = _payload;
-            let updatedProducts = [];
             try {
-                if (sizeIds.length >= 0) {
-                    const updatedSizes = yield (0, update_product_attributes_1.updateProductAttribute)(_id, "size", sizeIds, _next);
-                    updatedProducts = updatedProducts.concat(updatedSizes);
-                }
-                if (colorIds.length >= 0) {
-                    const updatedColors = yield (0, update_product_attributes_1.updateProductAttribute)(_id, "color", colorIds, _next);
-                    updatedProducts = updatedProducts.concat(updatedColors);
-                }
-                if (typeIds.length >= 0) {
-                    const updatedTypes = yield (0, update_product_attributes_1.updateProductAttribute)(_id, "type", typeIds, _next);
-                    updatedProducts = updatedProducts.concat(updatedTypes);
-                }
-                return updatedProducts;
+                const updatedProducts = yield Promise.all([
+                    sizeIds.length >= 0
+                        ? (0, update_product_attributes_1.updateProductAttribute)(_id, "size", sizeIds, _next)
+                        : [],
+                    colorIds.length >= 0
+                        ? (0, update_product_attributes_1.updateProductAttribute)(_id, "color", colorIds, _next)
+                        : [],
+                    typeIds.length >= 0
+                        ? (0, update_product_attributes_1.updateProductAttribute)(_id, "type", typeIds, _next)
+                        : [],
+                ]);
+                // Flatten the array of arrays into a single array
+                return updatedProducts.flat();
             }
             catch (err) {
                 _next(err);
