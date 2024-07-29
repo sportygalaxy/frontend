@@ -4,44 +4,43 @@ import { ErrorResponse } from "../utils/errorResponse";
 import { NextFunction } from "express";
 import { validateData } from "../helpers/validation";
 import {
-  CreateProductSizeDTO,
-  CreateProductSizeResponse,
-  GetProductSizesDTO,
-  UpdateProductSizeDTO,
-  UpdateProductSizeResponse,
-} from "types/product-size.types";
-import { createProductSizeSchema } from "../types/dto/product-size.dto";
-import { UpdateProductResponse } from "../types/product.types";
+  CreateProductColorDTO,
+  CreateProductColorResponse,
+  GetProductColorsDTO,
+  UpdateProductColorDTO,
+  UpdateProductColorResponse,
+} from "../types/product-color.types";
+import { createProductColorSchema } from "../types/dto/product-color.dto";
 
-export class ProductSizeService {
+export class ProductColorService {
   /**
    *
    * @param _query
    * @param _next
-   * @returns products size list
+   * @returns products color list
    */
-  async getProductSizes(_query: GetProductSizesDTO, _next: NextFunction) {
+  async getProductColors(_query: GetProductColorsDTO, _next: NextFunction) {
     try {
-      const productSizes = await prisma.size.findMany({
+      const productColors = await prisma.color.findMany({
         where: {
           ...(_query && _query),
         },
       });
 
-      if (!productSizes) {
+      if (!productColors) {
         return _next(
           new ErrorResponse(
-            ERROR_MESSAGES.PRODUCT_SIZE_NOT_FOUND,
+            ERROR_MESSAGES.PRODUCT_COLOR_NOT_FOUND,
             HTTP_STATUS_CODE[400].code
           )
         );
       }
 
-      return productSizes;
+      return productColors;
     } catch (err) {
       _next(err);
       throw new ErrorResponse(
-        ERROR_MESSAGES.PRODUCT_SIZE_GETS_FOUND,
+        ERROR_MESSAGES.PRODUCT_COLOR_GETS_FOUND,
         HTTP_STATUS_CODE[400].code
       );
     }
@@ -49,31 +48,31 @@ export class ProductSizeService {
 
   /**
    *
-   * @param _id sizeId
+   * @param _id colorId
    * @param _next
-   * @returns product size details
+   * @returns product color details
    */
-  async getProductSize(_id: string, _next: NextFunction) {
+  async getProductColor(_id: string, _next: NextFunction) {
     try {
-      const productSize = await prisma.size.findUnique({
+      const productColor = await prisma.color.findUnique({
         where: { id: _id },
         include: {},
       });
 
-      if (!productSize) {
+      if (!productColor) {
         return _next(
           new ErrorResponse(
-            ERROR_MESSAGES.PRODUCT_SIZE_NOT_FOUND,
+            ERROR_MESSAGES.PRODUCT_COLOR_NOT_FOUND,
             HTTP_STATUS_CODE[400].code
           )
         );
       }
 
-      return productSize;
+      return productColor;
     } catch (err) {
       _next(err);
       throw new ErrorResponse(
-        ERROR_MESSAGES.PRODUCT_SIZE_GETS_FOUND,
+        ERROR_MESSAGES.PRODUCT_COLOR_GETS_FOUND,
         HTTP_STATUS_CODE[400].code
       );
     }
@@ -85,36 +84,36 @@ export class ProductSizeService {
    * @param _next
    * @returns product
    */
-  async createProductSize(
-    _payload: CreateProductSizeDTO,
+  async createProductColor(
+    _payload: CreateProductColorDTO,
     _next: NextFunction
-  ): Promise<CreateProductSizeResponse> {
-    const validateProductSize = (productSize: CreateProductSizeDTO) =>
-      validateData(createProductSizeSchema, productSize);
+  ): Promise<CreateProductColorResponse> {
+    const validateProductColor = (productColor: CreateProductColorDTO) =>
+      validateData(createProductColorSchema, productColor);
 
     const { name } = _payload;
 
     try {
-      validateProductSize(_payload);
-      const productSize = await prisma.size.create({
+      validateProductColor(_payload);
+      const productColor = await prisma.color.create({
         data: {
           name,
         },
         include: {},
       });
 
-      if (!productSize) {
+      if (!productColor) {
         throw new ErrorResponse(
-          ERROR_MESSAGES.PRODUCT_SIZE_CREATE_FAILED,
+          ERROR_MESSAGES.PRODUCT_COLOR_CREATE_FAILED,
           HTTP_STATUS_CODE[400].code
         );
       }
 
-      return productSize;
+      return productColor;
     } catch (err: any) {
       _next(err);
       throw new ErrorResponse(
-        ERROR_MESSAGES.PRODUCT_SIZE_CREATE_FAILED,
+        ERROR_MESSAGES.PRODUCT_COLOR_CREATE_FAILED,
         HTTP_STATUS_CODE[400].code
       );
     }
@@ -127,46 +126,46 @@ export class ProductSizeService {
    * @param _next
    * @returns product
    */
-  async updateProductSize(
+  async updateProductColor(
     _id: string,
-    _payload: UpdateProductSizeDTO,
+    _payload: UpdateProductColorDTO,
     _next: NextFunction
-  ): Promise<UpdateProductSizeResponse> {
+  ): Promise<UpdateProductColorResponse> {
     const { name } = _payload;
     try {
-      await this.getProductSize(_id, _next);
-      const updatedProductSize = await prisma.size.update({
+      await this.getProductColor(_id, _next);
+      const updatedProductColor = await prisma.color.update({
         where: { id: _id },
         data: {
           ...(name && { name }),
         },
       });
 
-      if (!updatedProductSize) {
+      if (!updatedProductColor) {
         throw new ErrorResponse(
-          ERROR_MESSAGES.PRODUCT_SIZE_UPDATE_FAILED,
+          ERROR_MESSAGES.PRODUCT_COLOR_UPDATE_FAILED,
           HTTP_STATUS_CODE[400].code
         );
       }
 
-      return updatedProductSize;
+      return updatedProductColor;
     } catch (err: any) {
       _next(err);
       throw new ErrorResponse(
-        ERROR_MESSAGES.PRODUCT_SIZE_UPDATE_FAILED,
+        ERROR_MESSAGES.PRODUCT_COLOR_UPDATE_FAILED,
         HTTP_STATUS_CODE[400].code
       );
     }
   }
 
-  async deleteProductSize(
+  async deleteProductColor(
     _dto: { id: string },
     _next: NextFunction
   ): Promise<null | void> {
     const { id: _id } = _dto;
 
     try {
-      await prisma.size.delete({
+      await prisma.color.delete({
         where: { id: _id },
       });
 
@@ -174,7 +173,7 @@ export class ProductSizeService {
     } catch (err) {
       _next(err);
       throw new ErrorResponse(
-        ERROR_MESSAGES.PRODUCT_SIZE_DELETE_FAILED,
+        ERROR_MESSAGES.PRODUCT_COLOR_DELETE_FAILED,
         HTTP_STATUS_CODE[400].code
       );
     }

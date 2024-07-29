@@ -1,4 +1,9 @@
-import { CreateProductSizeSchemaDTO, GetProductSizeSchemaDTO, GetProductSizesSchemaDTO, UpdateProductSizeSchemaDTO } from "./dto/product-size.dto";
+import {
+  CreateProductSizeSchemaDTO,
+  GetProductSizeSchemaDTO,
+  GetProductSizesSchemaDTO,
+  UpdateProductSizeSchemaDTO,
+} from "./dto/product-size.dto";
 import { ApiResponse } from "./global.types";
 
 // export interface GetProductSizesDTO {}
@@ -37,7 +42,8 @@ export interface CreateProductSizeResponse {
 }
 
 export type CreateProductSizeDTO = CreateProductSizeSchemaDTO;
-export type CreateProductSizeApiResponse = ApiResponse<CreateProductSizeResponse>;
+export type CreateProductSizeApiResponse =
+  ApiResponse<CreateProductSizeResponse>;
 
 // export interface UpdateProductSizeDTO {
 //   name: string;
@@ -45,20 +51,9 @@ export type CreateProductSizeApiResponse = ApiResponse<CreateProductSizeResponse
 
 export interface UpdateProductSizeResponse {
   id: string;
-  name?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date | null;
+  name: string;
 }
 
 export type UpdateProductSizeDTO = UpdateProductSizeSchemaDTO;
-export type UpdateProductSizeApiResponse = ApiResponse<UpdateProductSizeResponse>;
-
-// export interface UpdateProductSizeDTO {
-//   sizeIds: string[];
-// }
-
-export interface UpdateProductSizeResponse {
-  productId: string;
-  sizeId: string;
-}
+export type UpdateProductSizeApiResponse =
+  ApiResponse<UpdateProductSizeResponse>;

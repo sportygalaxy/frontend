@@ -27,6 +27,11 @@ exports.ERROR_MESSAGES = {
     PRODUCT_SIZE_DELETE_FAILED: "Sorry, failed to delete product size",
     PRODUCT_SIZE_CREATE_FAILED: "Sorry, failed to create product size",
     PRODUCT_SIZE_UPDATE_FAILED: "Sorry, failed to update product size",
+    PRODUCT_COLOR_NOT_FOUND: "Sorry, product color not found",
+    PRODUCT_COLOR_GETS_FOUND: "Sorry, failed to retrive product colors",
+    PRODUCT_COLOR_DELETE_FAILED: "Sorry, failed to delete product color",
+    PRODUCT_COLOR_CREATE_FAILED: "Sorry, failed to create product color",
+    PRODUCT_COLOR_UPDATE_FAILED: "Sorry, failed to update product color",
 };
 exports.ENVIRONMENTS = {
     local: "local",
