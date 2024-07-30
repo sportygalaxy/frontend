@@ -37,6 +37,11 @@ exports.ERROR_MESSAGES = {
     PRODUCT_CATEGORY_DELETE_FAILED: "Sorry, failed to delete product category",
     PRODUCT_CATEGORY_CREATE_FAILED: "Sorry, failed to create product category",
     PRODUCT_CATEGORY_UPDATE_FAILED: "Sorry, failed to update product category",
+    PRODUCT_SUB_CATEGORY_NOT_FOUND: "Sorry, product sub category not found",
+    PRODUCT_SUB_CATEGORY_GETS_FOUND: "Sorry, failed to retrive product sub categorys",
+    PRODUCT_SUB_CATEGORY_DELETE_FAILED: "Sorry, failed to delete product sub category",
+    PRODUCT_SUB_CATEGORY_CREATE_FAILED: "Sorry, failed to create product sub category",
+    PRODUCT_SUB_CATEGORY_UPDATE_FAILED: "Sorry, failed to update product sub category",
 };
 exports.ENVIRONMENTS = {
     local: "local",

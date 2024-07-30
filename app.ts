@@ -13,6 +13,7 @@ import productRoute from "./src/routes/product.route";
 import productSizeRoute from "./src/routes/product-size.route";
 import productColorRoute from "./src/routes/product-color.route";
 import productCategoryRoute from "./src/routes/product-category.route";
+import productSubcategoryRoute from "./src/routes/product-subcategory.route";
 
 const app: Express = express();
 const apiPath = "/api/v1";
@@ -26,6 +27,7 @@ if (EnvKeys.isLocal()) {
 }
 
 app.use(`${apiPath}/auth`, authRoute);
+app.use(`${apiPath}/products/subcategory`, productSubcategoryRoute);
 app.use(`${apiPath}/products/category`, productCategoryRoute);
 app.use(`${apiPath}/products/color`, productColorRoute);
 app.use(`${apiPath}/products/size`, productSizeRoute);

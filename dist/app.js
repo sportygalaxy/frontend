@@ -17,6 +17,7 @@ const product_route_1 = __importDefault(require("./src/routes/product.route"));
 const product_size_route_1 = __importDefault(require("./src/routes/product-size.route"));
 const product_color_route_1 = __importDefault(require("./src/routes/product-color.route"));
 const product_category_route_1 = __importDefault(require("./src/routes/product-category.route"));
+const product_subcategory_route_1 = __importDefault(require("./src/routes/product-subcategory.route"));
 const app = (0, express_1.default)();
 const apiPath = "/api/v1";
 app.use((0, cors_1.default)({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -26,6 +27,7 @@ if (EnvKeys_1.EnvKeys.isLocal()) {
     app.use((0, morgan_1.default)("dev"));
 }
 app.use(`${apiPath}/auth`, auth_route_1.default);
+app.use(`${apiPath}/products/subcategory`, product_subcategory_route_1.default);
 app.use(`${apiPath}/products/category`, product_category_route_1.default);
 app.use(`${apiPath}/products/color`, product_color_route_1.default);
 app.use(`${apiPath}/products/size`, product_size_route_1.default);
