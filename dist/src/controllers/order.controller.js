@@ -13,46 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const order_service_1 = __importDefault(require("../services/order.service"));
+const async_1 = require("../middleware/async");
 class OrderController {
-    createOrder(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { userId, items } = req.body;
-                const order = yield order_service_1.default.createOrder(userId, items);
-                res.status(201).json(order);
+    constructor() {
+        this.createOrder = (0, async_1.asyncHandler)((req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { userId, items } = req.body;
+            const order = yield order_service_1.default.createOrder(userId, items);
+            res.status(201).json(order);
+        }));
+        this.getOrderById = (0, async_1.asyncHandler)((req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { orderId } = req.params;
+            const order = yield order_service_1.default.getOrderById(orderId);
+            if (!order) {
+                return res.status(404).json({ message: "Order not found" });
             }
-            catch (error) {
-                next(error);
-            }
-        });
-    }
-    getOrderById(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { orderId } = req.params;
-                const order = yield order_service_1.default.getOrderById(orderId);
-                if (!order) {
-                    return res.status(404).json({ message: "Order not found" });
-                }
-                res.status(200).json(order);
-            }
-            catch (error) {
-                next(error);
-            }
-        });
-    }
-    updateOrderStatus(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { orderId } = req.params;
-                const { status } = req.body;
-                const order = yield order_service_1.default.updateOrderStatus(orderId, status);
-                res.status(200).json(order);
-            }
-            catch (error) {
-                next(error);
-            }
-        });
+            res.status(200).json(order);
+        }));
+        this.updateOrderStatus = (0, async_1.asyncHandler)((req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { orderId } = req.params;
+            const { status } = req.body;
+            const order = yield order_service_1.default.updateOrderStatus(orderId, status);
+            res.status(200).json(order);
+        }));
     }
 }
 exports.default = new OrderController();
