@@ -29,6 +29,11 @@ export const ERROR_MESSAGES = {
   PRODUCT_COLOR_DELETE_FAILED: "Sorry, failed to delete product color",
   PRODUCT_COLOR_CREATE_FAILED: "Sorry, failed to create product color",
   PRODUCT_COLOR_UPDATE_FAILED: "Sorry, failed to update product color",
+  PRODUCT_CATEGORY_NOT_FOUND: "Sorry, product category not found",
+  PRODUCT_CATEGORY_GETS_FOUND: "Sorry, failed to retrive product categorys",
+  PRODUCT_CATEGORY_DELETE_FAILED: "Sorry, failed to delete product category",
+  PRODUCT_CATEGORY_CREATE_FAILED: "Sorry, failed to create product category",
+  PRODUCT_CATEGORY_UPDATE_FAILED: "Sorry, failed to update product category",
 };
 
 export const ENVIRONMENTS = {
