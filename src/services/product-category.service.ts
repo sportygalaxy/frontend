@@ -104,7 +104,9 @@ export class ProductCategoryService {
           name,
           ...(description && { description }),
         },
-        include: {},
+        include: {
+          subcategories: true,
+        },
       });
 
       if (!productCategory) {

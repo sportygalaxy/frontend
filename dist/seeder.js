@@ -10,110 +10,134 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const bcryptjs_1 = require("bcryptjs");
 const prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        // Create some users
+        // Create users
         const user1 = yield prisma.user.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174000",
                 firstName: "John",
                 lastName: "Doe",
                 email: "john.doe@example.com",
-                password: "password",
+                password: (0, bcryptjs_1.hashSync)("password", 10),
                 phone: "1234567890",
                 address: "123 Main St",
+                isVerified: true,
             },
         });
         const user2 = yield prisma.user.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174006",
                 firstName: "Jane",
                 lastName: "Smith",
                 email: "jane.smith@example.com",
-                password: "password",
+                password: (0, bcryptjs_1.hashSync)("password", 10),
                 phone: "0987654321",
-                address: "456 Main St",
+                address: "456 Elm St",
+                isVerified: true,
             },
         });
-        // Create some categories
-        const category1 = yield prisma.category.create({
+        // Create categories and subcategories
+        const sportsEquipment = yield prisma.category.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174001",
                 name: "Sports Equipment",
                 description: "Various sports equipment",
+                subcategories: {
+                    create: [
+                        {
+                            id: "123e4567-e89b-12d3-a456-426614174007",
+                            name: "Basketball",
+                            description: "Basketball equipment",
+                        },
+                    ],
+                },
+            },
+            include: {
+                subcategories: true, // Include subcategories in the returned payload
             },
         });
-        const category2 = yield prisma.category.create({
+        const apparel = yield prisma.category.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174002",
                 name: "Apparel",
                 description: "Sportswear and apparel",
+                subcategories: {
+                    create: [
+                        {
+                            id: "123e4567-e89b-12d3-a456-426614174008",
+                            name: "Running",
+                            description: "Running gear and accessories",
+                        },
+                    ],
+                },
+            },
+            include: {
+                subcategories: true, // Include subcategories in the returned payload
             },
         });
-        // Create some subcategories
-        const subcategory1 = yield prisma.subcategory.create({
+        // Create products
+        const product1 = yield prisma.product.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174003",
                 name: "Basketball",
-                description: "Basketball equipment",
-                categoryId: category1.id,
+                description: "A high-quality basketball",
+                price: 29.99,
+                stock: 100,
+                categoryId: sportsEquipment.id,
+                subcategoryId: sportsEquipment.subcategories[0].id,
             },
         });
-        const subcategory2 = yield prisma.subcategory.create({
+        const product2 = yield prisma.product.create({
             data: {
-                name: "Running",
-                description: "Running gear and accessories",
-                categoryId: category2.id,
+                id: "123e4567-e89b-12d3-a456-426614174004",
+                name: "Running Shoes",
+                description: "Comfortable running shoes",
+                price: 49.99,
+                stock: 50,
+                categoryId: apparel.id,
+                subcategoryId: apparel.subcategories[0].id,
             },
         });
         // Create sizes
         const size1 = yield prisma.size.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174005",
                 name: "Small",
             },
         });
         const size2 = yield prisma.size.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174006",
                 name: "Medium",
             },
         });
         // Create colors
         const color1 = yield prisma.color.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174007",
                 name: "Red",
             },
         });
         const color2 = yield prisma.color.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174008",
                 name: "Blue",
             },
         });
         // Create types
         const type1 = yield prisma.type.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174009",
                 name: "Outdoor",
             },
         });
         const type2 = yield prisma.type.create({
             data: {
+                id: "123e4567-e89b-12d3-a456-426614174010",
                 name: "Indoor",
-            },
-        });
-        // Create some products
-        const product1 = yield prisma.product.create({
-            data: {
-                name: "Basketball",
-                description: "A high-quality basketball",
-                price: 29.99,
-                stock: 100,
-                categoryId: category1.id,
-                subcategoryId: subcategory1.id,
-            },
-        });
-        const product2 = yield prisma.product.create({
-            data: {
-                name: "Running Shoes",
-                description: "Comfortable running shoes",
-                price: 49.99,
-                stock: 50,
-                categoryId: category2.id,
-                subcategoryId: subcategory2.id,
             },
         });
         // Associate products with sizes
@@ -137,6 +161,31 @@ function main() {
                 { productId: product1.id, typeId: type1.id },
                 { productId: product2.id, typeId: type2.id },
             ],
+        });
+        // Create order
+        const order1 = yield prisma.order.create({
+            data: {
+                id: "123e4567-e89b-12d3-a456-426614174011",
+                userId: user1.id,
+                total: 79.98,
+                status: "PENDING",
+                items: {
+                    create: [
+                        {
+                            id: "123e4567-e89b-12d3-a456-426614174012",
+                            productId: product1.id,
+                            quantity: 1,
+                            price: 29.99,
+                        },
+                        {
+                            id: "123e4567-e89b-12d3-a456-426614174013",
+                            productId: product2.id,
+                            quantity: 1,
+                            price: 49.99,
+                        },
+                    ],
+                },
+            },
         });
         console.log("Seeding completed");
     });

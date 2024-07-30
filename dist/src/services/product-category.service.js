@@ -80,7 +80,9 @@ class ProductCategoryService {
                 validateProductCategory(_payload);
                 const productCategory = yield prisma_1.default.category.create({
                     data: Object.assign({ name }, (description && { description })),
-                    include: {},
+                    include: {
+                        subcategories: true,
+                    },
                 });
                 if (!productCategory) {
                     throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_CATEGORY_CREATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
