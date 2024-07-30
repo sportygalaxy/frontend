@@ -8,33 +8,62 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const order_service_1 = __importDefault(require("../services/order.service"));
+exports.deleteOrder = exports.updateOrderStatus = exports.getOrder = exports.getOrders = exports.createOrder = void 0;
 const async_1 = require("../middleware/async");
-class OrderController {
-    constructor() {
-        this.createOrder = (0, async_1.asyncHandler)((req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const { userId, items } = req.body;
-            const order = yield order_service_1.default.createOrder(userId, items);
-            res.status(201).json(order);
-        }));
-        this.getOrderById = (0, async_1.asyncHandler)((req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const { orderId } = req.params;
-            const order = yield order_service_1.default.getOrderById(orderId);
-            if (!order) {
-                return res.status(404).json({ message: "Order not found" });
-            }
-            res.status(200).json(order);
-        }));
-        this.updateOrderStatus = (0, async_1.asyncHandler)((req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const { orderId } = req.params;
-            const { status } = req.body;
-            const order = yield order_service_1.default.updateOrderStatus(orderId, status);
-            res.status(200).json(order);
-        }));
-    }
-}
-exports.default = new OrderController();
+const order_service_1 = require("../services/order.service");
+const orderService = new order_service_1.OrderService();
+exports.createOrder = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId, items } = req.body;
+    const order = yield orderService.createOrder(userId, items, next);
+    if (!order)
+        return;
+    res.status(201).json({
+        message: "Order created successfully",
+        data: order,
+        success: !!order,
+    });
+}));
+exports.getOrders = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
+    const orders = yield orderService.getOrders(query, next);
+    if (!orders)
+        return;
+    res.status(200).json({
+        message: "Fetch Orders successfully",
+        data: orders,
+        success: !!orders,
+    });
+}));
+exports.getOrder = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderId } = req.params;
+    const order = yield orderService.getOrder(orderId, next);
+    if (!order)
+        return;
+    res.status(200).json({
+        message: "Fetch Order successfully",
+        data: order,
+        success: !!order,
+    });
+}));
+exports.updateOrderStatus = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = yield orderService.updateOrderStatus(orderId, status, next);
+    if (!order)
+        return;
+    res.status(200).json({
+        message: "Order updated successfully",
+        data: order,
+        success: !!order,
+    });
+}));
+exports.deleteOrder = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    yield orderService.deleteOrder({ id }, next);
+    res.status(200).json({
+        message: "Order deleted successfully",
+        data: null,
+        success: true,
+    });
+}));

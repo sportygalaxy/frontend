@@ -39,6 +39,11 @@ export const ERROR_MESSAGES = {
   PRODUCT_SUB_CATEGORY_DELETE_FAILED: "Sorry, failed to delete product sub category",
   PRODUCT_SUB_CATEGORY_CREATE_FAILED: "Sorry, failed to create product sub category",
   PRODUCT_SUB_CATEGORY_UPDATE_FAILED: "Sorry, failed to update product sub category",
+  ORDER_NOT_FOUND: "Sorry, order not found",
+  ORDER_GETS_FOUND: "Sorry, failed to retrive orders",
+  ORDER_DELETE_FAILED: "Sorry, failed to delete order",
+  ORDER_CREATE_FAILED: "Sorry, failed to create order",
+  ORDER_UPDATE_FAILED: "Sorry, failed to update order",
 };
 
 export const ENVIRONMENTS = {

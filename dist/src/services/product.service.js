@@ -141,13 +141,13 @@ class ProductService {
                     },
                 });
                 if (!product) {
-                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_CREATE_FAILED, constants_1.HTTP_STATUS_CODE[500].code);
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_CREATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
                 }
                 return product;
             }
             catch (err) {
                 _next(err);
-                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_CREATE_FAILED, constants_1.HTTP_STATUS_CODE[500].code);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_CREATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
             }
         });
     }

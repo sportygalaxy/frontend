@@ -175,7 +175,7 @@ export class ProductService {
       if (!product) {
         throw new ErrorResponse(
           ERROR_MESSAGES.PRODUCT_CREATE_FAILED,
-          HTTP_STATUS_CODE[500].code
+          HTTP_STATUS_CODE[400].code
         );
       }
 
@@ -184,7 +184,7 @@ export class ProductService {
       _next(err);
       throw new ErrorResponse(
         ERROR_MESSAGES.PRODUCT_CREATE_FAILED,
-        HTTP_STATUS_CODE[500].code
+        HTTP_STATUS_CODE[400].code
       );
     }
   }
