@@ -1,7 +1,5 @@
 "use client";
-import MinusIcon from "@/assets/icons/pack/Minus";
 import Add from "@/common/Add";
-import LucideIcon from "@/common/Icons/LucideIcon";
 import LinkComponent from "@/common/Link";
 import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import TooltipWrapper from "@/components/tooltip";
@@ -13,12 +11,14 @@ import useCartStore from "@/store/cartStore";
 import { TProduct } from "@/types/product";
 import Image from "next/image";
 import React, { FC } from "react";
+import Minus from "@/common/Minus";
+import ProductAddedToCart from "./ProductAddedToCart";
 
 interface Props {
-  product?: TProduct;
+  item: TProduct;
 }
 
-const ProductCard: FC<{ item: TProduct }> = (props) => {
+const ProductCard: FC<Props> = (props) => {
   const hydrated = useHydration();
 
   const { addToCart, removeFromCart, cart } = useCartStore();
@@ -32,9 +32,9 @@ const ProductCard: FC<{ item: TProduct }> = (props) => {
     className: "w-full cursor-pointer",
   };
 
-  if (!hydrated) {
-    return <SportygalaxyLoadingIndicator />;
-  }
+  // if (!hydrated) {
+  //   return <SportygalaxyLoadingIndicator />;
+  // }
 
   function isItemInCart(itemId: number): any {
     return cart.some((item) => item.id === itemId);
@@ -110,16 +110,8 @@ const ProductCard: FC<{ item: TProduct }> = (props) => {
           >
             {isItemInCart(item.id) ? (
               <div className="" onClick={() => removeFromCart(item.id)}>
-                <MinusIcon
-                  className="mobile-desktop-tablet-view"
-                  size={25}
-                  color="var(--success)"
-                />
-                <MinusIcon
-                  className="desktop-tablet-view"
-                  size={44}
-                  color="var(--success)"
-                />
+                {/* <Minus /> */}
+                <ProductAddedToCart />
               </div>
             ) : (
               <div onClick={() => addToCart(item)}>

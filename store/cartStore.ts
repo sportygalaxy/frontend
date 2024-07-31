@@ -50,7 +50,6 @@ const useCartStore = create<TCartState>()(
     {
       name: "cart-storage",
       storage: createJSONStorage(() => localStorage),
-
     }
   )
 );

@@ -22,8 +22,11 @@ import HeaderActiveLink from "./HeaderActiveLink";
 import Logo from "./Logo";
 import useToggle from "@/hooks/useToggle";
 import CartAddToCartDrawer from "@/components/cart/CartAddToCartDrawer";
+import useCartStore from "@/store/cartStore";
+import { showCartQtyValue } from "@/helpers/cart";
 
 const TopNavbarDesktop = () => {
+  const { cart } = useCartStore();
   const [openUploadModal, toggleUploadModal] = useToggle();
 
   const iconSize = {
@@ -69,6 +72,7 @@ const TopNavbarDesktop = () => {
         </>
       ),
       path: "notification",
+      notification: { status: false, value: 0 },
     },
     {
       id: 2,
@@ -79,10 +83,17 @@ const TopNavbarDesktop = () => {
     {
       id: 3,
       name: "Cart",
-      icon: <CartIcon {...iconSize} />,
+      icon: (
+        <CartAddToCartDrawer
+          data={iconSize}
+          component={CartIcon}
+        />
+      ),
       path: "cart",
+      notification: showCartQtyValue(cart),
     },
   ];
+
   const [inputValue, setInputValue] = useState("");
 
   const handleSearchClick = () => {
@@ -144,7 +155,6 @@ const TopNavbarDesktop = () => {
       <section className="flex items-center justify-between gap-8">
         <Logo />
 
-        {/* <CartAddToCartDrawer item={[]} /> */}
         <Search
           placeholder="Search.."
           onSearchClick={handleSearchClick}
@@ -158,9 +168,18 @@ const TopNavbarDesktop = () => {
             {CtaLink.map((cta) => (
               <span
                 key={cta.id}
-                className="p-2 md:p-4 border border-secondary rounded-full"
+                className={cn(
+                  cta.name !== "Cart" &&
+                    "p-2 md:p-4 border border-secondary rounded-full"
+                )}
               >
                 {cta.icon}
+
+                {cta?.notification?.status ? (
+                  <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-primary rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                    {cta?.notification?.value}
+                  </span>
+                ) : null}
               </span>
             ))}
           </div>

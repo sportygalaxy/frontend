@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Drawer,
   DrawerClose,
@@ -11,80 +10,107 @@ import {
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import { CircleCheckBigIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { useState } from "react";
-// import { CartItem, useCartStore } from "@/store/cartStore";
-import ProductSummaryCard from "./CartProductSummaryCard";
+import { FC } from "react";
+import useCartStore from "@/store/cartStore";
+import {
+  SHIPPING_FEE,
+  showTotalPrice,
+  showTotalPriceInCart,
+} from "@/helpers/cart";
+import CartProductCard from "./CartProductCard";
+import CartEmpty from "./CartEmpty";
+import CartClearAll from "./CartClearAll";
+
+type CartAddToCartDrawerProps<T> = {
+  data: { color?: string };
+  component?: FC<{ item?: { color: string }; className?: string }>;
+  className?: string;
+};
 
 // Get data from cart in global state
-function CartAddToCartDrawer({ item }: { item: any }) {
+function CartAddToCartDrawer<T>({
+  data,
+  component: Component,
+  className,
+}: CartAddToCartDrawerProps<T>) {
+  const { cart } = useCartStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const isShowDesktop = useMediaQuery("(min-width: 640px)");
 
   return (
     <Drawer direction={isDesktop ? "right" : "bottom"}>
       <DrawerTrigger asChild>
-        <Button
-          variant={"outline"}
-          size={"lg"}
-          className="rounded-full max-w-20 font-bold h-[48px] flex-1 w-full text-[#333] border-[#222]"
+        <button
+          className={cn(
+            isShowDesktop && "p-2 md:p-4 border border-secondary rounded-full"
+          )}
         >
-          Add to cart
-        </Button>
+          {Component ? <Component {...data} className={cn(className)} /> : null}
+        </button>
       </DrawerTrigger>
+
       <DrawerContent
         className={cn(
           "",
           isDesktop
             ? "top-0 right-0 left-auto w-[600px] h-full mt-0 rounded-none"
-            : ""
+            : "max-h-[90%] mt-10 bg-background"
         )}
       >
+        {/* Header */}
         <DrawerHeader className="flex items-center justify-between">
-          <DrawerTitle>Select variations and quantity</DrawerTitle>
-          <DrawerClose asChild>
-            <Button variant={"ghost"} size={"icon"}>
-              <XIcon />
-            </Button>
-          </DrawerClose>
+          <DrawerTitle className="text-mobile-3xl md:text-3xl">
+            Cart
+          </DrawerTitle>
+
+          {isDesktop ? (
+            <DrawerClose asChild>
+              <Button variant={"ghost"} size={"icon"}>
+                <XIcon />
+              </Button>
+            </DrawerClose>
+          ) : null}
         </DrawerHeader>
-        {/* <CartProductSummaryCard item={[]} drawer /> */}
-        <DrawerFooter className="text-[#222] bg-white shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] pb-6">
-          <div className="flex items-center justify-between">
-            <p className="underline cursor-pointer">Item subtotal</p>
-            <p>$300</p>
-          </div>
-          <div className="flex items-center justify-between">
-            <p>Shipping total</p>
-            <p>$10.24</p>
-          </div>
-          <div className="font-bold flex items-center justify-between">
-            <p>Subtotal</p>
-            <p>$500</p>
-          </div>
-          <Button
-            // onClick={handleAddToCart}
-            size={"lg"}
-            className="rounded-full font-bold min-h-[48px] flex-1 w-full mt-4"
-          >
-            Add to cart
-          </Button>
-        </DrawerFooter>
-        {isSuccess && <AddToCartSuccess />}
+
+        {/* Details */}
+        {cart.length >= 1 ? (
+          <>
+            <CartProductCard item={cart} drawer />
+            <CartClearAll />
+
+            <DrawerFooter className="text-[#222] bg-white shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] pb-6">
+              <div className="flex items-center justify-between">
+                <p className="underline cursor-pointer">Item subtotal</p>
+                <p>${showTotalPriceInCart(cart)}</p>
+              </div>
+              <div className="flex items-center justify-between">
+                <p>Shipping total</p>
+                <p>${SHIPPING_FEE}</p>
+              </div>
+              <div className="font-bold flex items-center justify-between">
+                <p>Subtotal</p>
+                <p>
+                  ${showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE)}
+                </p>
+              </div>
+
+              <Button
+                // onClick={handleCheckout}
+                size={"lg"}
+                className="rounded-full font-bold min-h-[48px] flex-1 w-full mt-4"
+              >
+                Check out now
+              </Button>
+            </DrawerFooter>
+          </>
+        ) : (
+          <CartEmpty />
+        )}
       </DrawerContent>
     </Drawer>
   );
 }
 
 export default CartAddToCartDrawer;
-
-function AddToCartSuccess() {
-  return (
-    <div className="w-full absolute top-1/2">
-      <div className="bg-[#ebf9eb] text-[#22891f] rounded-[8px] min-w-[100px] p-4 mx-auto w-fit flex items-center gap-x-2">
-        <CircleCheckBigIcon size={18} /> Added to cart!
-      </div>
-    </div>
-  );
-}

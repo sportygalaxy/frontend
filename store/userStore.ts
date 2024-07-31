@@ -1,5 +1,6 @@
 import { TUserState } from "@/types/user";
 import { create } from "zustand";
+import { createStore } from "zustand/vanilla";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 const useUserStore = create<TUserState>()(
