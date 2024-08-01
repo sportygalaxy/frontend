@@ -27,7 +27,8 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  orders Order[]
+  orders   Order[]
+  bookmarks Bookmark[]
 
   @@map("users")
 }
@@ -106,6 +107,7 @@ model Product {
   colors      ProductOnColor[]
   types       ProductOnType[]
   orders      OrderItem[]
+  bookmarks   Bookmark[]
 
   @@map("products")
 }
@@ -172,4 +174,19 @@ model OrderItem {
   product Product @relation(fields: [productId], references: [id])
 
   @@map("order_items")
+}
+
+model Bookmark {
+  userId    String
+  productId String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@id([userId, productId])
+  @@map("bookmarks")
 }

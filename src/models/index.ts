@@ -1,3 +1,31 @@
-import { User, Order, Product, OrderItem } from "@prisma/client";
+import {
+  User,
+  Product,
+  Size,
+  Color,
+  Type,
+  ProductOnSize,
+  ProductOnColor,
+  ProductOnType,
+  Category,
+  Subcategory,
+  Order,
+  OrderItem,
+  Bookmark
+} from "@prisma/client";
 
-export type { User, Order, Product, OrderItem };
+export type {
+  User,
+  Product,
+  Size,
+  Color,
+  Type,
+  ProductOnSize,
+  ProductOnColor,
+  ProductOnType,
+  Category,
+  Subcategory,
+  Order,
+  OrderItem,
+  Bookmark
+};

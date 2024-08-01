@@ -13,6 +13,7 @@ const constants_1 = require("./src/constants");
 const EnvKeys_1 = require("./src/common/EnvKeys");
 const error_1 = require("./src/middleware/error");
 const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
+const bookmark_route_1 = __importDefault(require("./src/routes/bookmark.route"));
 const order_route_1 = __importDefault(require("./src/routes/order.route"));
 const product_route_1 = __importDefault(require("./src/routes/product.route"));
 const product_size_route_1 = __importDefault(require("./src/routes/product-size.route"));
@@ -34,6 +35,7 @@ app.use(`${apiPath}/products/color`, product_color_route_1.default);
 app.use(`${apiPath}/products/size`, product_size_route_1.default);
 app.use(`${apiPath}/products`, product_route_1.default);
 app.use(`${apiPath}/orders`, order_route_1.default);
+app.use(`${apiPath}/bookmarks`, bookmark_route_1.default);
 app.use(error_1.errorHandler);
 const PORT = process.env.PORT || constants_1.DEFAULT_PORT;
 app.listen(PORT, () => {

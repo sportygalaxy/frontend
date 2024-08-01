@@ -44,6 +44,12 @@ export const ERROR_MESSAGES = {
   ORDER_DELETE_FAILED: "Sorry, failed to delete order",
   ORDER_CREATE_FAILED: "Sorry, failed to create order",
   ORDER_UPDATE_FAILED: "Sorry, failed to update order",
+  BOOKMARK_NOT_FOUND: "Sorry, bookmark not found",
+  BOOKMARK_ALREADY_EXIST_FOUND: "Sorry, bookmark already exist",
+  BOOKMARK_GETS_FOUND: "Sorry, failed to retrive bookmarks",
+  BOOKMARK_DELETE_FAILED: "Sorry, failed to delete bookmark",
+  BOOKMARK_CREATE_FAILED: "Sorry, failed to create bookmark",
+  BOOKMARK_UPDATE_FAILED: "Sorry, failed to update bookmark",
 };
 
 export const ENVIRONMENTS = {
