@@ -12,7 +12,9 @@ import {
   Order,
   OrderItem,
   Bookmark,
-  Review
+  Review,
+  Coupon,
+  CouponType,
 } from "@prisma/client";
 
 export type {
@@ -29,5 +31,7 @@ export type {
   Order,
   OrderItem,
   Bookmark,
-  Review
+  Review,
+  Coupon,
+  CouponType,
 };

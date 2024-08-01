@@ -56,6 +56,12 @@ export const ERROR_MESSAGES = {
   REVIEW_DELETE_FAILED: "Sorry, failed to delete review",
   REVIEW_CREATE_FAILED: "Sorry, failed to create review",
   REVIEW_UPDATE_FAILED: "Sorry, failed to update review",
+  COUPON_NOT_FOUND: "Sorry, coupon not found",
+  COUPON_ALREADY_EXIST_FOUND: "Sorry, coupon already exist",
+  COUPON_GETS_FOUND: "Sorry, failed to retrive coupons",
+  COUPON_DELETE_FAILED: "Sorry, failed to delete coupon",
+  COUPON_CREATE_FAILED: "Sorry, failed to create coupon",
+  COUPON_UPDATE_FAILED: "Sorry, failed to update coupon",
 };
 
 export const ENVIRONMENTS = {

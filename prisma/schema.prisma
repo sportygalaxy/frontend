@@ -27,9 +27,10 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  orders    Order[]
-  bookmarks Bookmark[]
-  reviews   Review[]
+  orders     Order[]
+  bookmarks  Bookmark[]
+  reviews    Review[]
+  CouponUser CouponUser[]
 
   @@map("users")
 }
@@ -158,8 +159,10 @@ model Order {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  user  User        @relation(fields: [userId], references: [id])
-  items OrderItem[]
+  user     User        @relation(fields: [userId], references: [id])
+  items    OrderItem[]
+  coupon   Coupon?     @relation(fields: [couponId], references: [id])
+  couponId String?
 
   @@map("orders")
 }
@@ -209,4 +212,41 @@ model Review {
 
   @@unique([userId, productId]) // Ensure that a user can only review a product once
   @@map("reviews")
+}
+
+enum CouponType {
+  PERCENTAGE
+  PRODUCT_OFF
+  PRICE_OFF
+}
+
+model Coupon {
+  id            String       @id @default(uuid())
+  code          String       @unique
+  type          CouponType
+  value         Float
+  unitCount     Int? // Total units available for this coupon
+  usedCount     Int          @default(0) // Counter for how many times the coupon has been used
+  assignedUsers CouponUser[]
+  global        Boolean      @default(true) // Indicates if the coupon can be used by all users
+  expiration    DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  orders Order[]
+
+  @@map("coupons")
+}
+
+model CouponUser {
+  userId   String
+  couponId String
+  used     Boolean @default(false)
+  remainingCount Int?      // For coupons with limited uses per user
+
+  user   User   @relation(fields: [userId], references: [id])
+  coupon Coupon @relation(fields: [couponId], references: [id])
+
+  @@id([userId, couponId])
+  @@map("coupon_users")
 }
