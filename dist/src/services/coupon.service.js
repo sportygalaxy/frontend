@@ -123,6 +123,7 @@ class CouponService {
      * @param couponId couponId
      * @param userId userId
      * @param _next
+     * NOTE: order amount is updated with discounted value on completed coupon application.
      * @returns coupon
      */
     applyCoupon(orderId, couponCode, userId, next) {
@@ -151,13 +152,11 @@ class CouponService {
                 if (couponUser === null || couponUser === void 0 ? void 0 : couponUser.used) {
                     throw new Error("Coupon already used by this user");
                 }
-                console.log("ORDER ID passed");
                 // Retrieve the order and calculate the discount
                 const order = yield prisma_1.default.order.findUnique({
                     where: { id: orderId },
                     include: { items: { include: { product: true } } },
                 });
-                console.log("ORDER ID passed again", order);
                 if (!order)
                     throw new Error("Order not found");
                 let discount = 0;
@@ -171,7 +170,13 @@ class CouponService {
                 else if (coupon.type === "PRICE_OFF") {
                     discount = coupon.value;
                 }
+                // Calculate total after discount
                 const totalAfterDiscount = order.total - discount;
+                // Update the order's total value in the database**
+                yield prisma_1.default.order.update({
+                    where: { id: order.id },
+                    data: { total: totalAfterDiscount, couponId: coupon.id },
+                });
                 // Update the coupon's used count
                 yield prisma_1.default.coupon.update({
                     where: { id: coupon.id },

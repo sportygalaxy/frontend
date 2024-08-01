@@ -159,6 +159,7 @@ export class CouponService {
    * @param couponId couponId
    * @param userId userId
    * @param _next
+   * NOTE: order amount is updated with discounted value on completed coupon application.
    * @returns coupon
    */
   async applyCoupon(
@@ -172,6 +173,7 @@ export class CouponService {
       const coupon = await prisma.coupon.findUnique({
         where: { code: couponCode },
       });
+
       if (!coupon) throw new Error("Coupon not found");
       if (coupon.expiration && new Date() > coupon.expiration)
         throw new Error("Coupon expired");
@@ -195,14 +197,11 @@ export class CouponService {
         throw new Error("Coupon already used by this user");
       }
 
-      console.log("ORDER ID passed");
       // Retrieve the order and calculate the discount
       const order = await prisma.order.findUnique({
         where: { id: orderId },
         include: { items: { include: { product: true } } },
       });
-
-      console.log("ORDER ID passed again", order);
       if (!order) throw new Error("Order not found");
 
       let discount = 0;
@@ -217,7 +216,14 @@ export class CouponService {
         discount = coupon.value;
       }
 
+      // Calculate total after discount
       const totalAfterDiscount = order.total - discount;
+
+      // Update the order's total value in the database**
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { total: totalAfterDiscount, couponId: coupon.id },
+      });
 
       // Update the coupon's used count
       await prisma.coupon.update({
