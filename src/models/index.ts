@@ -11,7 +11,8 @@ import {
   Subcategory,
   Order,
   OrderItem,
-  Bookmark
+  Bookmark,
+  Review
 } from "@prisma/client";
 
 export type {
@@ -27,5 +28,6 @@ export type {
   Subcategory,
   Order,
   OrderItem,
-  Bookmark
+  Bookmark,
+  Review
 };

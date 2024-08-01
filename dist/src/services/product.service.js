@@ -88,6 +88,7 @@ class ProductService {
                             },
                         },
                         orders: true,
+                        reviews: true,
                     },
                 });
                 if (!product) {

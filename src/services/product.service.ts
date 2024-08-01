@@ -98,6 +98,7 @@ export class ProductService {
             },
           },
           orders: true,
+          reviews: true,
         },
       });
 

@@ -9,6 +9,7 @@ import { EnvKeys } from "./src/common/EnvKeys";
 import { errorHandler } from "./src/middleware/error";
 
 import authRoute from "./src/routes/auth.route";
+import reviewRoute from "./src/routes/review.route";
 import bookmarkRoute from "./src/routes/bookmark.route";
 import orderRoute from "./src/routes/order.route";
 import productRoute from "./src/routes/product.route";
@@ -36,6 +37,7 @@ app.use(`${apiPath}/products/size`, productSizeRoute);
 app.use(`${apiPath}/products`, productRoute);
 app.use(`${apiPath}/orders`, orderRoute);
 app.use(`${apiPath}/bookmarks`, bookmarkRoute);
+app.use(`${apiPath}/reviews`, reviewRoute);
 
 app.use(errorHandler);
 

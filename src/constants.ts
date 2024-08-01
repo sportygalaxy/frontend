@@ -50,6 +50,12 @@ export const ERROR_MESSAGES = {
   BOOKMARK_DELETE_FAILED: "Sorry, failed to delete bookmark",
   BOOKMARK_CREATE_FAILED: "Sorry, failed to create bookmark",
   BOOKMARK_UPDATE_FAILED: "Sorry, failed to update bookmark",
+  REVIEW_NOT_FOUND: "Sorry, review not found",
+  REVIEW_ALREADY_EXIST_FOUND: "Sorry, review already exist",
+  REVIEW_GETS_FOUND: "Sorry, failed to retrive reviews",
+  REVIEW_DELETE_FAILED: "Sorry, failed to delete review",
+  REVIEW_CREATE_FAILED: "Sorry, failed to create review",
+  REVIEW_UPDATE_FAILED: "Sorry, failed to update review",
 };
 
 export const ENVIRONMENTS = {
