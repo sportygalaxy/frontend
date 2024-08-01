@@ -7,6 +7,7 @@ import {
   getCoupons,
   updateCoupon,
   applyCoupon,
+  validateCoupon,
   assignCoupon,
   deleteCoupon,
 } from "../controllers/coupon.controller.js";
@@ -18,6 +19,7 @@ router.post("/", createCoupon);
 router.get("/", getCoupons);
 router.put("/:couponId", updateCoupon);
 router.put("/:orderId/apply", applyCoupon);
+router.put("/:orderId/validate", validateCoupon);
 router.put("/:orderId/assign", assignCoupon);
 router.delete("/:couponId", deleteCoupon);
 

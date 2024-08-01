@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCoupon = exports.assignCoupon = exports.applyCoupon = exports.updateCoupon = exports.getCoupon = exports.getCoupons = exports.createCoupon = void 0;
+exports.deleteCoupon = exports.assignCoupon = exports.validateCoupon = exports.applyCoupon = exports.updateCoupon = exports.getCoupon = exports.getCoupons = exports.createCoupon = void 0;
 const async_1 = require("../middleware/async");
 const coupon_service_1 = require("../services/coupon.service");
 const couponService = new coupon_service_1.CouponService();
@@ -66,6 +66,18 @@ exports.applyCoupon = (0, async_1.asyncHandler)((req, res, next) => __awaiter(vo
         return;
     res.status(200).json({
         message: "Coupon applied successfully",
+        data: coupon,
+        success: !!coupon,
+    });
+}));
+exports.validateCoupon = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderId } = req.params;
+    const { couponCode, userId } = req.body; // Assuming userId is passed in the body for simplicity
+    const coupon = yield couponService.validateCoupon(orderId, couponCode, userId, next);
+    if (!coupon)
+        return;
+    res.status(200).json({
+        message: "Coupon valid",
         data: coupon,
         success: !!coupon,
     });

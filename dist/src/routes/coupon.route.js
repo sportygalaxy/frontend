@@ -11,6 +11,7 @@ router.post("/", coupon_controller_js_1.createCoupon);
 router.get("/", coupon_controller_js_1.getCoupons);
 router.put("/:couponId", coupon_controller_js_1.updateCoupon);
 router.put("/:orderId/apply", coupon_controller_js_1.applyCoupon);
+router.put("/:orderId/validate", coupon_controller_js_1.validateCoupon);
 router.put("/:orderId/assign", coupon_controller_js_1.assignCoupon);
 router.delete("/:couponId", coupon_controller_js_1.deleteCoupon);
 exports.default = router;

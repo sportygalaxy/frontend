@@ -91,6 +91,28 @@ export const applyCoupon = asyncHandler(
   }
 );
 
+export const validateCoupon = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { orderId } = req.params;
+    const { couponCode, userId } = req.body; // Assuming userId is passed in the body for simplicity
+
+    const coupon = await couponService.validateCoupon(
+      orderId,
+      couponCode,
+      userId,
+      next
+    );
+
+    if (!coupon) return;
+
+    res.status(200).json({
+      message: "Coupon valid",
+      data: coupon,
+      success: !!coupon,
+    });
+  }
+);
+
 export const assignCoupon = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, couponId, unitCount } = req.body;

@@ -18,6 +18,7 @@ const constants_1 = require("../constants");
 const errorResponse_1 = require("../utils/errorResponse");
 const coupon_dto_1 = require("../types/dto/coupon.dto");
 const validation_1 = require("../helpers/validation");
+const calculate_discount_1 = require("../helpers/calculate-discount");
 class CouponService {
     /**
      *
@@ -126,7 +127,7 @@ class CouponService {
      * NOTE: order amount is updated with discounted value on completed coupon application.
      * @returns coupon
      */
-    applyCoupon(orderId, couponCode, userId, next) {
+    validateCoupon(orderId, couponCode, userId, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Retrieve the coupon
@@ -135,8 +136,9 @@ class CouponService {
                 });
                 if (!coupon)
                     throw new Error("Coupon not found");
-                if (coupon.expiration && new Date() > coupon.expiration)
+                if (coupon.expiration && new Date() > coupon.expiration) {
                     throw new Error("Coupon expired");
+                }
                 // Check if coupon has a unit count and if it has been used up
                 if (coupon.unitCount !== null && coupon.usedCount >= coupon.unitCount) {
                     throw new Error("Coupon usage limit reached");
@@ -159,20 +161,72 @@ class CouponService {
                 });
                 if (!order)
                     throw new Error("Order not found");
-                let discount = 0;
-                if (coupon.type === "PERCENTAGE") {
-                    discount = (order.total * coupon.value) / 100;
-                }
-                else if (coupon.type === "PRODUCT_OFF") {
-                    const minProductPrice = Math.min(...order.items.map((item) => item.product.price));
-                    discount = minProductPrice * coupon.value;
-                }
-                else if (coupon.type === "PRICE_OFF") {
-                    discount = coupon.value;
-                }
-                // Calculate total after discount
+                const discount = yield (0, calculate_discount_1.calculateDiscount)(order, coupon);
                 const totalAfterDiscount = order.total - discount;
-                // Update the order's total value in the database**
+                // Handle the coupon user record
+                if (couponUser) {
+                    if (couponUser.remainingCount !== null &&
+                        couponUser.remainingCount <= 0) {
+                        throw new Error("Coupon already used by this user or no remaining uses left");
+                    }
+                }
+                return { orderId: order.id, total: totalAfterDiscount, discount, coupon };
+            }
+            catch (err) {
+                next(err);
+                throw new Error("Failed to apply coupon");
+            }
+        });
+    }
+    /**
+     *
+     * @param couponId couponId
+     * @param userId userId
+     * @param _next
+     * NOTE: order amount is updated with discounted value on completed coupon application.
+     * @returns coupon
+     */
+    applyCoupon(orderId, couponCode, userId, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Retrieve the coupon
+                const coupon = yield prisma_1.default.coupon.findUnique({
+                    where: { code: couponCode },
+                });
+                if (!coupon)
+                    throw new Error("Coupon not found");
+                if (coupon.expiration && new Date() > coupon.expiration) {
+                    throw new Error("Coupon expired");
+                }
+                // Check if coupon has a unit count and if it has been used up
+                if (coupon.unitCount !== null && coupon.usedCount >= coupon.unitCount) {
+                    throw new Error("Coupon usage limit reached");
+                }
+                // Check if coupon is assigned to a specific user
+                const couponUser = yield prisma_1.default.couponUser.findUnique({
+                    where: { userId_couponId: { userId, couponId: coupon.id } },
+                });
+                if (!coupon.global && !couponUser) {
+                    throw new Error("This coupon is not available for you");
+                }
+                // Check if the user has already used this coupon
+                if (couponUser === null || couponUser === void 0 ? void 0 : couponUser.used) {
+                    throw new Error("Coupon already used by this user");
+                }
+                // Retrieve the order and calculate the discount
+                const order = yield prisma_1.default.order.findUnique({
+                    where: { id: orderId },
+                    include: { items: { include: { product: true } } },
+                });
+                if (!order)
+                    throw new Error("Order not found");
+                const discount = yield (0, calculate_discount_1.calculateDiscount)(order, coupon);
+                let totalAfterDiscount = order.total - discount;
+                // Validate and adjust total if necessary
+                if (totalAfterDiscount <= 0) {
+                    totalAfterDiscount = 0;
+                }
+                // Update the order's total value in the database
                 yield prisma_1.default.order.update({
                     where: { id: order.id },
                     data: { total: totalAfterDiscount, couponId: coupon.id },
@@ -182,13 +236,12 @@ class CouponService {
                     where: { id: coupon.id },
                     data: { usedCount: { increment: 1 } },
                 });
-                // Check if the user has already used this coupon and manage unit counts
+                // Handle the coupon user record
                 if (couponUser) {
-                    if (couponUser.used ||
-                        (couponUser.remainingCount !== null && couponUser.remainingCount <= 0)) {
+                    if (couponUser.remainingCount !== null &&
+                        couponUser.remainingCount <= 0) {
                         throw new Error("Coupon already used by this user or no remaining uses left");
                     }
-                    // Update remaining count if applicable
                     if (couponUser.remainingCount !== null) {
                         yield prisma_1.default.couponUser.update({
                             where: { userId_couponId: { userId, couponId: coupon.id } },
@@ -203,14 +256,11 @@ class CouponService {
                         });
                     }
                 }
-                else if (!coupon.global) {
-                    throw new Error("This coupon is not available for you");
-                }
                 return { orderId: order.id, total: totalAfterDiscount, discount, coupon };
             }
             catch (err) {
                 next(err);
-                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.COUPON_UPDATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
+                throw new Error("Failed to apply coupon");
             }
         });
     }
