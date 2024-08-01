@@ -58,6 +58,7 @@ export const updateProductSchema = z.object({
   price: z.number().optional(),
   stock: z.number().optional(),
   specification: z.array(keyValuePairSchema).optional().nullable(),
+  keyattribute: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string().optional(),
   subcategoryId: z.string().optional(),
 });

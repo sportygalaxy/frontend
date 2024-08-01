@@ -47,6 +47,7 @@ exports.updateProductSchema = zod_1.z.object({
     price: zod_1.z.number().optional(),
     stock: zod_1.z.number().optional(),
     specification: zod_1.z.array(keyValuePairSchema).optional().nullable(),
+    keyattribute: zod_1.z.array(keyValuePairSchema).optional().nullable(),
     categoryId: zod_1.z.string().optional(),
     subcategoryId: zod_1.z.string().optional(),
 });
