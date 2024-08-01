@@ -17,6 +17,7 @@ type KeyValuePair = {
 
 // export type Specification = Prisma.JsonValue;
 export type Specification = KeyValuePair[];
+export type Keyattribute = KeyValuePair[];
 
 export interface GetProductsResponse {
   id: string;
@@ -25,6 +26,7 @@ export interface GetProductsResponse {
   price: number;
   stock: number | null;
   specification: Specification;
+  keyattribute: Keyattribute;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -44,6 +46,7 @@ export interface GetProductResponse {
   price: number;
   stock: number | null;
   specification: Specification;
+  keyattribute: Keyattribute;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -73,6 +76,7 @@ export interface CreateProductResponse {
   price: number;
   stock: number | null;
   specification: Specification;
+  keyattribute: Keyattribute;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -102,6 +106,7 @@ export interface UpdateAllProductResponse {
   price?: number;
   stock?: number | null;
   specification: Specification;
+  keyattribute: Keyattribute;
   categoryId?: string;
   subcategoryId?: string;
   sizeIds?: string[];
@@ -121,6 +126,7 @@ export type UpdateAllProductApiResponse = ApiResponse<UpdateAllProductResponse>;
 //   price: number;
 //   stock: number;
 //   specification: Specification;
+//   keyattribute: Keyattribute;
 //   categoryId: string;
 //   subcategoryId: string;
 //   sizeIds: string[];
@@ -135,6 +141,7 @@ export interface UpdateProductResponse {
   price?: number;
   stock?: number | null;
   specification: Specification;
+  keyattribute: Keyattribute;
   categoryId?: string;
   subcategoryId?: string;
   createdAt?: Date;

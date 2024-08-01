@@ -98,6 +98,7 @@ model Product {
   categoryId    String
   subcategoryId String
   specification Json?
+  keyattribute  Json?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?

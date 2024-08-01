@@ -47,7 +47,7 @@ exports.createProduct = (0, async_1.asyncHandler)((req, res, next) => __awaiter(
 }));
 exports.updateProduct = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, description, price, stock, specification, categoryId, subcategoryId, sizeIds, colorIds, typeIds, } = req.body;
+    const { name, description, price, stock, specification, keyattribute, categoryId, subcategoryId, sizeIds, colorIds, typeIds, } = req.body;
     const [details, attribute] = yield Promise.all([
         productService.updateProduct(id, {
             name,
@@ -55,6 +55,7 @@ exports.updateProduct = (0, async_1.asyncHandler)((req, res, next) => __awaiter(
             price,
             stock,
             specification,
+            keyattribute,
             categoryId,
             subcategoryId,
         }, next),

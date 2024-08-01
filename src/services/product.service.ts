@@ -9,6 +9,7 @@ import {
   GetProductsDTO,
   ProductAttributeUpdateResponse,
   Specification,
+  Keyattribute,
   UpdateProductDTO,
   UpdateProductResponse,
   UpdateProductSizeDTO,
@@ -121,7 +122,7 @@ export class ProductService {
 
   /**
    *
-   * @param _payload name, description, price, stock, specification, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
+   * @param _payload name, description, price, stock, specification, keyattribute, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
    * @param _next
    * @returns product
    */
@@ -138,6 +139,7 @@ export class ProductService {
       price,
       stock,
       specification,
+      keyattribute,
       categoryId,
       subcategoryId,
       sizeIds,
@@ -153,7 +155,8 @@ export class ProductService {
           description,
           price,
           stock,
-          specification: specification as any,
+          specification: specification as Specification,
+          keyattribute: keyattribute as Keyattribute,
           categoryId,
           subcategoryId,
           sizes: {
@@ -196,7 +199,7 @@ export class ProductService {
   /**
    *
    * @param _id productId
-   * @param _payload  name, description, price, stock, specification, categoryId, subcategoryId,
+   * @param _payload  name, description, price, stock, specification, keyattribute, categoryId, subcategoryId,
    * @param _next
    * @returns product
    */
@@ -211,6 +214,7 @@ export class ProductService {
       price,
       stock,
       specification,
+      keyattribute,
       categoryId,
       subcategoryId,
     } = _payload;
@@ -226,6 +230,11 @@ export class ProductService {
             specification: Array.isArray(specification)
               ? specification
               : JSON.parse(specification),
+          }),
+          ...(keyattribute && {
+            keyattribute: Array.isArray(keyattribute)
+              ? keyattribute
+              : JSON.parse(keyattribute),
           }),
           ...(categoryId && {
             category: {
