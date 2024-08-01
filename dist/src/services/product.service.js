@@ -103,14 +103,14 @@ class ProductService {
     }
     /**
      *
-     * @param _payload name, description, price, stock, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
+     * @param _payload name, description, price, stock, specification, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
      * @param _next
      * @returns product
      */
     createProduct(_payload, _next) {
         return __awaiter(this, void 0, void 0, function* () {
             const validateProduct = (product) => (0, validation_1.validateData)(product_dto_1.createProductSchema, product);
-            const { name, description, price, stock, categoryId, subcategoryId, sizeIds, colorIds, typeIds, } = _payload;
+            const { name, description, price, stock, specification, categoryId, subcategoryId, sizeIds, colorIds, typeIds, } = _payload;
             try {
                 validateProduct(_payload);
                 const product = yield prisma_1.default.product.create({
@@ -119,6 +119,7 @@ class ProductService {
                         description,
                         price,
                         stock,
+                        specification: specification,
                         categoryId,
                         subcategoryId,
                         sizes: {
@@ -154,17 +155,21 @@ class ProductService {
     /**
      *
      * @param _id productId
-     * @param _payload  name, description, price, stock, categoryId, subcategoryId,
+     * @param _payload  name, description, price, stock, specification, categoryId, subcategoryId,
      * @param _next
      * @returns product
      */
     updateProduct(_id, _payload, _next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description, price, stock, categoryId, subcategoryId } = _payload;
+            const { name, description, price, stock, specification, categoryId, subcategoryId, } = _payload;
             try {
                 const updatedProduct = yield prisma_1.default.product.update({
                     where: { id: _id },
-                    data: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (name && { name })), (description && { description })), (price && { price })), (stock && { stock })), (categoryId && {
+                    data: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (name && { name })), (description && { description })), (price && { price })), (stock && { stock })), (specification && {
+                        specification: Array.isArray(specification)
+                            ? specification
+                            : JSON.parse(specification),
+                    })), (categoryId && {
                         category: {
                             connect: {
                                 id: categoryId,

@@ -4,12 +4,17 @@ exports.updateProductSizeSchema = exports.updateProductSchema = exports.updateAl
 const zod_1 = require("zod");
 exports.getProductsSchema = zod_1.z.object({});
 exports.getProductSchema = zod_1.z.object({});
+const keyValuePairSchema = zod_1.z
+    .record(zod_1.z.string().optional().nullable())
+    .optional()
+    .nullable();
 exports.createProductSchema = zod_1.z.object({
     id: zod_1.z.string().uuid().optional(),
     name: zod_1.z.string(),
     description: zod_1.z.string().optional().nullable(),
     price: zod_1.z.number(),
     stock: zod_1.z.number().optional().nullable(),
+    specification: zod_1.z.array(keyValuePairSchema).optional().nullable(),
     categoryId: zod_1.z.string(),
     subcategoryId: zod_1.z.string(),
     sizeIds: zod_1.z.array(zod_1.z.string()).nullable().optional(),
@@ -27,6 +32,7 @@ exports.updateAllProductSchema = zod_1.z.object({
     description: zod_1.z.string().optional(),
     price: zod_1.z.number().optional(),
     stock: zod_1.z.number().optional(),
+    specification: zod_1.z.array(keyValuePairSchema).optional().nullable(),
     categoryId: zod_1.z.string().optional(),
     subcategoryId: zod_1.z.string().optional(),
     sizeIds: zod_1.z.array(zod_1.z.string()).optional(),
@@ -38,6 +44,7 @@ exports.updateProductSchema = zod_1.z.object({
     description: zod_1.z.string().optional(),
     price: zod_1.z.number().optional(),
     stock: zod_1.z.number().optional(),
+    specification: zod_1.z.array(keyValuePairSchema).optional().nullable(),
     categoryId: zod_1.z.string().optional(),
     subcategoryId: zod_1.z.string().optional(),
 });

@@ -8,12 +8,18 @@ export const getProductSchema = z.object({});
 
 export type GetProductSchemaDTO = z.infer<typeof getProductSchema>;
 
+const keyValuePairSchema = z
+  .record(z.string().optional().nullable())
+  .optional()
+  .nullable();
+
 export const createProductSchema = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
   description: z.string().optional().nullable(),
   price: z.number(),
   stock: z.number().optional().nullable(),
+  specification: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string(),
   subcategoryId: z.string(),
   sizeIds: z.array(z.string()).nullable().optional(),
@@ -34,6 +40,7 @@ export const updateAllProductSchema = z.object({
   description: z.string().optional(),
   price: z.number().optional(),
   stock: z.number().optional(),
+  specification: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string().optional(),
   subcategoryId: z.string().optional(),
   sizeIds: z.array(z.string()).optional(),
@@ -48,6 +55,7 @@ export const updateProductSchema = z.object({
   description: z.string().optional(),
   price: z.number().optional(),
   stock: z.number().optional(),
+  specification: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string().optional(),
   subcategoryId: z.string().optional(),
 });

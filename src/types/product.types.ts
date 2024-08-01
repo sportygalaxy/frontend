@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import {
   CreateProductSchemaDTO,
   GetProductSchemaDTO,
@@ -10,12 +11,20 @@ import { ApiResponse } from "./global.types";
 
 // export interface GetProductsDTO {}
 
+type KeyValuePair = {
+  [key: string]: string;
+};
+
+// export type Specification = Prisma.JsonValue;
+export type Specification = KeyValuePair[];
+
 export interface GetProductsResponse {
   id: string;
   name: string;
   description: string | null;
   price: number;
   stock: number | null;
+  specification: Specification;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -34,6 +43,7 @@ export interface GetProductResponse {
   description: string | null;
   price: number;
   stock: number | null;
+  specification: Specification;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -62,6 +72,7 @@ export interface CreateProductResponse {
   description: string | null;
   price: number;
   stock: number | null;
+  specification: Specification;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -90,6 +101,7 @@ export interface UpdateAllProductResponse {
   description?: string | null;
   price?: number;
   stock?: number | null;
+  specification: Specification;
   categoryId?: string;
   subcategoryId?: string;
   sizeIds?: string[];
@@ -108,6 +120,7 @@ export type UpdateAllProductApiResponse = ApiResponse<UpdateAllProductResponse>;
 //   description: string;
 //   price: number;
 //   stock: number;
+//   specification: Specification;
 //   categoryId: string;
 //   subcategoryId: string;
 //   sizeIds: string[];
@@ -121,6 +134,7 @@ export interface UpdateProductResponse {
   description?: string | null;
   price?: number;
   stock?: number | null;
+  specification: Specification;
   categoryId?: string;
   subcategoryId?: string;
   createdAt?: Date;

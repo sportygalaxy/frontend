@@ -27,7 +27,7 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  orders   Order[]
+  orders    Order[]
   bookmarks Bookmark[]
 
   @@map("users")
@@ -97,6 +97,7 @@ model Product {
   stock         Int?
   categoryId    String
   subcategoryId String
+  specification Json?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
@@ -183,7 +184,7 @@ model Bookmark {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 

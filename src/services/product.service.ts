@@ -8,6 +8,7 @@ import {
   GetProductDTO,
   GetProductsDTO,
   ProductAttributeUpdateResponse,
+  Specification,
   UpdateProductDTO,
   UpdateProductResponse,
   UpdateProductSizeDTO,
@@ -16,6 +17,7 @@ import {
 import { createProductSchema } from "../types/dto/product.dto";
 import { validateData } from "../helpers/validation";
 import { updateProductAttribute } from "../helpers/update-product-attributes";
+import { Product } from "models";
 
 export class ProductService {
   /**
@@ -119,14 +121,14 @@ export class ProductService {
 
   /**
    *
-   * @param _payload name, description, price, stock, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
+   * @param _payload name, description, price, stock, specification, categoryId, subcategoryId, sizeIds, colorIds, typeIds,
    * @param _next
    * @returns product
    */
   async createProduct(
     _payload: CreateProductDTO,
     _next: NextFunction
-  ): Promise<CreateProductResponse> {
+  ): Promise<Product> {
     const validateProduct = (product: CreateProductDTO) =>
       validateData(createProductSchema, product);
 
@@ -135,6 +137,7 @@ export class ProductService {
       description,
       price,
       stock,
+      specification,
       categoryId,
       subcategoryId,
       sizeIds,
@@ -150,6 +153,7 @@ export class ProductService {
           description,
           price,
           stock,
+          specification: specification as any,
           categoryId,
           subcategoryId,
           sizes: {
@@ -192,7 +196,7 @@ export class ProductService {
   /**
    *
    * @param _id productId
-   * @param _payload  name, description, price, stock, categoryId, subcategoryId,
+   * @param _payload  name, description, price, stock, specification, categoryId, subcategoryId,
    * @param _next
    * @returns product
    */
@@ -200,9 +204,16 @@ export class ProductService {
     _id: string,
     _payload: UpdateProductDTO,
     _next: NextFunction
-  ): Promise<UpdateProductResponse> {
-    const { name, description, price, stock, categoryId, subcategoryId } =
-      _payload;
+  ): Promise<Product> {
+    const {
+      name,
+      description,
+      price,
+      stock,
+      specification,
+      categoryId,
+      subcategoryId,
+    } = _payload;
     try {
       const updatedProduct = await prisma.product.update({
         where: { id: _id },
@@ -211,6 +222,11 @@ export class ProductService {
           ...(description && { description }),
           ...(price && { price }),
           ...(stock && { stock }),
+          ...(specification && {
+            specification: Array.isArray(specification)
+              ? specification
+              : JSON.parse(specification),
+          }),
           ...(categoryId && {
             category: {
               connect: {
