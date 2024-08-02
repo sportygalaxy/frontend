@@ -43,101 +43,94 @@ function CartProductCard({
   };
 
   return (
-    <>
-      <div
-        className={cn(
-          "col-span-2 w-full flow-root h-fit rounded-[8px] p-6 divide-[#e6e7eb] overflow-auto",
-          drawer
-            ? "bg-transparent"
-            : "bg-white shadow-[0_-4px_20px_0_rgba(0,0,0,.06)] divide-y"
-        )}
-      >
-        {item?.map((cart: TCart) => (
-          <div key={cart.id} className="flex flex-col gap-4 max-w-2xl mt-8">
-            <div className="flex gap-10 md:gap-16 h-[154px]">
-              <div className="relative w-[40%] h-[100%] bg-[#E8EAEC] px-6 py-2">
-                <Image
-                  fill
-                  sizes="100%"
-                  style={{
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
-                  src={cart?.image}
-                  alt={cart?.title}
-                  className="w-full transition-transform duration-700 group-hover:scale-110"
-                  priority
-                />
-              </div>
-
-              <div className="w-[60%] h-full flex flex-col justify-between">
-                <div className="flex flex-col gap-2">
-                  <p className="font-medium text-mobile-2xl md:text-2xl text-primary">
-                    {cart?.title}
-                  </p>
-                  <p className="font-light text-mobile-2xl sm:text-2xl text-primary opacity-50">
-                    {cart?.description}
-                  </p>
-                  <p className="mt-1 font-medium text-mobile-3xl sm:text-3xl">
-                    ${cart?.price}
-                  </p>
-                </div>
-                <div className="flex mt-2 h-10 items-center justify-center space-x-4 text-sm border w-fit rounded-lg border-[#DEE2E6] px-2">
-                  <span
-                    className={cn(
-                      isProductInCart(cart?.qty)
-                        ? "cursor-pointer"
-                        : "cursor-not-allowed"
-                    )}
-                    onClick={(event) => handleDecrement(event, cart?.id)}
-                  >
-                    <MinusLineIcon
-                      color={cn(
-                        isProductInCart(cart?.qty) ? "#000" : "#828282"
-                      )}
-                    />
-                  </span>
-                  <Separator
-                    className="text-[#DEE2E6]"
-                    orientation="vertical"
-                  />
-                  <p className="font-semibold text-mobile-2xl md:text-2xl text-primary">
-                    {cart?.qty}
-                  </p>
-                  <Separator
-                    className="text-[#DEE2E6]"
-                    orientation="vertical"
-                  />
-                  <span
-                    className="cursor-pointer"
-                    onClick={(event) => handleIncrement(event, cart?.id)}
-                  >
-                    <PlusIcon color="#000" />
-                  </span>
-                </div>
-              </div>
+    <div
+      className={cn(
+        "col-span-2 w-full flow-root h-fit p-6 divide-[#e6e7eb] overflow-auto",
+        drawer
+          ? "bg-transparent"
+          : "bg-white shadow-[0_-4px_20px_0_rgba(0,0,0,.06)] divide-y"
+      )}
+    >
+      {item?.map((cart: TCart) => (
+        <div
+          key={cart.id}
+          className="flex flex-col gap-4 max-w-2xl mt-8 border-none"
+        >
+          <div className="flex gap-10 md:gap-16 h-[154px]">
+            <div className="relative w-[40%] h-[100%] bg-[#E8EAEC] px-6 py-2">
+              <Image
+                fill
+                sizes="100%"
+                style={{
+                  objectFit: "contain",
+                  display: "block",
+                  margin: "0 auto",
+                }}
+                src={cart?.image}
+                alt={cart?.title}
+                className="w-full transition-transform duration-700 group-hover:scale-110"
+                priority
+              />
             </div>
-            <div className="flex items-center justify-between">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-light py-4"
-                onClick={handleSaveForLater}
-              >
-                Save for later
-              </Button>
-              <span
-                className="cursor-pointer hover:text-destructive"
-                onClick={(event) => handleRemove(event, cart?.id)}
-              >
-                <DeleteIcon />
-              </span>
+
+            <div className="w-[60%] h-full flex flex-col justify-between">
+              <div className="flex flex-col gap-2">
+                <p className="font-medium text-mobile-2xl md:text-2xl text-primary">
+                  {cart?.title}
+                </p>
+                <p className="font-light text-mobile-2xl sm:text-2xl text-primary opacity-50">
+                  {cart?.description}
+                </p>
+                <p className="mt-1 font-medium text-mobile-3xl sm:text-3xl">
+                  ${cart?.price}
+                </p>
+              </div>
+              <div className="flex mt-2 h-10 items-center justify-center space-x-4 text-sm border w-fit rounded-lg border-[#DEE2E6] px-2">
+                <span
+                  className={cn(
+                    isProductInCart(cart?.qty)
+                      ? "cursor-pointer"
+                      : "cursor-not-allowed"
+                  )}
+                  onClick={(event) => handleDecrement(event, cart?.id)}
+                >
+                  <MinusLineIcon
+                    color={cn(isProductInCart(cart?.qty) ? "#000" : "#828282")}
+                  />
+                </span>
+                <Separator className="text-[#DEE2E6]" orientation="vertical" />
+                <p className="font-semibold text-mobile-2xl md:text-2xl text-primary">
+                  {cart?.qty}
+                </p>
+                <Separator className="text-[#DEE2E6]" orientation="vertical" />
+                <span
+                  className="cursor-pointer"
+                  onClick={(event) => handleIncrement(event, cart?.id)}
+                >
+                  <PlusIcon color="#000" />
+                </span>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
-    </>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-light py-4"
+              onClick={handleSaveForLater}
+            >
+              Save for later
+            </Button>
+            <span
+              className="cursor-pointer hover:text-destructive"
+              onClick={(event) => handleRemove(event, cart?.id)}
+            >
+              <DeleteIcon />
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

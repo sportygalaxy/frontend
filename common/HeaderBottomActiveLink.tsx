@@ -9,6 +9,7 @@ type props = {
   text: string;
   isNotLink?: boolean;
   Icon: React.FC<{ color?: string }>;
+  action?: () => void;
 };
 
 const isActive = (pathname: string, link: string) => pathname === link;
@@ -17,7 +18,8 @@ const HeaderBottomActiveLink: React.FC<props> = ({
   href: link = "/",
   text,
   Icon,
-  isNotLink
+  isNotLink,
+  action,
 }) => {
   const pathname = usePathname();
   return (
@@ -39,7 +41,10 @@ const HeaderBottomActiveLink: React.FC<props> = ({
           </p>
         </Link>
       ) : (
-        <div className="flex flex-col items-center justify-between h-12">
+        <div
+          onClick={action && action}
+          className="flex flex-col items-center justify-between h-12 cursor-pointer"
+        >
           <Icon color={isActive(pathname, link) ? "black" : "#808080"} />
           <p
             className={`${

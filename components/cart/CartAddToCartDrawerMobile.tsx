@@ -1,0 +1,85 @@
+"use client";
+import { XIcon } from "lucide-react";
+import { Button } from "../ui/button";
+import useCartStore from "@/store/cartStore";
+import {
+  SHIPPING_FEE,
+  showTotalPrice,
+  showTotalPriceInCart,
+} from "@/helpers/cart";
+import CartProductCard from "./CartProductCard";
+import CartEmpty from "./CartEmpty";
+import CartClearAll from "./CartClearAll";
+import { Separator } from "../ui/separator";
+
+type CartAddToCartDrawerMobileProps<T> = {
+  onClose: () => void;
+};
+
+// Get data from cart in global state
+function CartAddToCartDrawerMobile<T>({
+  onClose,
+}: CartAddToCartDrawerMobileProps<T>) {
+  const { cart } = useCartStore();
+
+  return (
+    <div className="h-full flex flex-col justify-end bg-background">
+      {/* Header */}
+      <div className="flex flex-col items-center justify-between p-4 bg-background rounded-tl-[12px] rounded-tr-[12px]">
+        <div className="py-1">
+          <Separator
+            className="text-[#000] bg-black w-44 h-1 rounded-md"
+            orientation="horizontal"
+          />
+        </div>
+
+        <div className="flex w-full items-center justify-between">
+          <p className="text-mobile-3xl md:text-3xl">Cart</p>
+
+          <div>
+            <Button onClick={onClose} variant={"ghost"} size={"icon"}>
+              <XIcon />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Details */}
+      {cart.length >= 1 ? (
+        <div className="flex flex-col">
+          <div className="max-h-[600px] h-fit overflow-auto">
+            <CartProductCard item={cart} />
+          </div>
+
+          <div className="overflow-auto text-[#222] shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] pb-6 px-6">
+            <CartClearAll />
+            <div className="flex items-center justify-between">
+              <p className="underline cursor-pointer">Item subtotal</p>
+              <p>${showTotalPriceInCart(cart)}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Shipping total</p>
+              <p>${SHIPPING_FEE}</p>
+            </div>
+            <div className="font-bold flex items-center justify-between">
+              <p>Subtotal</p>
+              <p>${showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE)}</p>
+            </div>
+
+            <Button
+              // onClick={handleCheckout}
+              size={"lg"}
+              className="rounded-full font-bold min-h-[48px] flex-1 w-full mt-4"
+            >
+              Check out now
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <CartEmpty />
+      )}
+    </div>
+  );
+}
+
+export default CartAddToCartDrawerMobile;

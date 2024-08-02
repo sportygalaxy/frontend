@@ -6,7 +6,7 @@ const useCartStore = create<TCartState>()(
   persist(
     (set) => ({
       cart: [],
-      addToCart: (service: TCartWithoutQty) =>
+      addToCart: (service: TCartWithoutQty) => {
         set((state) => {
           const existingItem = state.cart.find(
             (item) => item.id === service.id
@@ -23,29 +23,34 @@ const useCartStore = create<TCartState>()(
               cart: [...state.cart, { ...service, qty: 1 }],
             };
           }
-        }),
-      removeFromCart: (id) =>
+        });
+      },
+      removeFromCart: (id) => {
         set((state) => ({
           cart: state.cart.filter((item) => item.id !== id),
-        })),
-      incrementQty: (id) =>
+        }));
+      },
+      incrementQty: (id) => {
         set((state) => ({
           cart: state.cart.map((item) =>
             item.id === id ? { ...item, qty: item.qty + 1 } : item
           ),
-        })),
-      decrementQty: (id) =>
+        }));
+      },
+      decrementQty: (id) => {
         set((state) => ({
           cart: state.cart.map((item) =>
             item.id === id && item.qty > 1
               ? { ...item, qty: item.qty - 1 }
               : item
           ),
-        })),
-      clearCart: () =>
+        }));
+      },
+      clearCart: () => {
         set(() => ({
           cart: [],
-        })),
+        }));
+      },
     }),
     {
       name: "cart-storage",

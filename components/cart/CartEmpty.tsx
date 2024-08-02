@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 type Props = {};
 const CartEmpty: FC<Props> = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 h-full mb-20">
+    <div className="flex flex-col bg-background items-center justify-center gap-6 h-full mb-20">
       <BinIcon />
 
       <div className="text-center">
