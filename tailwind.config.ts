@@ -102,7 +102,7 @@ const config = {
       },
       backgroundImage: {
         "dark-gradient":
-          "linear-gradient(264.39deg, rgba(0, 0, 0, 0) 35.33%, #000000 90.47%), url('https://s3-alpha-sig.figma.com/img/2761/03b9/636f37b60127439bafce63d7fbcf674d?Expires=1722211200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jdi3VeQNsf9ZPkj5jFY44ExO06epxnhNCSj3JxOukCwk48~okmdtNy52~9QAgxZJ48pZMSCBWHvSs3q3VIIhqQXycDAIMu4wpqbvp4o5ACokQYwzkjRq8TQOXAYLex5gNHieFrTYJvnxuEC6DZSX47GwBXA9OTPoH9sjN9FR7CMkNVh-BVQhlHBybM23KjDHcVAj2WGt6hQfMEUdQJxAsLzL3OmCmAEwKw3nwv41xlpBijH5VQ0T~NLYJdNcvsjHPG6hPWaaW9JjJG7jH8XtNIid0-IQgy~T3ZhH17NL5tP-fWlU4VbTDwqNUsQzBCRADo15fdGT02XgKQwd8AVBwQ__')",
+          "linear-gradient(264.39deg, rgba(0, 0, 0, 0) 35.33%, #000000 90.47%), url('https://s3-alpha-sig.figma.com/img/2761/03b9/636f37b60127439bafce63d7fbcf674d?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UOrB6l4G7ggckDRxkEsec3M-nuQjxLX7O5qrxpnpwFbaOmr7VShrxWzNaHVpFQ9Hx4ZvAm-tXGUIZNItxSTSNq1ChBBMeMVN1KQnPOdKpD6HuDfjhxh4kcsMvkbIK2~tnwKTEX2kLFfEGnZMW8gvFHqsPlt6Z5yinIEl2K-LrdPcf0IuhQG3WHx5NuXTxbW36npZulrP46uNC8vfuRy0KPc0glUKl3ZTCdAj0lpTJaoxiXWWnjFf2VNx5hV-kK12l8sELDo06TqAdSePa-fU8YLrxZnqce4KBq1YR2r3qtso2DuDEpVq0N~iyynHM6bA2dqfzCCZyqWer7VsvslyVw__')",
         "grey-gradient":
           "linear-gradient(180.77deg, rgba(0, 0, 0, 0) 64.59%, rgba(0, 0, 0, 0.7) 97.05%)",
       },
