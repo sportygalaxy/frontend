@@ -10,7 +10,7 @@ import { NextFunction, Response } from "express";
  * @param tokenUserId userId from JWT
  * @returns Error JSON payload
  */
-export const verifyOwner = (
+export const verifyOwner = async (
   res: Response | any,
   next: NextFunction | any,
   userId: string | undefined,

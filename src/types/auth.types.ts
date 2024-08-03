@@ -21,6 +21,13 @@ export interface ActivateUserDto {
   isVerified: boolean;
 }
 
+export interface SendVerificationDto {
+  userId: string;
+  userEmail: string;
+  userFirstName: string;
+  isVerified: boolean;
+}
+
 export interface LoginUserDto {
   email: string;
   password: string;

@@ -21,6 +21,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const EnvKeys_1 = require("../common/EnvKeys");
 const user_service_1 = require("./user.service");
 const crypto_1 = require("crypto");
+const mailer_1 = require("../helpers/mailer");
 const userService = new user_service_1.UserService();
 class AuthService {
     // constructor(public userService: UserService) {}
@@ -175,6 +176,24 @@ class AuthService {
                     },
                 });
                 return updatedUser;
+            }
+            catch (err) {
+                return _next(err);
+            }
+        });
+    }
+    sendVerification(_a, _next_1) {
+        return __awaiter(this, arguments, void 0, function* ({ userId, userEmail, userFirstName, isVerified }, _next) {
+            const THIRTY_MINUTES = 1000 * 60 * 30;
+            const isAdmin = false;
+            try {
+                if (isVerified) {
+                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_EMAIL_ALREADY_VERIFIED, constants_1.HTTP_STATUS_CODE[400].code));
+                }
+                const emailVerificationToken = yield this.generateCookieToken(userId, THIRTY_MINUTES, isAdmin);
+                const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
+                (0, mailer_1.sendVerificationEmail)(userEmail, userFirstName, url);
+                return true;
             }
             catch (err) {
                 return _next(err);

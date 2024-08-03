@@ -67,7 +67,7 @@ export class UserService {
   }
 
   async getUser(
-    { ...dto }: { id: string },
+    { ...dto }: { id: string | undefined },
     _next: NextFunction
   ): Promise<User | null> {
     const { id: _id } = dto;

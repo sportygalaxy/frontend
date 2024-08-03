@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.login = exports.activate = exports.register = void 0;
+exports.logout = exports.login = exports.sendVerification = exports.activate = exports.register = void 0;
 const auth_service_1 = require("../services/auth.service");
 const user_service_1 = require("../services/user.service");
 const async_1 = require("../middleware/async");
@@ -80,6 +80,25 @@ exports.activate = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 
         message: "Account has been activated successfully.",
         data: jwtUser,
         success: !!jwtUser,
+    });
+}));
+exports.sendVerification = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const tokenUserId = req.userId;
+    const jwtUser = yield userService.getUser({ id: tokenUserId }, next);
+    if (!jwtUser)
+        return;
+    const sentTojwtUser = yield authService.sendVerification({
+        userId: jwtUser === null || jwtUser === void 0 ? void 0 : jwtUser.id,
+        userEmail: jwtUser === null || jwtUser === void 0 ? void 0 : jwtUser.email,
+        userFirstName: jwtUser.firstName,
+        isVerified: jwtUser === null || jwtUser === void 0 ? void 0 : jwtUser.isVerified,
+    }, next);
+    if (!sentTojwtUser)
+        return;
+    res.status(201).json({
+        message: "Account email verification link sent successfully.",
+        data: sentTojwtUser,
+        success: !!sentTojwtUser,
     });
 }));
 exports.login = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

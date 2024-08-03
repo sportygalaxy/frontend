@@ -9,9 +9,11 @@ import {
   ActivateUserDto,
   CanRegisterResponse,
   RegisterUserDto,
+  SendVerificationDto,
 } from "types/auth.types";
 import { UserService } from "./user.service";
 import { randomUUID } from "crypto";
+import { sendVerificationEmail } from "../helpers/mailer";
 
 const userService = new UserService();
 export class AuthService {
@@ -223,6 +225,38 @@ export class AuthService {
       });
 
       return updatedUser;
+    } catch (err) {
+      return _next(err);
+    }
+  }
+
+  async sendVerification(
+    { userId, userEmail, userFirstName, isVerified }: SendVerificationDto,
+    _next: NextFunction
+  ) {
+    const THIRTY_MINUTES = 1000 * 60 * 30;
+    const isAdmin = false;
+
+    try {
+      if (isVerified) {
+        return _next(
+          new ErrorResponse(
+            ERROR_MESSAGES.USER_EMAIL_ALREADY_VERIFIED,
+            HTTP_STATUS_CODE[400].code
+          )
+        );
+      }
+
+      const emailVerificationToken = await this.generateCookieToken(
+        userId,
+        THIRTY_MINUTES,
+        isAdmin
+      );
+
+      const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
+      sendVerificationEmail(userEmail, userFirstName, url);
+
+      return true;
     } catch (err) {
       return _next(err);
     }

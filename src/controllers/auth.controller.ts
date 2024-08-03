@@ -89,6 +89,32 @@ export const activate = asyncHandler(
   }
 );
 
+export const sendVerification = asyncHandler(
+  async (req, res: Response, next: NextFunction) => {
+    const tokenUserId = req.userId;
+
+    const jwtUser = await userService.getUser({ id: tokenUserId }, next);
+    if (!jwtUser) return;
+
+    const sentTojwtUser = await authService.sendVerification(
+      {
+        userId: jwtUser?.id,
+        userEmail: jwtUser?.email,
+        userFirstName: jwtUser.firstName,
+        isVerified: jwtUser?.isVerified,
+      },
+      next
+    );
+    if (!sentTojwtUser) return;
+
+    res.status(201).json({
+      message: "Account email verification link sent successfully.",
+      data: sentTojwtUser,
+      success: !!sentTojwtUser,
+    });
+  }
+);
+
 export const login = asyncHandler(
   async (req: { body: LoginUserDto }, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
