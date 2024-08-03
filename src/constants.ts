@@ -3,6 +3,7 @@ export const ERROR_MESSAGES = {
   GENERIC_MESSAGE: "Sorry, an error occurred",
   USER_NOT_FOUND: "Sorry, user not found",
   USER_EXISTS_WITH_EMAIL_OR_USERNAME: "Sorry, user already exists",
+  USER_EMAIL_ALREADY_VERIFIED: "Email is already activated.",
   USER_EXISTS_WITH_USERNAME: "Sorry, username already exists",
   USER_EXISTS_WITH_EMAIL: "Sorry, email already exists",
   PROFILE_UPDATE_FAILED: "Sorry, profile update failed",

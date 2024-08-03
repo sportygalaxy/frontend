@@ -13,6 +13,7 @@ const constants_1 = require("./src/constants");
 const EnvKeys_1 = require("./src/common/EnvKeys");
 const error_1 = require("./src/middleware/error");
 const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
+const user_route_1 = __importDefault(require("./src/routes/user.route"));
 const coupon_route_1 = __importDefault(require("./src/routes/coupon.route"));
 const coupon_route_2 = __importDefault(require("./src/routes/coupon.route"));
 const bookmark_route_1 = __importDefault(require("./src/routes/bookmark.route"));
@@ -31,6 +32,7 @@ if (EnvKeys_1.EnvKeys.isLocal()) {
     app.use((0, morgan_1.default)("dev"));
 }
 app.use(`${apiPath}/auth`, auth_route_1.default);
+app.use(`${apiPath}/users`, user_route_1.default);
 app.use(`${apiPath}/products/subcategory`, product_subcategory_route_1.default);
 app.use(`${apiPath}/products/category`, product_category_route_1.default);
 app.use(`${apiPath}/products/color`, product_color_route_1.default);

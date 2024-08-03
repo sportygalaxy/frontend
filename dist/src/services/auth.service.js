@@ -50,11 +50,39 @@ class AuthService {
             }
         });
     }
+    decodeCookieToken(_token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const secret = EnvKeys_1.EnvKeys.JWT_SECRET;
+                const decodedJwtUser = jsonwebtoken_1.default.verify(_token, secret);
+                return decodedJwtUser;
+            }
+            catch (err) {
+                return err;
+            }
+        });
+    }
     validatedEmail(_email, _next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield prisma_1.default.user.findUnique({
                     where: { email: _email },
+                });
+                if (!user) {
+                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS, constants_1.HTTP_STATUS_CODE[400].code));
+                }
+                return user;
+            }
+            catch (err) {
+                return _next(err);
+            }
+        });
+    }
+    validatedUserId(_id, _next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield prisma_1.default.user.findUnique({
+                    where: { id: _id },
                 });
                 if (!user) {
                     return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS, constants_1.HTTP_STATUS_CODE[400].code));
@@ -128,6 +156,25 @@ class AuthService {
                     },
                 });
                 return newUser;
+            }
+            catch (err) {
+                return _next(err);
+            }
+        });
+    }
+    activate(_a, _next_1) {
+        return __awaiter(this, arguments, void 0, function* ({ userId, isVerified }, _next) {
+            try {
+                if (isVerified) {
+                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_EMAIL_ALREADY_VERIFIED, constants_1.HTTP_STATUS_CODE[400].code));
+                }
+                const updatedUser = yield prisma_1.default.user.update({
+                    where: { id: userId },
+                    data: {
+                        isVerified: true,
+                    },
+                });
+                return updatedUser;
             }
             catch (err) {
                 return _next(err);

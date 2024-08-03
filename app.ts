@@ -9,6 +9,7 @@ import { EnvKeys } from "./src/common/EnvKeys";
 import { errorHandler } from "./src/middleware/error";
 
 import authRoute from "./src/routes/auth.route";
+import userRoute from "./src/routes/user.route";
 import reviewRoute from "./src/routes/coupon.route";
 import couponRoute from "./src/routes/coupon.route";
 import bookmarkRoute from "./src/routes/bookmark.route";
@@ -31,6 +32,7 @@ if (EnvKeys.isLocal()) {
 }
 
 app.use(`${apiPath}/auth`, authRoute);
+app.use(`${apiPath}/users`, userRoute);
 app.use(`${apiPath}/products/subcategory`, productSubcategoryRoute);
 app.use(`${apiPath}/products/category`, productCategoryRoute);
 app.use(`${apiPath}/products/color`, productColorRoute);

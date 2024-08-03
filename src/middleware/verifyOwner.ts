@@ -1,3 +1,4 @@
+import { ErrorResponse } from "../utils/errorResponse";
 import { ERROR_MESSAGES, HTTP_STATUS_CODE } from "../constants";
 import { NextFunction, Response } from "express";
 
@@ -15,12 +16,11 @@ export const verifyOwner = (
   userId: string | undefined,
   tokenUserId: string | undefined
 ) => {
+  console.log("[verifyOwner]", { userId, tokenUserId });
   if (userId !== tokenUserId)
-    return res.status(403).json({
-      error: ERROR_MESSAGES.NOT_AUTHORIZED,
-      success: false,
-      statusCode: HTTP_STATUS_CODE[403].code,
-    });
-
+    throw new ErrorResponse(
+      ERROR_MESSAGES.NOT_AUTHORIZED,
+      HTTP_STATUS_CODE[403].code
+    );
   // next();
 };

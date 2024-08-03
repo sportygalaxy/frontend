@@ -3,9 +3,13 @@ import prisma from "../lib/prisma";
 import { ERROR_MESSAGES, HTTP_STATUS_CODE } from "../constants";
 import { ErrorResponse } from "../utils/errorResponse";
 import { NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { EnvKeys } from "../common/EnvKeys";
-import { CanRegisterResponse, RegisterUserDto } from "types/auth.types";
+import {
+  ActivateUserDto,
+  CanRegisterResponse,
+  RegisterUserDto,
+} from "types/auth.types";
 import { UserService } from "./user.service";
 import { randomUUID } from "crypto";
 
@@ -46,10 +50,43 @@ export class AuthService {
     }
   }
 
+  async decodeCookieToken(_token: string): Promise<JwtPayload> {
+    try {
+      const secret = EnvKeys.JWT_SECRET;
+
+      const decodedJwtUser = jwt.verify(_token, secret) as JwtPayload;
+
+      return decodedJwtUser;
+    } catch (err: any) {
+      return err;
+    }
+  }
+
   async validatedEmail(_email: string, _next: NextFunction) {
     try {
       const user = await prisma.user.findUnique({
         where: { email: _email },
+      });
+
+      if (!user) {
+        return _next(
+          new ErrorResponse(
+            ERROR_MESSAGES.INVALID_CREDENTIALS,
+            HTTP_STATUS_CODE[400].code
+          )
+        );
+      }
+
+      return user;
+    } catch (err) {
+      return _next(err);
+    }
+  }
+
+  async validatedUserId(_id: string, _next: NextFunction) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: _id },
       });
 
       if (!user) {
@@ -162,6 +199,30 @@ export class AuthService {
       });
 
       return newUser;
+    } catch (err) {
+      return _next(err);
+    }
+  }
+
+  async activate({ userId, isVerified }: ActivateUserDto, _next: NextFunction) {
+    try {
+      if (isVerified) {
+        return _next(
+          new ErrorResponse(
+            ERROR_MESSAGES.USER_EMAIL_ALREADY_VERIFIED,
+            HTTP_STATUS_CODE[400].code
+          )
+        );
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          isVerified: true,
+        },
+      });
+
+      return updatedUser;
     } catch (err) {
       return _next(err);
     }

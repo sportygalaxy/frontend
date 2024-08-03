@@ -32,6 +32,7 @@ const userFilter = {
     email: true,
     firstName: true,
     lastName: true,
+    isVerified: true,
     phone: true,
     avatar: true,
     createdAt: true,
@@ -44,12 +45,13 @@ class UserService {
                     where: { email: _email },
                 });
                 if (user) {
-                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_EXISTS_WITH_EMAIL, constants_1.HTTP_STATUS_CODE[400].code));
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_EXISTS_WITH_EMAIL, constants_1.HTTP_STATUS_CODE[400].code);
                 }
                 return user;
             }
             catch (err) {
-                return _next(err);
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
             }
         });
     }
@@ -57,15 +59,16 @@ class UserService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const users = yield prisma_1.default.user.findMany({
-                    select: Object.assign({}, userFilter),
+                // select: { ...userFilter },
                 });
                 if (!users) {
-                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code));
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
                 }
                 return users;
             }
             catch (err) {
-                return _next(err);
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
             }
         });
     }
@@ -76,15 +79,16 @@ class UserService {
             try {
                 const user = yield prisma_1.default.user.findUnique({
                     where: { id: _id },
-                    select: Object.assign({}, userFilter),
+                    // select: { ...userFilter },
                 });
                 if (!user) {
-                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code));
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
                 }
                 return user;
             }
             catch (err) {
-                return _next(err);
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
             }
         });
     }
@@ -92,25 +96,23 @@ class UserService {
         return __awaiter(this, void 0, void 0, function* () {
             var dto = __rest(_a, []);
             const { id: _id, payload: _payload } = dto;
-            console.log({ _id, _payload });
             try {
                 const user = yield this.getUser({ id: _id }, _next);
-                console.log({ user });
                 const updatedUser = yield prisma_1.default.user.update({
                     where: { id: _id },
                     data: Object.assign(Object.assign(Object.assign({}, _payload === null || _payload === void 0 ? void 0 : _payload.inputs), ((_payload === null || _payload === void 0 ? void 0 : _payload.password) && {
                         password: _payload === null || _payload === void 0 ? void 0 : _payload.password,
-                    })), ((_payload === null || _payload === void 0 ? void 0 : _payload.avatar) && { avatar: (_payload === null || _payload === void 0 ? void 0 : _payload.avatar) || user.avatar })),
+                    })), ((_payload === null || _payload === void 0 ? void 0 : _payload.avatar) && { avatar: (_payload === null || _payload === void 0 ? void 0 : _payload.avatar) || (user === null || user === void 0 ? void 0 : user.avatar) })),
                 });
                 if (!updatedUser) {
-                    return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PROFILE_UPDATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code));
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PROFILE_UPDATE_FAILED, constants_1.HTTP_STATUS_CODE[400].code);
                 }
-                console.log({ newPaszword: updatedUser });
                 const { password: userPassword } = updatedUser, rest = __rest(updatedUser, ["password"]);
                 return rest;
             }
             catch (err) {
-                return _next(err);
+                _next(err);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code);
             }
         });
     }

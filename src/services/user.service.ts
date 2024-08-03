@@ -3,97 +3,106 @@ import { ERROR_MESSAGES, HTTP_STATUS_CODE } from "../constants";
 import prisma from "../lib/prisma";
 import { ErrorResponse } from "../utils/errorResponse";
 import { UpdateUserResponse, UpdateUserParams } from "types/user.types";
+import { User } from "../models";
 
 const userFilter = {
   id: true,
   email: true,
   firstName: true,
   lastName: true,
+  isVerified: true,
   phone: true,
   avatar: true,
   createdAt: true,
 };
 
 export class UserService {
-  async getUserByEmail(_email: string, _next: NextFunction) {
+  async getUserByEmail(
+    _email: string,
+    _next: NextFunction
+  ): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
         where: { email: _email },
       });
 
       if (user) {
-        return _next(
-          new ErrorResponse(
-            ERROR_MESSAGES.USER_EXISTS_WITH_EMAIL,
-            HTTP_STATUS_CODE[400].code
-          )
+        throw new ErrorResponse(
+          ERROR_MESSAGES.USER_EXISTS_WITH_EMAIL,
+          HTTP_STATUS_CODE[400].code
         );
       }
 
       return user;
     } catch (err) {
-      return _next(err);
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.USER_NOT_FOUND,
+        HTTP_STATUS_CODE[400].code
+      );
     }
   }
 
-  async getUsers(_next: NextFunction): Promise<any | void> {
+  async getUsers(_next: NextFunction): Promise<User[]> {
     try {
       const users = await prisma.user.findMany({
-        select: { ...userFilter },
+        // select: { ...userFilter },
       });
 
       if (!users) {
-        return _next(
-          new ErrorResponse(
-            ERROR_MESSAGES.USER_NOT_FOUND,
-            HTTP_STATUS_CODE[400].code
-          )
+        throw new ErrorResponse(
+          ERROR_MESSAGES.USER_NOT_FOUND,
+          HTTP_STATUS_CODE[400].code
         );
       }
 
       return users;
     } catch (err) {
-      return _next(err);
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.USER_NOT_FOUND,
+        HTTP_STATUS_CODE[400].code
+      );
     }
   }
 
   async getUser(
     { ...dto }: { id: string },
     _next: NextFunction
-  ): Promise<any | void> {
+  ): Promise<User | null> {
     const { id: _id } = dto;
 
     try {
       const user = await prisma.user.findUnique({
         where: { id: _id },
-        select: { ...userFilter },
+        // select: { ...userFilter },
       });
 
       if (!user) {
-        return _next(
-          new ErrorResponse(
-            ERROR_MESSAGES.USER_NOT_FOUND,
-            HTTP_STATUS_CODE[400].code
-          )
+        throw new ErrorResponse(
+          ERROR_MESSAGES.USER_NOT_FOUND,
+          HTTP_STATUS_CODE[400].code
         );
       }
 
       return user;
     } catch (err) {
-      return _next(err);
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.USER_NOT_FOUND,
+        HTTP_STATUS_CODE[400].code
+      );
     }
   }
 
   async update(
     { ...dto }: UpdateUserParams,
     _next: NextFunction
-  ): Promise<UpdateUserResponse | void> {
+  ): Promise<UpdateUserResponse | null> {
     const { id: _id, payload: _payload } = dto;
 
-    console.log({ _id, _payload });
     try {
       const user = await this.getUser({ id: _id }, _next);
-      console.log({ user });
       const updatedUser = await prisma.user.update({
         where: { id: _id },
         data: {
@@ -101,25 +110,26 @@ export class UserService {
           ...(_payload?.password && {
             password: _payload?.password,
           }),
-          ...(_payload?.avatar && { avatar: _payload?.avatar || user.avatar }),
+          ...(_payload?.avatar && { avatar: _payload?.avatar || user?.avatar }),
         },
       });
 
       if (!updatedUser) {
-        return _next(
-          new ErrorResponse(
-            ERROR_MESSAGES.PROFILE_UPDATE_FAILED,
-            HTTP_STATUS_CODE[400].code
-          )
+        throw new ErrorResponse(
+          ERROR_MESSAGES.PROFILE_UPDATE_FAILED,
+          HTTP_STATUS_CODE[400].code
         );
       }
 
-      console.log({ newPaszword: updatedUser });
       const { password: userPassword, ...rest } = updatedUser;
 
       return rest;
     } catch (err) {
-      return _next(err);
+      _next(err);
+      throw new ErrorResponse(
+        ERROR_MESSAGES.USER_NOT_FOUND,
+        HTTP_STATUS_CODE[400].code
+      );
     }
   }
 

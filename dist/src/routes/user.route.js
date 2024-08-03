@@ -8,7 +8,7 @@ const user_controller_js_1 = require("../controllers/user.controller.js");
 const verifyToken_js_1 = require("../middleware/verifyToken.js");
 const router = express_1.default.Router();
 router.get("/", user_controller_js_1.getUsers);
-router.get("/search/:id", verifyToken_js_1.verifyToken, user_controller_js_1.getUser);
+router.get("/:id", verifyToken_js_1.verifyToken, user_controller_js_1.getUser);
 router.put("/:id", verifyToken_js_1.verifyToken, user_controller_js_1.updateUser);
 router.delete("/:id", verifyToken_js_1.verifyToken, user_controller_js_1.deleteUser);
 exports.default = router;

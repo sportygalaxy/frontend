@@ -17,12 +17,19 @@ const constants_1 = require("../constants");
 const EnvKeys_1 = require("../common/EnvKeys");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const verifyToken = (req, res, next) => {
-    const token = req.cookies.token;
+    let tokenFromHeader = req.header("Authorization");
+    tokenFromHeader = tokenFromHeader
+        ? tokenFromHeader.slice(7, tokenFromHeader.length)
+        : "";
+    const tokenFromCookies = req.cookies.token;
+    // Use cookies / headers
+    const token = tokenFromHeader || tokenFromCookies;
+    console.log({ tokenFromCookies, tokenFromHeader });
     if (!token)
         return res.status(401).json({
             error: constants_1.ERROR_MESSAGES.NOT_AUTHENTICATED,
             success: false,
-            statusCode: constants_1.HTTP_STATUS_CODE[401],
+            statusCode: constants_1.HTTP_STATUS_CODE[401].name,
         });
     const secret = EnvKeys_1.EnvKeys.JWT_SECRET;
     jsonwebtoken_1.default.verify(token, secret, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -30,7 +37,7 @@ const verifyToken = (req, res, next) => {
             return res.status(403).json({
                 error: constants_1.ERROR_MESSAGES.TOKEN_EXPIRED,
                 success: false,
-                statusCode: constants_1.HTTP_STATUS_CODE[403],
+                statusCode: constants_1.HTTP_STATUS_CODE[403].name,
             });
         console.log("[verifyToken]", payload);
         req.userId = payload.id;
