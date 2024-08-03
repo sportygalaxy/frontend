@@ -88,7 +88,7 @@ const BottomNavbarMobile: FC = () => {
             {cta?.notification?.status ? (
               <span
                 onClick={cta?.action && cta?.action}
-                className="absolute right-[-8px] top-[-8px] bg-primary rounded-full p-4 text-white h-3 w-3 flex items-center justify-center text-sm font-semibold cursor-pointer"
+                className="absolute right-[-8px] top-[-8px] bg-destructive rounded-full p-4 text-white h-3 w-3 flex items-center justify-center text-sm font-semibold cursor-pointer"
               >
                 {cta?.notification?.value}
               </span>

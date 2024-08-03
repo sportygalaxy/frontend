@@ -12,7 +12,6 @@ import { TProduct } from "@/types/product";
 import Image from "next/image";
 import React, { FC } from "react";
 import Minus from "@/common/Minus";
-import ProductAddedToCart from "./ProductAddedToCart";
 
 interface Props {
   item: TProduct;
@@ -110,8 +109,7 @@ const ProductCard: FC<Props> = (props) => {
           >
             {isItemInCart(item.id) ? (
               <div className="" onClick={() => removeFromCart(item.id)}>
-                {/* <Minus /> */}
-                <ProductAddedToCart />
+                <Minus />
               </div>
             ) : (
               <div onClick={() => addToCart(item)}>

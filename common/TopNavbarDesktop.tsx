@@ -176,7 +176,7 @@ const TopNavbarDesktop = () => {
                 {cta.icon}
 
                 {cta?.notification?.status ? (
-                  <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-primary rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                  <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
                     {cta?.notification?.value}
                   </span>
                 ) : null}

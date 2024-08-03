@@ -36,15 +36,14 @@ function CartAddToCartDrawer<T>({
   className,
 }: CartAddToCartDrawerProps<T>) {
   const { cart } = useCartStore();
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const isShowDesktop = useMediaQuery("(min-width: 640px)");
+  const isDesktop = useMediaQuery("(min-width: 640px)");
 
   return (
     <Drawer direction={isDesktop ? "right" : "bottom"}>
       <DrawerTrigger asChild>
         <button
           className={cn(
-            isShowDesktop && "p-2 md:p-4 border border-secondary rounded-full"
+            isDesktop && "p-2 md:p-4 border border-secondary rounded-full"
           )}
         >
           {Component ? <Component {...data} className={cn(className)} /> : null}
@@ -53,7 +52,7 @@ function CartAddToCartDrawer<T>({
 
       <DrawerContent
         className={cn(
-          "",
+          "bg-background",
           isDesktop
             ? "top-0 right-0 left-auto w-[600px] h-full mt-0 rounded-none"
             : "max-h-[90%] mt-10 bg-background"
@@ -65,13 +64,11 @@ function CartAddToCartDrawer<T>({
             Cart
           </DrawerTitle>
 
-          {isDesktop ? (
-            <DrawerClose asChild>
-              <Button variant={"ghost"} size={"icon"}>
-                <XIcon />
-              </Button>
-            </DrawerClose>
-          ) : null}
+          <DrawerClose asChild>
+            <Button variant={"ghost"} size={"icon"}>
+              <XIcon />
+            </Button>
+          </DrawerClose>
         </DrawerHeader>
 
         {/* Details */}
