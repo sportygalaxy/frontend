@@ -32,6 +32,8 @@ model User {
   reviews    Review[]
   CouponUser CouponUser[]
 
+  payments Payment[]
+
   @@map("users")
 }
 
@@ -239,14 +241,48 @@ model Coupon {
 }
 
 model CouponUser {
-  userId   String
-  couponId String
-  used     Boolean @default(false)
-  remainingCount Int?      // For coupons with limited uses per user
+  userId         String
+  couponId       String
+  used           Boolean @default(false)
+  remainingCount Int? // For coupons with limited uses per user
 
   user   User   @relation(fields: [userId], references: [id])
   coupon Coupon @relation(fields: [couponId], references: [id])
 
   @@id([userId, couponId])
   @@map("coupon_users")
+}
+
+model Payment {
+  id             String         @id @default(uuid())
+  userId         String
+  amount         Float
+  currency       String // Currency of the payment
+  status         String
+  paymentGateway PaymentGateway @relation(fields: [gatewayId], references: [id])
+  gatewayId      String
+  conversionRate Float // Rate applied to convert the currency
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("payments")
+}
+
+model PaymentGateway {
+  id                  String    @id @default(uuid())
+  name                String    @unique
+  description         String?
+  baseUrl             String?
+  apiKey              String?
+  supportedCurrencies Json // Array of supported currencies
+  transactionFee      Float?
+  isActive            Boolean   @default(true)
+  payments            Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payment_gateways")
 }

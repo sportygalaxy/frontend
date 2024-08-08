@@ -12,9 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const bcryptjs_1 = require("bcryptjs");
 const prisma = new client_1.PrismaClient();
-function main() {
+function seedUsers() {
     return __awaiter(this, void 0, void 0, function* () {
-        // Create users
         const user1 = yield prisma.user.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174000",
@@ -39,7 +38,11 @@ function main() {
                 isVerified: true,
             },
         });
-        // Create categories and subcategories
+        console.log("Users seeded");
+    });
+}
+function seedCategoriesAndProducts() {
+    return __awaiter(this, void 0, void 0, function* () {
         const sportsEquipment = yield prisma.category.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174001",
@@ -56,7 +59,7 @@ function main() {
                 },
             },
             include: {
-                subcategories: true, // Include subcategories in the returned payload
+                subcategories: true,
             },
         });
         const apparel = yield prisma.category.create({
@@ -75,10 +78,9 @@ function main() {
                 },
             },
             include: {
-                subcategories: true, // Include subcategories in the returned payload
+                subcategories: true,
             },
         });
-        // Create products
         const product1 = yield prisma.product.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174003",
@@ -101,7 +103,11 @@ function main() {
                 subcategoryId: apparel.subcategories[0].id,
             },
         });
-        // Create sizes
+        console.log("Categories and Products seeded");
+    });
+}
+function seedSizesAndColors() {
+    return __awaiter(this, void 0, void 0, function* () {
         const size1 = yield prisma.size.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174005",
@@ -114,7 +120,6 @@ function main() {
                 name: "Medium",
             },
         });
-        // Create colors
         const color1 = yield prisma.color.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174007",
@@ -127,7 +132,11 @@ function main() {
                 name: "Blue",
             },
         });
-        // Create types
+        console.log("Sizes and Colors seeded");
+    });
+}
+function seedTypesAndAssociations() {
+    return __awaiter(this, void 0, void 0, function* () {
         const type1 = yield prisma.type.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174009",
@@ -140,46 +149,68 @@ function main() {
                 name: "Indoor",
             },
         });
-        // Associate products with sizes
         yield prisma.productOnSize.createMany({
             data: [
-                { productId: product1.id, sizeId: size1.id },
-                { productId: product1.id, sizeId: size2.id },
-                { productId: product2.id, sizeId: size2.id },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174003",
+                    sizeId: "123e4567-e89b-12d3-a456-426614174005",
+                },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174003",
+                    sizeId: "123e4567-e89b-12d3-a456-426614174006",
+                },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174004",
+                    sizeId: "123e4567-e89b-12d3-a456-426614174006",
+                },
             ],
         });
-        // Associate products with colors
         yield prisma.productOnColor.createMany({
             data: [
-                { productId: product1.id, colorId: color1.id },
-                { productId: product2.id, colorId: color2.id },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174003",
+                    colorId: "123e4567-e89b-12d3-a456-426614174007",
+                },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174004",
+                    colorId: "123e4567-e89b-12d3-a456-426614174008",
+                },
             ],
         });
-        // Associate products with types
         yield prisma.productOnType.createMany({
             data: [
-                { productId: product1.id, typeId: type1.id },
-                { productId: product2.id, typeId: type2.id },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174003",
+                    typeId: "123e4567-e89b-12d3-a456-426614174009",
+                },
+                {
+                    productId: "123e4567-e89b-12d3-a456-426614174004",
+                    typeId: "123e4567-e89b-12d3-a456-426614174010",
+                },
             ],
         });
-        // Create order
+        console.log("Types and Associations seeded");
+    });
+}
+function seedOrders() {
+    return __awaiter(this, void 0, void 0, function* () {
         const order1 = yield prisma.order.create({
             data: {
                 id: "123e4567-e89b-12d3-a456-426614174011",
-                userId: user1.id,
+                userId: "123e4567-e89b-12d3-a456-426614174000",
                 total: 79.98,
                 status: "PENDING",
                 items: {
                     create: [
                         {
                             id: "123e4567-e89b-12d3-a456-426614174012",
-                            productId: product1.id,
+                            productId: "123e4567-e89b-12d3-a456-426614174003",
                             quantity: 1,
                             price: 29.99,
                         },
                         {
                             id: "123e4567-e89b-12d3-a456-426614174013",
-                            productId: product2.id,
+                            productId: "123e4567-e89b-12d3-a456-426614174004",
                             quantity: 1,
                             price: 49.99,
                         },
@@ -187,7 +218,62 @@ function main() {
                 },
             },
         });
-        console.log("Seeding completed");
+        console.log("Orders seeded");
+    });
+}
+function seedPaymentGateways() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const gateways = [
+            {
+                name: "Stripe",
+                baseUrl: "https://api.stripe.com",
+                apiKey: process.env.STRIPE_API_KEY,
+                supportedCurrencies: ["USD", "EUR", "NGN"],
+                transactionFee: 2.9, // Assuming 2.9% fee for Stripe
+            },
+            {
+                name: "Paystack",
+                baseUrl: "https://api.paystack.co",
+                apiKey: process.env.PAYSTACK_API_KEY,
+                supportedCurrencies: ["NGN", "USD"],
+                transactionFee: 1.5, // Assuming 1.5% fee for Paystack
+            },
+        ];
+        for (const gateway of gateways) {
+            yield prisma.paymentGateway.upsert({
+                where: { name: gateway.name },
+                update: {},
+                create: gateway,
+            });
+        }
+        console.log("Payment Gateways seeded successfully");
+    });
+}
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const blockToSeed = process.argv[2]; // Pass the block name as a command line argument
+        switch (blockToSeed) {
+            case "users":
+                yield seedUsers();
+                break;
+            case "categoriesAndProducts":
+                yield seedCategoriesAndProducts();
+                break;
+            case "sizesAndColors":
+                yield seedSizesAndColors();
+                break;
+            case "typesAndAssociations":
+                yield seedTypesAndAssociations();
+                break;
+            case "orders":
+                yield seedOrders();
+                break;
+            case "paymentGateways":
+                yield seedPaymentGateways();
+                break;
+            default:
+                console.log("Please specify a valid block to seed: users, categoriesAndProducts, sizesAndColors, typesAndAssociations, orders");
+        }
     });
 }
 main()
@@ -198,3 +284,6 @@ main()
     .finally(() => __awaiter(void 0, void 0, void 0, function* () {
     yield prisma.$disconnect();
 }));
+// append the block name to seed
+// npx ts-node seeder.ts paymentGateways
+// node seeder.ts paymentGateways

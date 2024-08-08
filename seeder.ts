@@ -3,8 +3,7 @@ import { hashSync } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  // Create users
+async function seedUsers() {
   const user1 = await prisma.user.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174000",
@@ -31,7 +30,10 @@ async function main() {
     },
   });
 
-  // Create categories and subcategories
+  console.log("Users seeded");
+}
+
+async function seedCategoriesAndProducts() {
   const sportsEquipment = await prisma.category.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174001",
@@ -48,7 +50,7 @@ async function main() {
       },
     },
     include: {
-      subcategories: true, // Include subcategories in the returned payload
+      subcategories: true,
     },
   });
 
@@ -68,11 +70,10 @@ async function main() {
       },
     },
     include: {
-      subcategories: true, // Include subcategories in the returned payload
+      subcategories: true,
     },
   });
 
-  // Create products
   const product1 = await prisma.product.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174003",
@@ -97,7 +98,10 @@ async function main() {
     },
   });
 
-  // Create sizes
+  console.log("Categories and Products seeded");
+}
+
+async function seedSizesAndColors() {
   const size1 = await prisma.size.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174005",
@@ -112,7 +116,6 @@ async function main() {
     },
   });
 
-  // Create colors
   const color1 = await prisma.color.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174007",
@@ -127,7 +130,10 @@ async function main() {
     },
   });
 
-  // Create types
+  console.log("Sizes and Colors seeded");
+}
+
+async function seedTypesAndAssociations() {
   const type1 = await prisma.type.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174009",
@@ -142,49 +148,70 @@ async function main() {
     },
   });
 
-  // Associate products with sizes
   await prisma.productOnSize.createMany({
     data: [
-      { productId: product1.id, sizeId: size1.id },
-      { productId: product1.id, sizeId: size2.id },
-      { productId: product2.id, sizeId: size2.id },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174003",
+        sizeId: "123e4567-e89b-12d3-a456-426614174005",
+      },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174003",
+        sizeId: "123e4567-e89b-12d3-a456-426614174006",
+      },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174004",
+        sizeId: "123e4567-e89b-12d3-a456-426614174006",
+      },
     ],
   });
 
-  // Associate products with colors
   await prisma.productOnColor.createMany({
     data: [
-      { productId: product1.id, colorId: color1.id },
-      { productId: product2.id, colorId: color2.id },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174003",
+        colorId: "123e4567-e89b-12d3-a456-426614174007",
+      },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174004",
+        colorId: "123e4567-e89b-12d3-a456-426614174008",
+      },
     ],
   });
 
-  // Associate products with types
   await prisma.productOnType.createMany({
     data: [
-      { productId: product1.id, typeId: type1.id },
-      { productId: product2.id, typeId: type2.id },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174003",
+        typeId: "123e4567-e89b-12d3-a456-426614174009",
+      },
+      {
+        productId: "123e4567-e89b-12d3-a456-426614174004",
+        typeId: "123e4567-e89b-12d3-a456-426614174010",
+      },
     ],
   });
 
-  // Create order
+  console.log("Types and Associations seeded");
+}
+
+async function seedOrders() {
   const order1 = await prisma.order.create({
     data: {
       id: "123e4567-e89b-12d3-a456-426614174011",
-      userId: user1.id,
+      userId: "123e4567-e89b-12d3-a456-426614174000",
       total: 79.98,
       status: "PENDING",
       items: {
         create: [
           {
             id: "123e4567-e89b-12d3-a456-426614174012",
-            productId: product1.id,
+            productId: "123e4567-e89b-12d3-a456-426614174003",
             quantity: 1,
             price: 29.99,
           },
           {
             id: "123e4567-e89b-12d3-a456-426614174013",
-            productId: product2.id,
+            productId: "123e4567-e89b-12d3-a456-426614174004",
             quantity: 1,
             price: 49.99,
           },
@@ -193,7 +220,65 @@ async function main() {
     },
   });
 
-  console.log("Seeding completed");
+  console.log("Orders seeded");
+}
+
+async function seedPaymentGateways() {
+  const gateways = [
+    {
+      name: "Stripe",
+      baseUrl: "https://api.stripe.com",
+      apiKey: process.env.STRIPE_API_KEY,
+      supportedCurrencies: ["USD", "EUR", "NGN"],
+      transactionFee: 2.9, // Assuming 2.9% fee for Stripe
+    },
+    {
+      name: "Paystack",
+      baseUrl: "https://api.paystack.co",
+      apiKey: process.env.PAYSTACK_API_KEY,
+      supportedCurrencies: ["NGN", "USD"],
+      transactionFee: 1.5, // Assuming 1.5% fee for Paystack
+    },
+  ];
+
+  for (const gateway of gateways) {
+    await prisma.paymentGateway.upsert({
+      where: { name: gateway.name },
+      update: {},
+      create: gateway,
+    });
+  }
+
+  console.log("Payment Gateways seeded successfully");
+}
+
+async function main() {
+  const blockToSeed = process.argv[2]; // Pass the block name as a command line argument
+
+  switch (blockToSeed) {
+    case "users":
+      await seedUsers();
+      break;
+    case "categoriesAndProducts":
+      await seedCategoriesAndProducts();
+      break;
+    case "sizesAndColors":
+      await seedSizesAndColors();
+      break;
+    case "typesAndAssociations":
+      await seedTypesAndAssociations();
+      break;
+    case "orders":
+      await seedOrders();
+      break;
+    case "paymentGateways":
+      await seedPaymentGateways();
+      break;
+    default:
+      console.log(
+        "Please specify a valid block to seed: users, categoriesAndProducts, sizesAndColors, typesAndAssociations, orders"
+      );
+  }
 }
 
 main()
@@ -204,3 +289,7 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+// append the block name to seed
+// npx ts-node seeder.ts paymentGateways
+// node seeder.ts paymentGateways

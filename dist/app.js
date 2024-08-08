@@ -16,6 +16,7 @@ const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
 const user_route_1 = __importDefault(require("./src/routes/user.route"));
 const coupon_route_1 = __importDefault(require("./src/routes/coupon.route"));
 const coupon_route_2 = __importDefault(require("./src/routes/coupon.route"));
+const payment_route_1 = __importDefault(require("./src/routes/payment.route"));
 const bookmark_route_1 = __importDefault(require("./src/routes/bookmark.route"));
 const order_route_1 = __importDefault(require("./src/routes/order.route"));
 const product_route_1 = __importDefault(require("./src/routes/product.route"));
@@ -42,6 +43,7 @@ app.use(`${apiPath}/orders`, order_route_1.default);
 app.use(`${apiPath}/bookmarks`, bookmark_route_1.default);
 app.use(`${apiPath}/reviews`, coupon_route_1.default);
 app.use(`${apiPath}/coupons`, coupon_route_2.default);
+app.use(`${apiPath}/payments`, payment_route_1.default);
 app.use(error_1.errorHandler);
 const PORT = process.env.PORT || constants_1.DEFAULT_PORT;
 app.listen(PORT, () => {

@@ -11,7 +11,13 @@
     "start": "console-ninja node --watch dist/app.js",
     "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w\"  \"console-ninja node --watch dist/app.js\"",
-    "seeder": "npx ts-node seeder.ts"
+    "seeder": "npx ts-node seeder.ts",
+    "seed:users": "npx ts-node seeder.ts users",
+    "seed:categories": "npx ts-node seeder.ts categoriesAndProducts",
+    "seed:sizes": "npx ts-node seeder.ts sizesAndColors",
+    "seed:types": "npx ts-node seeder.ts typesAndAssociations",
+    "seed:orders": "npx ts-node seeder.ts orders",
+    "seed:gateways": "npx ts-node seeder.ts paymentGateways"
   },
   "_moduleAliases": {
     "@common": "dist/common",

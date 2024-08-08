@@ -3,7 +3,6 @@ import { UpdateUserDto } from "../types/user.types.js";
 import { UserService } from "../services/user.service.js";
 import { AuthService } from "../services/auth.service.js";
 import { ERROR_MESSAGES, HTTP_STATUS_CODE } from "../constants.js";
-import { ErrorResponse } from "../utils/errorResponse.js";
 import { verifyOwner } from "../middleware/verifyOwner.js";
 
 const authService = new AuthService();

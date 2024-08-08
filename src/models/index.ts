@@ -15,6 +15,7 @@ import {
   Review,
   Coupon,
   CouponType,
+  Payment
 } from "@prisma/client";
 
 export type {
@@ -34,4 +35,5 @@ export type {
   Review,
   Coupon,
   CouponType,
+  Payment
 };

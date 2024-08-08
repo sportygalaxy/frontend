@@ -69,6 +69,7 @@ exports.ERROR_MESSAGES = {
     COUPON_DELETE_FAILED: "Sorry, failed to delete coupon",
     COUPON_CREATE_FAILED: "Sorry, failed to create coupon",
     COUPON_UPDATE_FAILED: "Sorry, failed to update coupon",
+    PAYMENT_FAILED: "Sorry, payment failed",
 };
 exports.ENVIRONMENTS = {
     local: "local",
