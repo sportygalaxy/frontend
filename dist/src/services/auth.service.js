@@ -21,8 +21,13 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const EnvKeys_1 = require("../common/EnvKeys");
 const user_service_1 = require("./user.service");
 const crypto_1 = require("crypto");
-const mailer_1 = require("../helpers/mailer");
+const email_service_1 = require("./integration/email.service");
+const redis_service_1 = require("./integration/redis.service");
+const helpers_1 = require("../helpers");
+// import { sendVerificationEmail } from "../helpers/mailer";
 const userService = new user_service_1.UserService();
+const redisService = new redis_service_1.RedisService();
+redisService.testConnection();
 class AuthService {
     // constructor(public userService: UserService) {}
     hashPassword(_password) {
@@ -192,11 +197,91 @@ class AuthService {
                 }
                 const emailVerificationToken = yield this.generateCookieToken(userId, THIRTY_MINUTES, isAdmin);
                 const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
-                (0, mailer_1.sendVerificationEmail)(userEmail, userFirstName, url);
+                yield (0, email_service_1.sendVerificationEmail)("gmail", userEmail, userFirstName, url);
                 return true;
             }
             catch (err) {
                 return _next(err);
+            }
+        });
+    }
+    sendResetPasswordCode(email, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield prisma_1.default.user.findUnique({
+                    where: { email },
+                    select: { id: true, firstName: true, email: true },
+                });
+                if (!user) {
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[404].code);
+                }
+                const redisKey = `resetCode:${user.id}`;
+                const timestampKey = `resetCodeTimestamp:${user.id}`;
+                const currentTime = Date.now();
+                const OTP_LENGTH = 5;
+                const ONE_MINUTE = 60000;
+                // Get the stored code and timestamp from Redis
+                const redisTimestamp = yield redisService.get(timestampKey);
+                // Check if the resend interval has passed
+                if (redisTimestamp &&
+                    currentTime - parseInt(redisTimestamp, 10) < ONE_MINUTE) {
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.OTP_RESEND_TOO_SOON, constants_1.HTTP_STATUS_CODE[400].code);
+                }
+                // Generate new code and set it in Redis with the current timestamp
+                const code = (0, helpers_1.generateCode)(OTP_LENGTH);
+                yield redisService.set(redisKey, code, ONE_MINUTE); // Set code in Redis with 1-hour expiration
+                yield redisService.set(timestampKey, currentTime.toString(), ONE_MINUTE); // Set timestamp in Redis with 1-hour expiration
+                yield (0, email_service_1.sendResetCodeEmail)("namecheap", user.email, user.firstName, code);
+                return true;
+            }
+            catch (error) {
+                next(error);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.GENERIC_MESSAGE, constants_1.HTTP_STATUS_CODE[500].code);
+            }
+        });
+    }
+    validateResetPasswordCode(email, code, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield prisma_1.default.user.findUnique({ where: { email } });
+                if (!user) {
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[404].code);
+                }
+                const redisKey = `resetCode:${user.id}`;
+                const storedCode = yield redisService.get(redisKey);
+                console.log("VALIDATE", { redisKey, storedCode, code });
+                if (!storedCode || storedCode !== code) {
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.VERIFICATION_CODE_INVALID, constants_1.HTTP_STATUS_CODE[400].code);
+                }
+                return { email: user.email };
+            }
+            catch (error) {
+                next(error);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.GENERIC_MESSAGE, constants_1.HTTP_STATUS_CODE[500].code);
+            }
+        });
+    }
+    changePassword(email, password, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const cryptedPassword = yield bcrypt_1.default.hash(password, 12);
+                const user = yield prisma_1.default.user.findUnique({ where: { email } });
+                if (!user) {
+                    throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS_CODE[404].code);
+                }
+                yield prisma_1.default.user.update({
+                    where: { email: user.email },
+                    data: { password: cryptedPassword },
+                });
+                const redisKey = `resetCode:${user.id}`;
+                const timestampKey = `resetCodeTimestamp:${user.id}`;
+                yield redisService.delete(redisKey);
+                yield redisService.delete(timestampKey);
+                return true;
+            }
+            catch (error) {
+                next(error);
+                throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.GENERIC_MESSAGE, constants_1.HTTP_STATUS_CODE[500].code);
             }
         });
     }

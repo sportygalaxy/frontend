@@ -17,7 +17,7 @@ export const verifyOwner = async (
   tokenUserId: string | undefined
 ) => {
   console.log("[verifyOwner]", { userId, tokenUserId });
-  if (userId !== tokenUserId)
+  if (!userId || !tokenUserId || userId !== tokenUserId)
     throw new ErrorResponse(
       ERROR_MESSAGES.NOT_AUTHORIZED,
       HTTP_STATUS_CODE[403].code

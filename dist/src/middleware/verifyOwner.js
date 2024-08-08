@@ -22,7 +22,7 @@ const constants_1 = require("../constants");
  */
 const verifyOwner = (res, next, userId, tokenUserId) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("[verifyOwner]", { userId, tokenUserId });
-    if (userId !== tokenUserId)
+    if (!userId || !tokenUserId || userId !== tokenUserId)
         throw new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.NOT_AUTHORIZED, constants_1.HTTP_STATUS_CODE[403].code);
     // next();
 });

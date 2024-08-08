@@ -2,6 +2,8 @@ export const ERROR_MESSAGES = {
   UNAUTHORIZED: "Sorry, you do not have access to this resource",
   GENERIC_MESSAGE: "Sorry, an error occurred",
   USER_NOT_FOUND: "Sorry, user not found",
+  EMAIL_FAILED: "Sorry, email sending failed",
+  VERIFICATION_CODE_INVALID: "Sorry, verification code is invalid",
   USER_EXISTS_WITH_EMAIL_OR_USERNAME: "Sorry, user already exists",
   USER_EMAIL_ALREADY_VERIFIED: "Email is already activated.",
   USER_EXISTS_WITH_USERNAME: "Sorry, username already exists",
@@ -9,6 +11,7 @@ export const ERROR_MESSAGES = {
   PROFILE_UPDATE_FAILED: "Sorry, profile update failed",
   USER_DELETE_FAILED: "Sorry, failed to delete",
   INVALID_OTP: "Invalid/Expired OTP Entered",
+  OTP_RESEND_TOO_SOON: "You can only resend the OTP code once every minute.",
   TOKEN_EXPIRED: "Sorry, this token is expired or invalid",
   NOT_AUTHORIZED: "Sorry, you are not authorized!",
   NOT_AUTHENTICATED: "Sorry, you are not authenticated!",
@@ -36,10 +39,14 @@ export const ERROR_MESSAGES = {
   PRODUCT_CATEGORY_CREATE_FAILED: "Sorry, failed to create product category",
   PRODUCT_CATEGORY_UPDATE_FAILED: "Sorry, failed to update product category",
   PRODUCT_SUB_CATEGORY_NOT_FOUND: "Sorry, product sub category not found",
-  PRODUCT_SUB_CATEGORY_GETS_FOUND: "Sorry, failed to retrive product sub categorys",
-  PRODUCT_SUB_CATEGORY_DELETE_FAILED: "Sorry, failed to delete product sub category",
-  PRODUCT_SUB_CATEGORY_CREATE_FAILED: "Sorry, failed to create product sub category",
-  PRODUCT_SUB_CATEGORY_UPDATE_FAILED: "Sorry, failed to update product sub category",
+  PRODUCT_SUB_CATEGORY_GETS_FOUND:
+    "Sorry, failed to retrive product sub categorys",
+  PRODUCT_SUB_CATEGORY_DELETE_FAILED:
+    "Sorry, failed to delete product sub category",
+  PRODUCT_SUB_CATEGORY_CREATE_FAILED:
+    "Sorry, failed to create product sub category",
+  PRODUCT_SUB_CATEGORY_UPDATE_FAILED:
+    "Sorry, failed to update product sub category",
   ORDER_NOT_FOUND: "Sorry, order not found",
   ORDER_GETS_FOUND: "Sorry, failed to retrive orders",
   ORDER_DELETE_FAILED: "Sorry, failed to delete order",

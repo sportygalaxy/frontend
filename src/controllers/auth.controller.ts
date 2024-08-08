@@ -115,6 +115,85 @@ export const sendVerification = asyncHandler(
   }
 );
 
+export const sendResetPasswordCode = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    const sentResetPasswordCode = await authService.sendResetPasswordCode(
+      email,
+      next
+    );
+
+    if (!sentResetPasswordCode) return;
+
+    res.status(201).json({
+      message: "Email reset code has been sent to your email",
+      data: sentResetPasswordCode,
+      success: !!sentResetPasswordCode,
+    });
+  }
+);
+
+export const validateResetPasswordCode = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, code } = req.body;
+
+    // TODO: Return a token, when decoded, check if the email matches the email on change password body
+    const validateResetPasswordCode =
+      await authService.validateResetPasswordCode(email, code, next);
+
+    if (!validateResetPasswordCode) return;
+
+    res.status(201).json({
+      message: "Email reset code validated",
+      data: validateResetPasswordCode,
+      success: !!validateResetPasswordCode,
+    });
+  }
+);
+
+export const changePassword = asyncHandler(
+  async (req: Request | any, res: Response, next: NextFunction) => {
+    const { password } = req.body;
+    const tokenUserId = req.userId;
+
+    await verifyOwner(res, next, tokenUserId, tokenUserId);
+    const jwtUser = await userService.getUser({ id: tokenUserId }, next);
+    if (!jwtUser) return;
+
+    const changePassword = await authService.changePassword(
+      jwtUser.email,
+      password,
+      next
+    );
+    if (!changePassword) return;
+
+    res.status(201).json({
+      message: "Password change successfully",
+      data: changePassword,
+      success: !!changePassword,
+    });
+  }
+);
+export const changePasswordViaReset = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    const changePassword = await authService.changePassword(
+      email,
+      password,
+      next
+    );
+
+    if (!changePassword) return;
+
+    res.status(201).json({
+      message: "Password change successfully",
+      data: changePassword,
+      success: !!changePassword,
+    });
+  }
+);
+
 export const login = asyncHandler(
   async (req: { body: LoginUserDto }, res: Response, next: NextFunction) => {
     const { email, password } = req.body;

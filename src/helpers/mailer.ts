@@ -1,18 +1,25 @@
 import nodemailer from "nodemailer";
-import { google } from "googleapis";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const { OAuth2 } = google.auth;
-const oauthLink = "https://developers.google.com/oauthplayground";
-const { EMAIL, MAILING_ID, MAILING_REFRESH, MAILING_SECRET } = process.env;
+const {
+  EMAIL,
+  NAMECHEAP_USER,
+  NAMECHEAP_PASS,
+  NAMECHEAP_HOST,
+  NAMECHEAP_PORT,
+} = process.env;
 
-if (!EMAIL || !MAILING_ID || !MAILING_REFRESH || !MAILING_SECRET) {
+if (
+  !EMAIL ||
+  !NAMECHEAP_USER ||
+  !NAMECHEAP_PASS ||
+  !NAMECHEAP_HOST ||
+  !NAMECHEAP_PORT
+) {
   throw new Error("Missing required environment variables");
 }
-
-const auth = new OAuth2(MAILING_ID, MAILING_SECRET, oauthLink);
 
 interface MailOptions {
   from: string;
@@ -27,29 +34,18 @@ export const sendVerificationEmail = async (
   url: string
 ): Promise<void> => {
   try {
-    auth.setCredentials({
-      refresh_token: MAILING_REFRESH,
-    });
-    const accessToken = await auth.getAccessToken();
-
-    if (!accessToken.token) {
-      throw new Error("Failed to obtain access token");
-    }
-
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: NAMECHEAP_HOST,
+      port: parseInt(NAMECHEAP_PORT, 10),
+      secure: true, // true for 465, false for other ports
       auth: {
-        type: "OAuth2",
-        user: EMAIL,
-        clientId: MAILING_ID,
-        clientSecret: MAILING_SECRET,
-        refreshToken: MAILING_REFRESH,
-        accessToken: accessToken.token,
+        user: NAMECHEAP_USER,
+        pass: NAMECHEAP_PASS,
       },
     });
 
     const mailOptions: MailOptions = {
-      from: EMAIL,
+      from: NAMECHEAP_USER,
       to: email,
       subject: "Facebook email verification",
       html: `

@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.login = exports.sendVerification = exports.activate = exports.register = void 0;
+exports.logout = exports.login = exports.changePasswordViaReset = exports.changePassword = exports.validateResetPasswordCode = exports.sendResetPasswordCode = exports.sendVerification = exports.activate = exports.register = void 0;
 const auth_service_1 = require("../services/auth.service");
 const user_service_1 = require("../services/user.service");
 const async_1 = require("../middleware/async");
@@ -99,6 +99,56 @@ exports.sendVerification = (0, async_1.asyncHandler)((req, res, next) => __await
         message: "Account email verification link sent successfully.",
         data: sentTojwtUser,
         success: !!sentTojwtUser,
+    });
+}));
+exports.sendResetPasswordCode = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    const sentResetPasswordCode = yield authService.sendResetPasswordCode(email, next);
+    if (!sentResetPasswordCode)
+        return;
+    res.status(201).json({
+        message: "Email reset code has been sent to your email",
+        data: sentResetPasswordCode,
+        success: !!sentResetPasswordCode,
+    });
+}));
+exports.validateResetPasswordCode = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, code } = req.body;
+    // TODO: Return a token, when decoded, check if the email matches the email on change password body
+    const validateResetPasswordCode = yield authService.validateResetPasswordCode(email, code, next);
+    if (!validateResetPasswordCode)
+        return;
+    res.status(201).json({
+        message: "Email reset code validated",
+        data: validateResetPasswordCode,
+        success: !!validateResetPasswordCode,
+    });
+}));
+exports.changePassword = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { password } = req.body;
+    const tokenUserId = req.userId;
+    yield (0, verifyOwner_1.verifyOwner)(res, next, tokenUserId, tokenUserId);
+    const jwtUser = yield userService.getUser({ id: tokenUserId }, next);
+    if (!jwtUser)
+        return;
+    const changePassword = yield authService.changePassword(jwtUser.email, password, next);
+    if (!changePassword)
+        return;
+    res.status(201).json({
+        message: "Password change successfully",
+        data: changePassword,
+        success: !!changePassword,
+    });
+}));
+exports.changePasswordViaReset = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    const changePassword = yield authService.changePassword(email, password, next);
+    if (!changePassword)
+        return;
+    res.status(201).json({
+        message: "Password change successfully",
+        data: changePassword,
+        success: !!changePassword,
     });
 }));
 exports.login = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
