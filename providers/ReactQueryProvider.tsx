@@ -1,8 +1,6 @@
 "use client";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useState } from "react";
 import { CounterStoreProvider } from "./CounterStoreProvider";
 
 export default function ReactQueryProvider({
@@ -10,12 +8,12 @@ export default function ReactQueryProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [client] = useState(new QueryClient());
+  const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={client}>
+    <QueryClientProvider client={queryClient}>
       {/* <CounterStoreProvider> */}
-        {children}
+      {children}
       {/* </CounterStoreProvider> */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
