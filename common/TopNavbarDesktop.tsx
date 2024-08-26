@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { FC, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -24,8 +24,14 @@ import useToggle from "@/hooks/useToggle";
 import CartAddToCartDrawer from "@/components/cart/CartAddToCartDrawer";
 import useCartStore from "@/store/cartStore";
 import { showCartQtyValue } from "@/helpers/cart";
+import { AUTHENTIATED } from "@/constants/appConstants";
+import Link from "next/link";
 
-const TopNavbarDesktop = () => {
+interface TopNavbarDesktopProps {
+  isAuth: boolean;
+}
+const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
+  const { isAuth } = props;
   const { cart } = useCartStore();
   const [openUploadModal, toggleUploadModal] = useToggle();
 
@@ -83,12 +89,7 @@ const TopNavbarDesktop = () => {
     {
       id: 3,
       name: "Cart",
-      icon: (
-        <CartAddToCartDrawer
-          data={iconSize}
-          component={CartIcon}
-        />
-      ),
+      icon: <CartAddToCartDrawer data={iconSize} component={CartIcon} />,
       path: "cart",
       notification: showCartQtyValue(cart),
     },
@@ -123,20 +124,46 @@ const TopNavbarDesktop = () => {
           ))}
         </ol>
 
-        <div className="flex gap-2 md:gap-4">
-          <Select>
-            <SelectTrigger
-              className={cn("text-primary font-normal", selectFontSize)}
-            >
-              <span>$</span>
-              <SelectValue placeholder="USD" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border border-dark">
-              <SelectItem value="light">USD</SelectItem>
-              <SelectItem value="dark">EUR</SelectItem>
-              <SelectItem value="system">NGN</SelectItem>
-            </SelectContent>
-          </Select>
+        {isAuth ? null : (
+          <div className="flex gap-2 md:gap-4">
+            <Select>
+              <SelectTrigger
+                className={cn("text-primary font-normal", selectFontSize)}
+              >
+                <span>$</span>
+                <SelectValue placeholder="USD" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-dark">
+                <SelectItem value="light">USD</SelectItem>
+                <SelectItem value="dark">EUR</SelectItem>
+                <SelectItem value="system">NGN</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger
+                className={cn("text-primary font-normal", selectFontSize)}
+              >
+                <SelectValue placeholder="ENG" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-dark">
+                <SelectItem value="light">ENG</SelectItem>
+                <SelectItem value="dark">UK</SelectItem>
+                <SelectItem value="system">FRN</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+      </section>
+
+      <section
+        className={cn(
+          "flex items-center justify-between gap-8",
+          isAuth && "w-fit"
+        )}
+      >
+        <Logo />
+
+        {isAuth ? (
           <Select>
             <SelectTrigger
               className={cn("text-primary font-normal", selectFontSize)}
@@ -149,57 +176,60 @@ const TopNavbarDesktop = () => {
               <SelectItem value="system">FRN</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-      </section>
-
-      <section className="flex items-center justify-between gap-8">
-        <Logo />
-
-        <Search
-          placeholder="Search.."
-          onSearchClick={handleSearchClick}
-          onClearClick={handleCameraClick}
-          value={inputValue}
-          onChange={handleChange}
-        />
-
-        {true ? (
-          <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
-            {CtaLink.map((cta) => (
-              <span
-                key={cta.id}
-                className={cn(
-                  cta.name !== "Cart" &&
-                    "p-2 md:p-4 border border-secondary rounded-full"
-                )}
-              >
-                {cta.icon}
-
-                {cta?.notification?.status ? (
-                  <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
-                    {cta?.notification?.value}
-                  </span>
-                ) : null}
-              </span>
-            ))}
-          </div>
         ) : (
-          <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
-            <Button
-              className="text-mobile-xl md:text-xl px-4 lg:px-14"
-              variant="tertiary"
-              size="lg"
-            >
-              Sign in
-            </Button>
-            <Button
-              className="text-mobile-xl md:text-xl text-white px-4 lg:px-14"
-              variant="default"
-              size="lg"
-            >
-              Sign up
-            </Button>
-          </div>
+          <>
+            <Search
+              placeholder="Search.."
+              onSearchClick={handleSearchClick}
+              onClearClick={handleCameraClick}
+              value={inputValue}
+              onChange={handleChange}
+            />
+
+            {AUTHENTIATED ? (
+              <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+                {CtaLink.map((cta) => (
+                  <span
+                    key={cta.id}
+                    className={cn(
+                      cta.name !== "Cart" &&
+                        "p-2 md:p-4 border border-secondary rounded-full"
+                    )}
+                  >
+                    {cta.icon}
+
+                    {cta?.notification?.status ? (
+                      <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                        {cta?.notification?.value}
+                      </span>
+                    ) : null}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+                <Link href={RoutesEnum.LOGIN}>
+                  <Button
+                    className="text-mobile-xl md:text-xl px-4 lg:px-14"
+                    variant="tertiary"
+                    size="lg"
+                  >
+                    Sign in
+                  </Button>
+                </Link>
+
+                <Link href={RoutesEnum.REGISTER}>
+                  <Button
+                    className="text-mobile-xl md:text-xl text-white px-4 lg:px-14"
+                    variant="default"
+                    size="lg"
+                  >
+                    Sign up
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </>
         )}
       </section>
 

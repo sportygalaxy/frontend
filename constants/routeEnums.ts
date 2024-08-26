@@ -4,6 +4,10 @@ export enum RoutesEnum {
   ABOUT_US = "/about-us",
   FAQ = "/faq",
 
+  // AUTH
+  LOGIN="/login",
+  REGISTER="/register",
+
   // App
   CART = "/cart",
   NOTIFICATION = "/notification",

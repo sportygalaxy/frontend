@@ -3,7 +3,7 @@
 import React, { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductData } from "@/lib/apiProduct";
-
+import { Span } from "next/dist/trace";
 
 interface ProductProps {
   params: { productId: string };
@@ -13,9 +13,7 @@ interface ProductProps {
 const ProductPage: FC<ProductProps> = (props) => {
   const { params, searchParams } = props;
 
-  const productId =
-    // params?.productId ||
-    "15b2e08c-b395-4bff-bed9-bbcd68c7d6dd";
+  const productId = params?.productId || "15b2e08c-b395-4bff-bed9-bbcd68c7d6dd";
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["product", productId],
@@ -30,7 +28,14 @@ const ProductPage: FC<ProductProps> = (props) => {
 
   return (
     <div>
-      Product {productId} <pre>{JSON.stringify(data, null, 2)}</pre>
+      Product {productId}
+      {isLoading ? (
+        <span>loading.......</span>
+      ) : (
+        <>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </>
+      )}
     </div>
   );
 };

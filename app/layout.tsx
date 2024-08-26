@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "../styles/globals.css";
-import Navbar from "@/common/Navbar";
-import Footer from "@/common/Footer";
 import TopLoader from "@/common/Loaders/TopLoader";
 import {
   appDescription,
@@ -52,48 +50,40 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jost.className} relative grid grid-cols-12 gap-0 auto-rows-max`}
+        className={`${jost.className}`}
       >
         <ReactQueryProvider>
-          <Navbar />
-
-          <main className="col-span-12 auto-rows-auto w-full h-full-minus-80 sm:h-full overflow-auto sm:overflow-hidden">
-            <Script
-              id="schema-organization"
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: getScriptJson({
-                  "@context": "https://schema.org",
-                  "@type": "Organization", // Use 'Organization' or 'LocalBusiness' depending on your needs
-                  name: appTitle,
-                  alternateName: "Sporty Galaxy",
-                  url: webBaseUrl,
-                  logo: logoUrl,
-                  contactPoint: {
-                    "@type": "ContactPoint",
-                    telephone: NAV_CONSTANT.PHONE_NUMBER,
-                    contactType: "customer service",
-                    availableLanguage: "en",
-                  },
-                  sameAs: [],
-                }),
-              }}
-            />
-            <TopLoader />
-            <Suspense
-              fallback={
-                <div className="w-screen h-screen">
-                  <SportygalaxyLoadingIndicator />
-                </div>
-              }
-            >
-              {children}
-            </Suspense>
-          </main>
-
-          <footer className="col-span-12 mx-auto w-full flex justify-center items-center">
-            <Footer />
-          </footer>
+          <Script
+            id="schema-organization"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: getScriptJson({
+                "@context": "https://schema.org",
+                "@type": "Organization", // Use 'Organization' or 'LocalBusiness' depending on your needs
+                name: appTitle,
+                alternateName: "Sporty Galaxy",
+                url: webBaseUrl,
+                logo: logoUrl,
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: NAV_CONSTANT.PHONE_NUMBER,
+                  contactType: "customer service",
+                  availableLanguage: "en",
+                },
+                sameAs: [],
+              }),
+            }}
+          />
+          <TopLoader />
+          <Suspense
+            fallback={
+              <div className="w-screen h-screen">
+                <SportygalaxyLoadingIndicator />
+              </div>
+            }
+          >
+            {children}
+          </Suspense>
         </ReactQueryProvider>
       </body>
     </html>

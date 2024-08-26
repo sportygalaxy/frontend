@@ -25,3 +25,5 @@ export const NAV_CONSTANT = {
   BANK_ACCOUNT_NUMBER: 7025069316,
   BANK_ACCOUNT_NAME: "Sporty Galaxy",
 };
+
+export const AUTHENTIATED = false

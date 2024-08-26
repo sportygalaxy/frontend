@@ -3,12 +3,16 @@ import TopNavbarDesktop from "./TopNavbarDesktop";
 import { FC, PropsWithChildren, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export default function Navbar() {
+interface NavbarProps {
+  isAuth: boolean;
+}
+export default function Navbar(props: NavbarProps) {
+  const { isAuth } = props;
   return (
     <>
       <DesktopNavbar className="sticky top-0 z-10 bg-background">
         <section className="hidden sm:flex w-full items-center justify-center">
-          <TopNavbarDesktop />
+          <TopNavbarDesktop isAuth={isAuth} />
         </section>
       </DesktopNavbar>
 
