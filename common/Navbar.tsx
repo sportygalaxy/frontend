@@ -10,7 +10,7 @@ export default function Navbar(props: NavbarProps) {
   const { isAuth } = props;
   return (
     <>
-      <DesktopNavbar className="sticky top-0 z-10 bg-background">
+      <DesktopNavbar className="sticky top-0 z-10 bg-white">
         <section className="hidden sm:flex w-full items-center justify-center">
           <TopNavbarDesktop isAuth={isAuth} />
         </section>

@@ -8,7 +8,10 @@ const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className={`relative grid grid-cols-12 gap-0 auto-rows-max`}>
       <Navbar isAuth />
-      {children}
+
+      <main className="col-span-12 auto-rows-auto w-full h-full-minus-80 sm:h-full overflow-auto sm:overflow-hidden">
+        {children}
+      </main>
     </div>
   );
 };
