@@ -2,11 +2,15 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import Select, { SingleValue, CSSObjectWithLabel } from "react-select";
+import Select, { SingleValue } from "react-select";
 import countryList from "react-select-country-list";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { getCountryFlag, getDialingCodeByValue } from "@/utils/countyUtils";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "@/lib/apiAuth";
+import { IRegistrationData } from "@/types/auth";
+import { selectFieldStyles } from "./RegisterationCountrySelectInputStyle";
 
 interface FormValues {
   email: string;
@@ -38,11 +42,30 @@ const validationSchema = Yup.object({
 const RegistrationForm: React.FC = () => {
   const [countryOptions] = useState<[]>(countryList().getData());
 
-  const handleSubmit = (
+  const getRegisterData = (data?: any) => {
+    return data;
+  };
+  const {
+    mutate: registerUser,
+    isPending,
+    error,
+    data,
+  } = useMutation<void, Error, IRegistrationData>({
+    mutationFn: (registerData: any) => register(registerData),
+    onMutate: async () => {},
+    onSuccess: (data) => {
+      console.log("Registration successful", data);
+    },
+    onError: (error, variables, context) => {
+      console.error("Registration failed", error);
+    },
+  });
+
+  const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
-    const data = {
+    const registerData: IRegistrationData = {
       email: values.email,
       password: values.password,
       firstName: values.firstName,
@@ -52,40 +75,9 @@ const RegistrationForm: React.FC = () => {
     };
 
     console.log(values, data);
+    await getRegisterData(registerData);
+    registerUser(registerData);
     setSubmitting(false);
-  };
-
-  const selectFieldStyles = {
-    control: (base: CSSObjectWithLabel, state: any): CSSObjectWithLabel => ({
-      ...base,
-      display: "flex",
-      width: "100%",
-      paddingInline: "24px",
-      paddingBlock: "4px",
-      margin: "0px",
-      borderRadius: "10px",
-      borderWidth: state.isFocused ? "2px" : "2px",
-      borderColor: state.isFocused
-        ? "#4A90E2"
-        : state.isDisabled
-        ? "#D1D5DB"
-        : "#DEE2E6",
-      backgroundColor: state.isDisabled ? "#F3F4F6" : "#FFFFFF",
-      boxShadow: state.isFocused ? "0 0 0 2px #BFDBFE" : "none",
-      //  transition: "border-color 0.2s, box-shadow 0.2s", // Smooth transition
-      cursor: state.isDisabled ? "not-allowed" : "default",
-    }),
-    valueContainer: (
-      base: CSSObjectWithLabel,
-      props: any
-    ): CSSObjectWithLabel => ({
-      ...base,
-      display: "flex",
-      alignItems: "center",
-      width: "100%",
-      padding: "0px",
-      margin: "0px",
-    }),
   };
 
   return (
