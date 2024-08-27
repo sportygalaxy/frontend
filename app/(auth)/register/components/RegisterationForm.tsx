@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { register } from "@/lib/apiAuth";
 import { IRegistrationData } from "@/types/auth";
 import { selectFieldStyles } from "./RegisterationCountrySelectInputStyle";
+import SpinnerIcon from "@/assets/icons/pack/Spinner";
 
 interface FormValues {
   email: string;
@@ -42,16 +43,13 @@ const validationSchema = Yup.object({
 const RegistrationForm: React.FC = () => {
   const [countryOptions] = useState<[]>(countryList().getData());
 
-  const getRegisterData = (data?: any) => {
-    return data;
-  };
   const {
     mutate: registerUser,
     isPending,
     error,
     data,
   } = useMutation<void, Error, IRegistrationData>({
-    mutationFn: (registerData: any) => register(registerData),
+    mutationFn: (registerData: IRegistrationData) => register(registerData),
     onMutate: async () => {},
     onSuccess: (data) => {
       console.log("Registration successful", data);
@@ -75,7 +73,6 @@ const RegistrationForm: React.FC = () => {
     };
 
     console.log(values, data);
-    await getRegisterData(registerData);
     registerUser(registerData);
     setSubmitting(false);
   };
@@ -109,7 +106,8 @@ const RegistrationForm: React.FC = () => {
           !values.address ||
           !values.phoneNumber ||
           !values.countryCode ||
-          !values.agreeToTerms
+          !values.agreeToTerms ||
+          isPending
         );
 
         const focusClassName =
@@ -385,10 +383,15 @@ const RegistrationForm: React.FC = () => {
 
                 <div className="w-full mt-8">
                   <button
-                    className="w-full text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
+                    className="w-full flex items-center justify-center text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
                     type="submit"
                     disabled={!disableBtn}
                   >
+                    {isPending ? (
+                      <div className="mr-3">
+                        <SpinnerIcon width="15" height="15" color="white" />
+                      </div>
+                    ) : null}{" "}
                     Agree and Register
                   </button>
                 </div>
