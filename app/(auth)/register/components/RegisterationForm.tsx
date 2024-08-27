@@ -6,10 +6,7 @@ import Select, { SingleValue, CSSObjectWithLabel } from "react-select";
 import countryList from "react-select-country-list";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import {
-  getCountryFlag,
-  getDialingCodeByValue,
-} from "@/utils/countyUtils";
+import { getCountryFlag, getDialingCodeByValue } from "@/utils/countyUtils";
 
 interface FormValues {
   email: string;
@@ -40,19 +37,11 @@ const validationSchema = Yup.object({
 
 const RegistrationForm: React.FC = () => {
   const [countryOptions] = useState<[]>(countryList().getData());
-  const [selectedCountry, setSelectedCountry] = useState<[] | null>(null);
-  const [locale, setLocale] = useState("NG");
-
-  const updateLocale = (newLocale: string) => {
-    setLocale(newLocale);
-  };
 
   const handleSubmit = (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
-    // Transfrom countryCode  getDialingCodeByValue(value.countryCode)
-
     const data = {
       email: values.email,
       password: values.password,
@@ -157,7 +146,6 @@ const RegistrationForm: React.FC = () => {
                       if (option) {
                         setFieldValue("country", option.label);
                         setFieldValue("countryCode", option.value);
-                        setSelectedCountry(option);
                       }
                     }}
                     formatOptionLabel={(option: any) => (
