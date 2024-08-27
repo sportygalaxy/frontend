@@ -1,4 +1,5 @@
-import WorldFlag from "react-world-flags";
+import React from "react";
+import CountryFlag from "./CountryFlag";
 
 export const dialingCodes: { [key: string]: string } = {
   AF: "93",
@@ -230,7 +231,7 @@ export const dialingCodes: { [key: string]: string } = {
 // Function to get the flag of the selected country
 export const getCountryFlag = (countryCode: string) => {
   const code = countryCode.toUpperCase();
-  return <WorldFlag code={code} width="15" height="15" />;
+  return <CountryFlag locale={code} />;
 };
 
 // Function to extract the dialing code from the selected country

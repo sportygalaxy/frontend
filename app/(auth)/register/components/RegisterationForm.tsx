@@ -4,11 +4,9 @@ import { Formik, Field, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import Select, { SingleValue, CSSObjectWithLabel } from "react-select";
 import countryList from "react-select-country-list";
-import WorldFlag from "react-world-flags";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import {
-  dialingCodes,
   getCountryFlag,
   getDialingCodeByValue,
 } from "@/utils/countyUtils";
@@ -43,6 +41,11 @@ const validationSchema = Yup.object({
 const RegistrationForm: React.FC = () => {
   const [countryOptions] = useState<[]>(countryList().getData());
   const [selectedCountry, setSelectedCountry] = useState<[] | null>(null);
+  const [locale, setLocale] = useState("NG");
+
+  const updateLocale = (newLocale: string) => {
+    setLocale(newLocale);
+  };
 
   const handleSubmit = (
     values: FormValues,
@@ -159,7 +162,7 @@ const RegistrationForm: React.FC = () => {
                     }}
                     formatOptionLabel={(option: any) => (
                       <div className="flex items-center">
-                        {getCountryFlag(option.value)}
+                        {values.countryCode && getCountryFlag(option.value)}
                         <span className="ml-3">{option.label}</span>
                       </div>
                     )}
