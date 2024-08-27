@@ -85,6 +85,7 @@ const config = {
         dark: "var(--grey)", // Custom border color
         light: "var(--light-grey)", // Another custom border color
         grey: "var(--border-grey)", // Another custom border color
+        lightDarkGrey: "var(--light-dark-grey)", // Another custom border color
       },
       keyframes: {
         "accordion-down": {

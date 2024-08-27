@@ -6,6 +6,12 @@ import Select, { SingleValue, CSSObjectWithLabel } from "react-select";
 import countryList from "react-select-country-list";
 import WorldFlag from "react-world-flags";
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
+import {
+  dialingCodes,
+  getCountryFlag,
+  getDialingCodeByValue,
+} from "@/utils/countyUtils";
 
 interface FormValues {
   email: string;
@@ -43,21 +49,39 @@ const RegistrationForm: React.FC = () => {
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     // Transfrom countryCode  getDialingCodeByValue(value.countryCode)
-    console.log(values);
+
+    const data = {
+      email: values.email,
+      password: values.password,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      phone: getDialingCodeByValue(values.countryCode) + values.phoneNumber,
+      address: values.address,
+    };
+
+    console.log(values, data);
     setSubmitting(false);
   };
 
-  const customStyles = {
-    control: (base: CSSObjectWithLabel, props: any): CSSObjectWithLabel => ({
+  const selectFieldStyles = {
+    control: (base: CSSObjectWithLabel, state: any): CSSObjectWithLabel => ({
       ...base,
       display: "flex",
       width: "100%",
       paddingInline: "24px",
       paddingBlock: "4px",
       margin: "0px",
-      border: "none",
       borderRadius: "10px",
-      borderColor: "currentcolor",
+      borderWidth: state.isFocused ? "2px" : "2px",
+      borderColor: state.isFocused
+        ? "#4A90E2"
+        : state.isDisabled
+        ? "#D1D5DB"
+        : "#DEE2E6",
+      backgroundColor: state.isDisabled ? "#F3F4F6" : "#FFFFFF",
+      boxShadow: state.isFocused ? "0 0 0 2px #BFDBFE" : "none",
+      //  transition: "border-color 0.2s, box-shadow 0.2s", // Smooth transition
+      cursor: state.isDisabled ? "not-allowed" : "default",
     }),
     valueContainer: (
       base: CSSObjectWithLabel,
@@ -70,31 +94,6 @@ const RegistrationForm: React.FC = () => {
       padding: "0px",
       margin: "0px",
     }),
-  };
-
-  // Function to get the flag of the selected country
-  const getCountryFlag = (countryCode: string) => {
-    const code = countryCode.toUpperCase();
-    return <WorldFlag code={code} width="15" height="15" />;
-  };
-
-  // Function to extract the dialing code from the selected country
-  const getDialingCode = (country: any | null) => {
-    if (!country) return "";
-    const dialingCode = country.label.match(/\(\+(\d+)\)/);
-    return dialingCode ? dialingCode[1] : "";
-  };
-
-  // Function to map country value to dialing code
-  const getDialingCodeByValue = (value: string): string => {
-    const dialingCodes: { [key: string]: string } = {
-      NG: "234",
-      US: "1",
-      GB: "44",
-      // Add more country codes as needed
-    };
-
-    return dialingCodes[value] || "+";
   };
 
   return (
@@ -129,6 +128,11 @@ const RegistrationForm: React.FC = () => {
           !values.agreeToTerms
         );
 
+        const focusClassName =
+          "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+        const placeholderClassName =
+          "placeholder-[#808080] placeholder:font-light focus:placeholder-opacity-50 disabled:placeholder-opacity-70";
+
         return (
           <Form className="flex flex-col items-center justify-start w-full h-screen my-20 bg-background">
             <div className="flex flex-col items-center justify-start w-full">
@@ -141,11 +145,11 @@ const RegistrationForm: React.FC = () => {
                     * Country / Region
                   </label>
                   <Select
-                    className="flex justify-start border-1 border-dark flex-[3] w-full p-0 m-0 rounded-xl"
+                    className="flex justify-start flex-[3] w-full p-0 m-0 rounded-xl"
                     options={countryOptions}
                     name="country"
                     placeholder="Search.."
-                    styles={customStyles}
+                    styles={selectFieldStyles}
                     onChange={(option: SingleValue<any>) => {
                       if (option) {
                         setFieldValue("country", option.label);
@@ -175,9 +179,14 @@ const RegistrationForm: React.FC = () => {
                     * First Name
                   </label>
                   <Field
-                    className="flex flex-[3] justify-start w-full border-1 border-dark rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                    className={cn(
+                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                      placeholderClassName,
+                      focusClassName
+                    )}
                     name="firstName"
                     type="text"
+                    placeholder="Please enter your first name"
                   />
                   {errors.firstName && touched.firstName ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -194,9 +203,14 @@ const RegistrationForm: React.FC = () => {
                     * Last Name
                   </label>
                   <Field
-                    className="flex flex-[3] justify-start w-full border-1 border-dark rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                    className={cn(
+                      "flex flex-[3] justify-start w-full border-1 lightDarkGrey rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                      placeholderClassName,
+                      focusClassName
+                    )}
                     name="lastName"
                     type="text"
+                    placeholder="Please enter your last name"
                   />
                   {errors.lastName && touched.lastName ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -213,9 +227,14 @@ const RegistrationForm: React.FC = () => {
                     * Email
                   </label>
                   <Field
-                    className="flex flex-[3] justify-start border-1 border-dark w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                    className={cn(
+                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                      placeholderClassName,
+                      focusClassName
+                    )}
                     name="email"
                     type="email"
+                    placeholder="Please set the email as the login name"
                   />
                   {errors.email && touched.email ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -232,9 +251,14 @@ const RegistrationForm: React.FC = () => {
                     * Login Password
                   </label>
                   <Field
-                    className="flex flex-[3] justify-start w-full border-1 border-dark rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                    className={cn(
+                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                      placeholderClassName,
+                      focusClassName
+                    )}
                     name="password"
                     type="password"
+                    placeholder="Set login password"
                   />
                   {errors.password && touched.password ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -251,9 +275,14 @@ const RegistrationForm: React.FC = () => {
                     * Confirm Password
                   </label>
                   <Field
-                    className="flex flex-[3] justify-start w-full border-1 border-dark rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                    className={cn(
+                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                      placeholderClassName,
+                      focusClassName
+                    )}
                     name="confirmPassword"
                     type="password"
+                    placeholder="Enter the login password again"
                   />
                   {errors.confirmPassword && touched.confirmPassword ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -270,9 +299,14 @@ const RegistrationForm: React.FC = () => {
                     * Pick up location
                   </label>
                   <Field
-                    className="flex flex-[3] justify-start w-full border-1 border-dark rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                    className={cn(
+                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                      placeholderClassName,
+                      focusClassName
+                    )}
                     name="address"
                     type="text"
+                    placeholder="Please enter your address"
                   />
                   {errors.address && touched.address ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -292,7 +326,11 @@ const RegistrationForm: React.FC = () => {
                     <div className="grid w-full grid-cols-4 gap-2 xs:gap-5 xs:grid-cols-8">
                       <div className="relative col-span-2 xs:col-span-2">
                         <Field
-                          className="w-fit xs:w-full border-1 border-[#808080] rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                          className={cn(
+                            "px-4 py-3 m-0 w-fit xs:w-full border-1 lightDarkGrey rounded-xl xs:py-4 xs:px-8",
+                            placeholderClassName,
+                            focusClassName
+                          )}
                           name="countryCode"
                           type="text"
                           disabled
@@ -310,7 +348,11 @@ const RegistrationForm: React.FC = () => {
                       </div>
                       <div className="relative col-span-4 xs:col-span-6">
                         <Field
-                          className="w-full xs:w-full border-1 border-[#808080] rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0"
+                          className={cn(
+                            "w-full px-4 py-3 m-0 xs:w-full border-1 lightDarkGrey rounded-xl xs:py-4 xs:px-8",
+                            placeholderClassName,
+                            focusClassName
+                          )}
                           name="phoneNumber"
                           type="number"
                           placeholder="Phone number"
@@ -362,7 +404,7 @@ const RegistrationForm: React.FC = () => {
                   <button
                     className="w-full text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
                     type="submit"
-                    disabled={disableBtn}
+                    disabled={!disableBtn}
                   >
                     Agree and Register
                   </button>
