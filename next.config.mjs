@@ -9,16 +9,19 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        // protocol: "https",
+        protocol: "https",
         hostname: "via.placeholder.com",
+        pathname: "/**",
       },
       {
-        // protocol: "https",
+        protocol: "https",
         hostname: "s3-alpha-sig.figma.com",
+        pathname: "/**",
       },
       {
-        // protocol: "https",
+        protocol: "https",
         hostname: "images.unsplash.com",
+        pathname: "/**",
       },
     ],
   },
