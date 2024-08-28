@@ -7,9 +7,14 @@ export interface ICreateUserPayload {
   address: string;
 }
 
-type UserData = Partial<{
+export interface ILoginUserPayload {
+  email: string;
+  password: string;
+}
+
+export type UserData = Partial<{
   token: string;
-  id: string;
+  id: string | number;
   firstName: string;
   lastName: string;
   email: string;
@@ -24,3 +29,4 @@ type UserData = Partial<{
 }>;
 
 export type ICreateUserResponse = ServerResponse<UserData>;
+export type ILoginUserResponse = ServerResponse<UserData>;

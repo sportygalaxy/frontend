@@ -1,11 +1,7 @@
-export type TUser = {
-  id: number;
-  name: string;
-  email: string;
-};
+import { UserData } from "./auth";
 
 export type TUserState = {
-  user: TUser | null;
-  setUser: (user: TUser) => void;
+  user: UserData | null;
+  setUser: (user: UserData) => void;
   clearUser: () => void;
 };

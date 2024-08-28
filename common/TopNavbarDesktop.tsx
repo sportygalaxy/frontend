@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -24,8 +24,9 @@ import useToggle from "@/hooks/useToggle";
 import CartAddToCartDrawer from "@/components/cart/CartAddToCartDrawer";
 import useCartStore from "@/store/cartStore";
 import { showCartQtyValue } from "@/helpers/cart";
-import { AUTHENTIATED } from "@/constants/appConstants";
 import Link from "next/link";
+import { getCookie } from "cookies-next";
+import useUserStore from "@/store/userStore";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
@@ -33,8 +34,18 @@ interface TopNavbarDesktopProps {
 const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
   const { cart } = useCartStore();
-  const [openUploadModal, toggleUploadModal] = useToggle();
+  const { user, setUser, clearUser } = useUserStore();
+  console.log("store - user:", user);
 
+  const [inputValue, setInputValue] = useState("");
+  const [openUploadModal, toggleUploadModal] = useToggle();
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const AUTHENTIATED = getCookie("token");
+    setAuthenticated(!!AUTHENTIATED);
+    console.log("AUTHENTIATED", AUTHENTIATED);
+  }, []);
   const iconSize = {
     color: "grey",
   };
@@ -95,8 +106,6 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     },
   ];
 
-  const [inputValue, setInputValue] = useState("");
-
   const handleSearchClick = () => {
     //
   };
@@ -111,8 +120,8 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   };
 
   return (
-    <div className="relative wrapper flex-col w-full">
-      <section className="flex gap-4 py-4 items-center justify-between">
+    <div className="relative flex-col w-full wrapper">
+      <section className="flex items-center justify-between gap-4 py-4">
         <ol className="flex gap-6 md:gap-16">
           {NavLink.map((link) => (
             <li
@@ -186,8 +195,8 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
               onChange={handleChange}
             />
 
-            {AUTHENTIATED ? (
-              <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+            {!!user || authenticated ? (
+              <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">
                 {CtaLink.map((cta) => (
                   <span
                     key={cta.id}
@@ -207,10 +216,10 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
                 ))}
               </div>
             ) : (
-              <div className="hidden sm:flex items-center justify-between gap-2 sm:gap-4 xl:gap-10">
+              <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">
                 <Link href={RoutesEnum.LOGIN}>
                   <Button
-                    className="text-mobile-xl md:text-xl px-4 lg:px-14"
+                    className="px-4 text-mobile-xl md:text-xl lg:px-14"
                     variant="tertiary"
                     size="lg"
                   >
@@ -220,7 +229,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
                 <Link href={RoutesEnum.REGISTER}>
                   <Button
-                    className="text-mobile-xl md:text-xl text-white px-4 lg:px-14"
+                    className="px-4 !text-white text-mobile-xl md:text-xl lg:px-14"
                     variant="default"
                     size="lg"
                   >

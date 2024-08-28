@@ -1,4 +1,6 @@
+import LoginForm from "./components/LoginForm";
+
 interface LoginProps {}
 export default function Login(props: LoginProps) {
-  return <div>page</div>;
+  return <div><LoginForm /></div>;
 }

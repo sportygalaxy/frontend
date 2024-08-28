@@ -9,13 +9,14 @@ import { cn } from "@/lib/utils";
 import { getCountryFlag, getDialingCodeByValue } from "@/utils/countyUtils";
 import { useMutation } from "@tanstack/react-query";
 import { register } from "@/lib/apiAuth";
-import { ICreateUserPayload } from "@/types/auth";
+import { ICreateUserPayload, UserData } from "@/types/auth";
 import { selectFieldStyles } from "./RegisterationCountrySelectInputStyle";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import { NotifyError, NotifySuccess } from "@/helpers/toasts";
 import { ICreateUserResponse } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
+import useUserStore from "@/store/userStore";
 
 interface FormValues {
   email: string;
@@ -45,6 +46,7 @@ const validationSchema = Yup.object({
 });
 
 const RegistrationForm: React.FC = () => {
+  const { setUser } = useUserStore();
   const [countryOptions] = useState<[]>(countryList().getData());
   const router = useRouter();
 
@@ -55,10 +57,9 @@ const RegistrationForm: React.FC = () => {
     data,
   } = useMutation<ICreateUserResponse, Error, ICreateUserPayload>({
     mutationFn: (registerData: ICreateUserPayload) => register(registerData),
-    onMutate: async () => {
-      console.log("onMutate:");
-    },
+    onMutate: async () => {},
     onSuccess: (data) => {
+      setUser(data?.data as UserData);
       NotifySuccess(data?.message as string);
       router.push(RoutesEnum.LANDING_PAGE);
     },
