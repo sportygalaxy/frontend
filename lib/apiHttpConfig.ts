@@ -19,7 +19,9 @@ type AxiosBaseQueryResult = AxiosBaseQuerySuccess | AxiosBaseQueryError;
 
 // Create an Axios instance with base configuration
 const SportyGalaxyHttp: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL:
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://sporty-galaxy-dev-backend.onrender.com/api/v1",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -34,7 +36,7 @@ SportyGalaxyHttp.interceptors.request.use(
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
-    console.log("config", config);
+
     return config;
   },
   (error) => {
@@ -49,6 +51,10 @@ SportyGalaxyHttp.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.code === "ERR_NETWORK") {
+      throw "A network error occured";
+    }
+
     console.error(
       "HTTPS - Error: ",
       error.response ? error.response.data : error.message

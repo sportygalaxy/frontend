@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
       router.push(RoutesEnum.LANDING_PAGE);
     },
     onError: (error, variables, context) => {
-      NotifyError(error?.message ?? "An error occured");
+      NotifyError(error?.message || "An error occured");
     },
   });
 
