@@ -440,10 +440,10 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==
 
-console-log-colors@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/console-log-colors/-/console-log-colors-0.4.0.tgz#35ebaa439416e6be069c4b08cc66c9a08d023f79"
-  integrity sha512-XX0qO0MUzbREpPrutavmOLML8h8IokzKTzJqMwvykBcL9D7bMbj5P17+driOjy4RaA99aIAkMDo8holIxYbbpQ==
+console-log-colors@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/console-log-colors/-/console-log-colors-0.5.0.tgz#7084c88fa11dba1bdff82f38f5728595d1a4d64e"
+  integrity sha512-ixjGY06zMLCnNXeBdDKL6GuS1+/yQ1GorbZ9YsptP6jDgLqk/bBdQ5cTQvVveKUbO8Th6zwIhY8yRwhrpjXk6g==
 
 content-disposition@0.5.4:
   version "0.5.4"

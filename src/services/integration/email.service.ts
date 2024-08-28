@@ -1,4 +1,4 @@
-import nodemailer, { Transporter } from "nodemailer";
+import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import { ErrorResponse } from "../../utils/errorResponse";
 import { ERROR_MESSAGES } from "../../constants";
@@ -24,7 +24,7 @@ interface MailOptions {
 }
 
 class EmailService {
-  private transporter: Transporter;
+  private transporter: any;
 
   constructor(config: EmailConfig) {
     this.transporter = nodemailer.createTransport(config);

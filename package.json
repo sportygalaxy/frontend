@@ -41,6 +41,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "concurrently": "^7.4.0",
+    "console-log-colors": "^0.5.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -66,7 +67,6 @@
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
-    "@types/nodemailer": "^6.4.15",
-    "console-log-colors": "^0.4.0"
+    "@types/nodemailer": "^6.4.15"
   }
 }

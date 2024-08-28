@@ -7,3 +7,13 @@ declare module "jsonwebtoken";
 declare module "bcrypt";
 declare module "jsonwebtoken";
 declare module "nodemailer";
+
+declare module "console-log-colors" {
+  const colors: {
+    white: any;
+    green: any;
+    red: any;
+    bg: any;
+  };
+  export = colors;
+}

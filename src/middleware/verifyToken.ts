@@ -3,7 +3,7 @@ import { EnvKeys } from "../common/EnvKeys";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-export interface JwtPayload {
+export interface IJwtPayload {
   id: string;
   isAdmin: boolean;
   iat: number;
@@ -42,7 +42,7 @@ export const verifyToken = (
 
   const secret = EnvKeys.JWT_SECRET;
 
-  jwt.verify(token, secret, async (err: any, payload: JwtPayload | any) => {
+  jwt.verify(token, secret, async (err: any, payload: IJwtPayload | any) => {
     if (err)
       return res.status(403).json({
         error: ERROR_MESSAGES.TOKEN_EXPIRED,

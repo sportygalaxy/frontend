@@ -3,7 +3,7 @@ import prisma from "../lib/prisma";
 import { ERROR_MESSAGES, HTTP_STATUS_CODE } from "../constants";
 import { ErrorResponse } from "../utils/errorResponse";
 import { NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { EnvKeys } from "../common/EnvKeys";
 import {
   ActivateUserDto,
@@ -20,6 +20,7 @@ import {
 import { RedisService } from "./integration/redis.service";
 import { generateCode } from "../helpers";
 import { User } from "../models";
+import { IJwtPayload } from "../middleware/verifyToken";
 // import { sendVerificationEmail } from "../helpers/mailer";
 
 const userService = new UserService();
@@ -63,11 +64,11 @@ export class AuthService {
     }
   }
 
-  async decodeCookieToken(_token: string): Promise<JwtPayload> {
+  async decodeCookieToken(_token: string): Promise<IJwtPayload> {
     try {
       const secret = EnvKeys.JWT_SECRET;
 
-      const decodedJwtUser = jwt.verify(_token, secret) as JwtPayload;
+      const decodedJwtUser = jwt.verify(_token, secret) as IJwtPayload;
 
       return decodedJwtUser;
     } catch (err: any) {
