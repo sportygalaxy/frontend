@@ -9,9 +9,13 @@ import { cn } from "@/lib/utils";
 import { getCountryFlag, getDialingCodeByValue } from "@/utils/countyUtils";
 import { useMutation } from "@tanstack/react-query";
 import { register } from "@/lib/apiAuth";
-import { IRegistrationData } from "@/types/auth";
+import { ICreateUserPayload } from "@/types/auth";
 import { selectFieldStyles } from "./RegisterationCountrySelectInputStyle";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
+import { NotifyError, NotifySuccess } from "@/helpers/toasts";
+import { ICreateUserResponse } from "@/types/auth";
+import { useRouter } from "next/navigation";
+import { RoutesEnum } from "@/constants/routeEnums";
 
 interface FormValues {
   email: string;
@@ -42,20 +46,24 @@ const validationSchema = Yup.object({
 
 const RegistrationForm: React.FC = () => {
   const [countryOptions] = useState<[]>(countryList().getData());
+  const router = useRouter();
 
   const {
     mutate: registerUser,
     isPending,
     error,
     data,
-  } = useMutation<void, Error, IRegistrationData>({
-    mutationFn: (registerData: IRegistrationData) => register(registerData),
-    onMutate: async () => {},
+  } = useMutation<ICreateUserResponse, Error, ICreateUserPayload>({
+    mutationFn: (registerData: ICreateUserPayload) => register(registerData),
+    onMutate: async () => {
+      console.log("onMutate:");
+    },
     onSuccess: (data) => {
-      console.log("Registration successful", data);
+      NotifySuccess(data?.message as string);
+      router.push(RoutesEnum.LANDING_PAGE);
     },
     onError: (error, variables, context) => {
-      console.error("Registration failed", error);
+      NotifyError(error?.message ?? "An error occured");
     },
   });
 
@@ -63,7 +71,7 @@ const RegistrationForm: React.FC = () => {
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
-    const registerData: IRegistrationData = {
+    const registerData: ICreateUserPayload = {
       email: values.email,
       password: values.password,
       firstName: values.firstName,
@@ -72,7 +80,6 @@ const RegistrationForm: React.FC = () => {
       address: values.address,
     };
 
-    console.log(values, data);
     registerUser(registerData);
     setSubmitting(false);
   };

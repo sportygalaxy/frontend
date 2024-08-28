@@ -15,6 +15,7 @@ import getScriptJson from "@/helpers/getScriptJson";
 import { Suspense } from "react";
 import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   metadataBase: new URL(webBaseUrl),
@@ -49,9 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${jost.className}`}
-      >
+      <body className={`${jost.className}`}>
         <ReactQueryProvider>
           <Script
             id="schema-organization"
@@ -83,6 +82,7 @@ export default function RootLayout({
             }
           >
             {children}
+            <Toaster position="top-right" richColors />
           </Suspense>
         </ReactQueryProvider>
       </body>

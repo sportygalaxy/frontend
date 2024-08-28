@@ -1,4 +1,21 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from "axios";
+import { getCookie } from "cookies-next";
+
+type AxiosBaseQuerySuccess = {
+  data: any;
+  message: string;
+  success: boolean;
+  error?: string; // optional
+};
+
+type AxiosBaseQueryError = {
+  statusCode: number;
+  error: string;
+  success: boolean;
+  data?: any; // optional
+};
+
+type AxiosBaseQueryResult = AxiosBaseQuerySuccess | AxiosBaseQueryError;
 
 // Create an Axios instance with base configuration
 const SportyGalaxyHttp: AxiosInstance = axios.create({
@@ -12,10 +29,12 @@ const SportyGalaxyHttp: AxiosInstance = axios.create({
 // Request interceptor to add headers or modify the request
 SportyGalaxyHttp.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getCookie("token");
+
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
+    console.log("config", config);
     return config;
   },
   (error) => {
@@ -26,22 +45,18 @@ SportyGalaxyHttp.interceptors.request.use(
 // Response interceptor to handle responses and errors
 SportyGalaxyHttp.interceptors.response.use(
   (response) => {
-    // Return successful response data
     console.log("HTTPS - Success: ", response?.data);
     return response;
   },
   (error) => {
-    // Handle error globally
-
     console.error(
       "HTTPS - Error: ",
       error.response ? error.response.data : error.message
     );
 
-    // Structure the custom error response
     const customError = {
       ...(error.response?.data && {
-        data: error.response.data,
+        ...error.response.data,
       }),
     };
 
@@ -52,17 +67,19 @@ SportyGalaxyHttp.interceptors.response.use(
 // Helper function to handle requests
 export const axiosBaseQuery = async (
   config: AxiosRequestConfig
-): Promise<{ data?: any; error?: any; meta?: any }> => {
+): Promise<AxiosBaseQueryResult> => {
   try {
     const response = await SportyGalaxyHttp.request(config);
     return {
       ...response.data,
+      success: true,
     };
   } catch (error: any) {
     return {
-      ...(error.data && {
-        ...error.data,
+      ...(error && {
+        ...error,
       }),
+      success: false,
     };
   }
 };

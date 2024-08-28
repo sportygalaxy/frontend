@@ -3,7 +3,6 @@
 import React, { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductData } from "@/lib/apiProduct";
-import { Span } from "next/dist/trace";
 
 interface ProductProps {
   params: { productId: string };
