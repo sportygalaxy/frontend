@@ -23,7 +23,7 @@ function CartAddToCartDrawerMobile<T>({
   const { cart } = useCartStore();
 
   return (
-    <div className="h-full flex flex-col justify-end bg-background">
+    <div className="flex flex-col justify-end h-full bg-background">
       {/* Header */}
       <div className="flex flex-col items-center justify-between p-4 bg-background rounded-tl-[12px] rounded-tr-[12px]">
         <div className="py-1">
@@ -33,7 +33,7 @@ function CartAddToCartDrawerMobile<T>({
           />
         </div>
 
-        <div className="flex w-full items-center justify-between">
+        <div className="flex items-center justify-between w-full">
           <p className="text-mobile-3xl md:text-3xl">Cart</p>
 
           <div>
@@ -61,7 +61,7 @@ function CartAddToCartDrawerMobile<T>({
               <p>Shipping total</p>
               <p>${SHIPPING_FEE}</p>
             </div>
-            <div className="font-bold flex items-center justify-between">
+            <div className="flex items-center justify-between font-bold">
               <p>Subtotal</p>
               <p>${showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE)}</p>
             </div>

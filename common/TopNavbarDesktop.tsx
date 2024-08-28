@@ -34,11 +34,12 @@ interface TopNavbarDesktopProps {
 const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
   const { cart } = useCartStore();
+  
   const { user } = useUserStore();
+  const [authenticated, setAuthenticated] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
   const [openUploadModal, toggleUploadModal] = useToggle();
-  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const AUTHENTIATED = getCookie("token");

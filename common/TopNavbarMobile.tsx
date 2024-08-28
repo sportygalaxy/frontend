@@ -1,13 +1,27 @@
 "use client";
 import { Search } from "@/components/search";
-import { useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Upload from "./Upload";
 import Logo from "./Logo";
 import useToggle from "@/hooks/useToggle";
+import useUserStore from "@/store/userStore";
+import { getCookie } from "cookies-next";
 
-const TopNavbarMobile = () => {
+interface TopNavbarMobileProps {
+  isAuth: boolean;
+}
+const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
+  const { isAuth } = props;
+  const { user } = useUserStore();
+  const [authenticated, setAuthenticated] = useState(false);
+
   const [openUploadModal, toggleUploadModal] = useToggle();
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    const AUTHENTIATED = getCookie("token");
+    setAuthenticated(!!AUTHENTIATED);
+  }, []);
 
   const handleSearchClick = () => {
     //
@@ -23,32 +37,38 @@ const TopNavbarMobile = () => {
   };
 
   return (
-    <div className="relative wrapper flex flex-col w-full gap-3">
+    <div className="relative flex flex-col w-full gap-3 wrapper">
       <div className="flex flex-col gap-2">
         {/* logged in
          */}
         <Logo />
 
         {/* not logged in */}
-        {/* <p className="text-xl font-medium">Hello Chibueze,</p> */}
+        {!!user || authenticated ? (
+          <p className="text-xl font-medium capitalize">Hello {user?.firstName},</p>
+        ) : null}
 
-        <p className="text-primary opacity-50 font-light text-sm">
+        <p className="text-sm font-light opacity-50 text-primary">
           What are you buying today?
         </p>
       </div>
 
-      <div className="mt-7">
-        <Search
-          placeholder="Search.."
-          onSearchClick={handleSearchClick}
-          onClearClick={handleCameraClick}
-          value={inputValue}
-          onChange={handleChange}
-          onClose={toggleUploadModal}
-        />
-      </div>
+      {isAuth ? null : (
+        <div className="mt-7">
+          <Search
+            placeholder="Search.."
+            onSearchClick={handleSearchClick}
+            onClearClick={handleCameraClick}
+            value={inputValue}
+            onChange={handleChange}
+            onClose={toggleUploadModal}
+          />
+        </div>
+      )}
 
-      <Upload onClose={toggleUploadModal} open={openUploadModal} />
+      {isAuth ? null : (
+        <Upload onClose={toggleUploadModal} open={openUploadModal} />
+      )}
     </div>
   );
 };

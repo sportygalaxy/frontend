@@ -44,7 +44,9 @@ const BottomNavbarMobile: FC = () => {
     {
       id: 2,
       name: "Cart",
-      Icon: (props) => <CartIcon {...props} />,
+      Icon: (props) => (
+          <CartIcon {...props} />
+      ),
       path: RoutesEnum.CART,
       notification: showCartQtyValue(cart),
       isNotLink: true,
@@ -65,15 +67,7 @@ const BottomNavbarMobile: FC = () => {
   ];
 
   return (
-    <>
-      <Drawer
-        open={isOpen}
-        onClose={toggleDrawer}
-        direction="bottom"
-        // size="100%"
-      >
-        <CartAddToCartDrawerMobile onClose={toggleDrawer} />
-      </Drawer>
+    <div className="w-full">
       <div className="flex items-center justify-between w-full px-9 bg-primary-foreground">
         {CtaLink.map((cta) => (
           <div key={cta.id} className="relative min-w-14">
@@ -96,7 +90,16 @@ const BottomNavbarMobile: FC = () => {
           </div>
         ))}
       </div>
-    </>
+      <Drawer
+        className="bg-green-50"
+        open={isOpen}
+        onClose={toggleDrawer}
+        direction="bottom"
+        // size="100%"
+      >
+        <CartAddToCartDrawerMobile onClose={toggleDrawer} />
+      </Drawer>
+    </div>
   );
 };
 

@@ -11,14 +11,14 @@ export default function Navbar(props: NavbarProps) {
   return (
     <>
       <DesktopNavbar className="sticky top-0 z-10 bg-white">
-        <section className="hidden sm:flex w-full items-center justify-center">
+        <section className="items-center justify-center hidden w-full sm:flex">
           <TopNavbarDesktop isAuth={isAuth} />
         </section>
       </DesktopNavbar>
 
       <MobileNavbar className="bg-background">
-        <section className="flex sm:hidden w-full mt-14">
-          <TopNavbarMobile />
+        <section className="flex w-full sm:hidden mt-14">
+          <TopNavbarMobile isAuth={isAuth} />
         </section>
       </MobileNavbar>
     </>
