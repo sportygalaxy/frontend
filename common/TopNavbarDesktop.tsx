@@ -34,8 +34,7 @@ interface TopNavbarDesktopProps {
 const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
   const { cart } = useCartStore();
-  const { user, setUser, clearUser } = useUserStore();
-  console.log("store - user:", user);
+  const { user } = useUserStore();
 
   const [inputValue, setInputValue] = useState("");
   const [openUploadModal, toggleUploadModal] = useToggle();
@@ -44,8 +43,8 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   useEffect(() => {
     const AUTHENTIATED = getCookie("token");
     setAuthenticated(!!AUTHENTIATED);
-    console.log("AUTHENTIATED", AUTHENTIATED);
   }, []);
+
   const iconSize = {
     color: "grey",
   };
