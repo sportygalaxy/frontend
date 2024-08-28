@@ -176,7 +176,7 @@ exports.login = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, 
             .status(200)
             .json({
             message: "User login successfully",
-            data: userInfo,
+            data: Object.assign(Object.assign({}, userInfo), { token }),
             success: !!userInfo,
         });
     }

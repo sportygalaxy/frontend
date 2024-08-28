@@ -232,7 +232,7 @@ export const login = asyncHandler(
         .status(200)
         .json({
           message: "User login successfully",
-          data: userInfo,
+          data: {...userInfo, token},
           success: !!userInfo,
         });
     }

@@ -1,0 +1,9 @@
+declare module "cors";
+declare module "cookie-parser";
+declare module "morgan";
+declare module "bcryptjs";
+declare module "nodemailer";
+declare module "jsonwebtoken";
+declare module "bcrypt";
+declare module "jsonwebtoken";
+declare module "nodemailer";
