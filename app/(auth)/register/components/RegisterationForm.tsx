@@ -17,6 +17,7 @@ import { ICreateUserResponse } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
 import useUserStore from "@/store/userStore";
+import Link from "next/link";
 
 interface FormValues {
   email: string;
@@ -404,6 +405,13 @@ const RegistrationForm: React.FC = () => {
                   </button>
                 </div>
               </div>
+            </div>
+            <div className="flex items-center justify-center w-full mt-6">
+              <Link href={RoutesEnum.LOGIN}>
+                <p className="font-normal text-black underline cursor-pointer text-mobile-xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
+                  Login
+                </p>
+              </Link>
             </div>
           </Form>
         );
