@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "console-ninja node --watch dist/app.js",
     "run-migrations": "npx prisma db push",
-    "build": "rimraf dist && npx tsc",
+    "build": "rimraf dist && tsc",
     "prestart": "npm run build",
-    "start": "console-ninja node --watch dist/app.js",
+    "start": "node dist/app.js",
+    "vercel-build": "npm run build",
     "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w\"  \"console-ninja node --watch dist/app.js\"",
     "seeder": "npx ts-node seeder.ts",
