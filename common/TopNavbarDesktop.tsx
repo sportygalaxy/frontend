@@ -27,19 +27,45 @@ import { showCartQtyValue } from "@/helpers/cart";
 import Link from "next/link";
 import { getCookie } from "cookies-next";
 import useUserStore from "@/store/userStore";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "@/lib/apiAuth";
+import { NotifyError, NotifySuccess } from "@/helpers/toasts";
+import { useRouter } from "next/navigation";
+import SpinnerIcon from "@/assets/icons/pack/Spinner";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
 }
 const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
+  const router = useRouter();
+
   const { cart } = useCartStore();
-  
+
   const { user } = useUserStore();
   const [authenticated, setAuthenticated] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
   const [openUploadModal, toggleUploadModal] = useToggle();
+  const { clearUser } = useUserStore();
+
+  const {
+    mutate: logoutUser,
+    isPending,
+    error,
+    data,
+  } = useMutation<any, Error, void>({
+    mutationFn: () => logout(),
+    onMutate: async () => {},
+    onSuccess: (data) => {
+      clearUser();
+      NotifySuccess((data?.message as string) || "logout successful");
+      router.push(RoutesEnum.LOGIN);
+    },
+    onError: (error, variables, context) => {
+      NotifyError(error?.message || "An error occured");
+    },
+  });
 
   useEffect(() => {
     const AUTHENTIATED = getCookie("token");
@@ -197,6 +223,13 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
             {!!user || authenticated ? (
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">
+                <button
+                  onClick={() => logoutUser()}
+                  className="p-2 md:p-4 border border-secondary rounded-full flex items-center justify-center"
+                >
+                  Logout
+                  {isPending ? <SpinnerIcon width={15} height={15} /> : null}
+                </button>
                 {CtaLink.map((cta) => (
                   <span
                     key={cta.id}
