@@ -7,6 +7,7 @@ const nextConfig = {
   },
   transpilePackages: ["lucide-react"],
   images: {
+    domains: ["www.ecommerce-sport-app.vercel.app"],
     remotePatterns: [
       {
         protocol: "https",
