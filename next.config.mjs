@@ -2,9 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    appDir: true,
-  },
   transpilePackages: ["lucide-react"],
   images: {
     domains: ["www.ecommerce-sport-app.vercel.app"],

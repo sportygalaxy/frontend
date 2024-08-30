@@ -14,12 +14,12 @@ export default function LandingPage() {
   return (
     <>
       {/* Development */}
-      <div className="desktop-tablet-view wrapper mt-5 sm:mt-0">
+      {/* <div className="desktop-tablet-view wrapper mt-5 sm:mt-0">
         <Products />
-      </div>
+      </div> */}
 
       {/* Desktop contents */}
-      {/* <>
+      <>
         <div className="relative">
           <Hero />
         </div>
@@ -72,10 +72,10 @@ export default function LandingPage() {
         <div className="desktop-tablet-view mt-24 w-full">
           <NewsLetter />
         </div>
-      </> */}
+      </>
 
       {/* Mobile contents */}
-      {/* <>
+      <>
         <div className="wrapper mt-9 sm:mt-0">
           <MobileTitle title="Best selling" path="" />
         </div>
@@ -89,7 +89,7 @@ export default function LandingPage() {
         <div className="mobile-desktop-tablet-view wrapper mt-5 sm:mt-0">
           <Products isMobile isHorizontalScroll />
         </div>
-      </> */}
+      </>
     </>
   );
 }
