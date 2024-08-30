@@ -13,7 +13,7 @@ export default function RootLayout({
     <div className={`relative grid grid-cols-12 gap-0 auto-rows-max`}>
       <Navbar isAuth={false} />
 
-      <main className="col-span-12 auto-rows-auto w-full h-full-minus-80 sm:h-full overflow-auto sm:overflow-hidden">
+      <main className="col-span-12 auto-rows-auto w-full min-h-full-minus-80 mb-24 sm:h-full overflow-auto sm:overflow-hidden">
         <Suspense
           fallback={
             <div className="w-screen h-screen">

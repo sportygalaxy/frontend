@@ -44,9 +44,7 @@ const BottomNavbarMobile: FC = () => {
     {
       id: 2,
       name: "Cart",
-      Icon: (props) => (
-          <CartIcon {...props} />
-      ),
+      Icon: (props) => <CartIcon {...props} />,
       path: RoutesEnum.CART,
       notification: showCartQtyValue(cart),
       isNotLink: true,
@@ -68,7 +66,7 @@ const BottomNavbarMobile: FC = () => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between w-full px-9 bg-primary-foreground">
+      <div className="flex items-center justify-between w-full h-full px-9 bg-primary-foreground">
         {CtaLink.map((cta) => (
           <div key={cta.id} className="relative min-w-14">
             <HeaderBottomActiveLink
