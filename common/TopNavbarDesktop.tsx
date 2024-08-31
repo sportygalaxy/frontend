@@ -225,7 +225,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">
                 <button
                   onClick={() => logoutUser()}
-                  className="p-2 md:p-4 border border-secondary rounded-full flex items-center justify-center"
+                  className="flex items-center justify-center p-2 border rounded-full md:p-4 border-secondary"
                 >
                   Logout
                   {isPending ? <SpinnerIcon width={15} height={15} /> : null}

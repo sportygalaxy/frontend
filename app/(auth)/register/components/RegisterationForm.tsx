@@ -406,9 +406,9 @@ const RegistrationForm: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-center w-full mt-6">
+            <div className="flex items-center justify-center w-full py-6">
               <Link href={RoutesEnum.LOGIN}>
-                <p className="font-normal text-black underline cursor-pointer text-mobile-xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
+                <p className="font-normal text-black underline cursor-pointer text-mobile-2xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
                   Login
                 </p>
               </Link>

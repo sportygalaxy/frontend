@@ -16,7 +16,7 @@ export default function Navbar(props: NavbarProps) {
         </section>
       </DesktopNavbar>
 
-      <MobileNavbar className="bg-background">
+      <MobileNavbar className="sticky top-0 z-10 bg-background">
         <section className="flex w-full sm:hidden mt-14">
           <TopNavbarMobile isAuth={isAuth} />
         </section>

@@ -13,7 +13,7 @@ export default function RootLayout({
     <div className={`relative grid grid-cols-12 gap-0 auto-rows-max`}>
       <Navbar isAuth={false} />
 
-      <main className="col-span-12 auto-rows-auto w-full min-h-full-minus-80 mb-24 sm:h-full overflow-auto sm:overflow-hidden">
+      <main className="w-full col-span-12 mb-24 overflow-auto auto-rows-auto min-h-full-minus-80 sm:h-full sm:overflow-hidden">
         <Suspense
           fallback={
             <div className="w-screen h-screen">
@@ -25,7 +25,7 @@ export default function RootLayout({
         </Suspense>
       </main>
 
-      <footer className="col-span-12 mx-auto w-full flex justify-center items-center">
+      <footer className="flex items-center justify-center w-full col-span-12 mx-auto">
         <Footer />
       </footer>
     </div>

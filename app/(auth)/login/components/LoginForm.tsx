@@ -102,7 +102,7 @@ const LoginForm: React.FC = () => {
                       )}
                       name="email"
                       type="email"
-                      placeholder="Please set the email as the login name"
+                      placeholder="eg name@domain.com"
                     />
                     {errors.email && touched.email ? (
                       <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -126,7 +126,7 @@ const LoginForm: React.FC = () => {
                       )}
                       name="password"
                       type="password"
-                      placeholder="Set login password"
+                      placeholder="******"
                     />
                     {errors.password && touched.password ? (
                       <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
@@ -149,19 +149,18 @@ const LoginForm: React.FC = () => {
                       Login
                     </button>
                   </div>
-
-                  <div className="flex items-center justify-between w-full mt-16">
-                    <Link href={RoutesEnum.REGISTER}>
-                      <p className="font-normal text-black underline cursor-pointer text-mobile-xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
-                        Create account
-                      </p>
-                    </Link>
-                    <Link href={RoutesEnum.REGISTER}>
-                      <p className="font-normal text-black underline cursor-pointer text-mobile-xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
-                        Forgot password?
-                      </p>
-                    </Link>
-                  </div>
+                </div>
+                <div className="flex items-center justify-between w-full py-6 mx-auto md:max-w-screen-sm">
+                  <Link href={RoutesEnum.REGISTER}>
+                    <p className="font-normal text-black underline cursor-pointer text-mobile-2xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
+                      Create account
+                    </p>
+                  </Link>
+                  <Link href={RoutesEnum.REGISTER}>
+                    <p className="font-normal text-black underline cursor-pointer text-mobile-2xl md:text-xl font-jost hover:underline-offset-4 underline-offset-2">
+                      Forgot password?
+                    </p>
+                  </Link>
                 </div>
               </div>
             </Form>
