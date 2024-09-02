@@ -121,7 +121,7 @@ html {
 }
 .EZDrawer .EZDrawer__overlay {
     display: none;
-    height: 100vh;
+    height: 800px!important;
     left: 0;
     position: fixed;
     top: 0;

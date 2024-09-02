@@ -8,7 +8,7 @@ const CartClearAll: FC<Props> = () => {
   return (
     <>
       {cart.length >= 1 && (
-        <div className="inset-1 bg-gradient-to-b from-background to-transparent flex items-center justify-center my-4 px-11 bg-red-50">
+        <div className="inset-1 bg-gradient-to-b from-background to-transparent flex items-center justify-center my-2 px-11 bg-red-50">
           <Button
             onClick={() => clearCart()}
             variant="link"
