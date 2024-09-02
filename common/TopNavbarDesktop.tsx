@@ -11,10 +11,7 @@ import { Search } from "@/components/search";
 import NotificationIcon from "@/assets/icons/pack/Notification";
 import CartIcon from "@/assets/icons/pack/Cart";
 import UserIcon from "@/assets/icons/pack/User";
-import LogoIcon from "@/assets/icons/pack/Logo";
 import { cn } from "@/lib/utils";
-import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
-import GalleryIcon from "@/assets/icons/pack/Gallery";
 import Upload from "./Upload";
 import { Button } from "@/components/ui/button";
 import { RoutesEnum } from "@/constants/routeEnums";
@@ -27,18 +24,23 @@ import { showCartQtyValue } from "@/helpers/cart";
 import Link from "next/link";
 import { getCookie } from "cookies-next";
 import useUserStore from "@/store/userStore";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "@/lib/apiAuth";
-import { NotifyError, NotifySuccess } from "@/helpers/toasts";
-import { useRouter } from "next/navigation";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
+import { useLogout } from "@/hooks/useLogout";
+import {
+  LogoutCurve,
+} from "iconsax-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
 }
 const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
-  const router = useRouter();
+  const { logoutUser, isPending } = useLogout();
 
   const { cart } = useCartStore();
 
@@ -47,25 +49,6 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
   const [inputValue, setInputValue] = useState("");
   const [openUploadModal, toggleUploadModal] = useToggle();
-  const { clearUser } = useUserStore();
-
-  const {
-    mutate: logoutUser,
-    isPending,
-    error,
-    data,
-  } = useMutation<any, Error, void>({
-    mutationFn: () => logout(),
-    onMutate: async () => {},
-    onSuccess: (data) => {
-      clearUser();
-      NotifySuccess((data?.message as string) || "logout successful");
-      router.push(RoutesEnum.LOGIN);
-    },
-    onError: (error, variables, context) => {
-      NotifyError(error?.message || "An error occured");
-    },
-  });
 
   useEffect(() => {
     const AUTHENTIATED = getCookie("token");
@@ -96,7 +79,21 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     },
   ];
 
-  const CtaLink = [
+  type CtaLinkType = {
+    id: number;
+    name: string;
+    icon: React.ReactNode;
+    path: string;
+    notification?:
+      | { status: boolean | undefined; value: number | undefined }
+      | (() => void)
+      | null
+      | undefined
+      | any;
+    type?: string | null;
+  };
+
+  const CtaLink: CtaLinkType[] = [
     {
       id: 1,
       name: "Notification",
@@ -116,12 +113,15 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
       ),
       path: "notification",
       notification: { status: false, value: 0 },
+      type: null,
     },
     {
       id: 2,
       name: "Profile",
       icon: <UserIcon {...iconSize} />,
       path: "profile",
+      notification: null,
+      type: "popover",
     },
     {
       id: 3,
@@ -129,6 +129,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
       icon: <CartAddToCartDrawer data={iconSize} component={CartIcon} />,
       path: "cart",
       notification: showCartQtyValue(cart),
+      type: null,
     },
   ];
 
@@ -223,30 +224,63 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
             {!!user || authenticated ? (
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">
-                <button
-                  onClick={() => logoutUser()}
-                  className="flex items-center justify-center p-2 border rounded-full md:p-4 border-secondary"
-                >
-                  Logout
-                  {isPending ? <SpinnerIcon width={15} height={15} /> : null}
-                </button>
-                {CtaLink.map((cta) => (
-                  <span
-                    key={cta.id}
-                    className={cn(
-                      cta.name !== "Cart" &&
-                        "p-2 md:p-4 border border-secondary rounded-full"
-                    )}
-                  >
-                    {cta.icon}
+                {CtaLink.map((cta: CtaLinkType) => {
+                  if (cta.type === "popover")
+                    return (
+                      <Popover key={cta.id}>
+                        <PopoverTrigger
+                          className={cn(
+                            "p-2 md:p-4 border border-secondary rounded-full"
+                          )}
+                        >
+                          {cta.icon}
 
-                    {cta?.notification?.status ? (
-                      <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
-                        {cta?.notification?.value}
-                      </span>
-                    ) : null}
-                  </span>
-                ))}
+                          {cta?.notification?.status ? (
+                            <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                              {cta?.notification?.value}
+                            </span>
+                          ) : null}
+                        </PopoverTrigger>
+                        <PopoverContent className="m-0 p-0">
+                          <ul className="m-0 p-0">
+                            <Link href={RoutesEnum.PROFILE}>
+                              <li className="flex items-center gap-3 cursor-pointer hover:bg-secondary-foreground py-3 px-4">
+                                <UserIcon /> My Profile
+                              </li>
+                            </Link>
+                            <li
+                              className="flex items-center gap-3 cursor-pointer hover:bg-secondary-foreground py-3 px-4"
+                              onClick={() => logoutUser()}
+                            >
+                              <LogoutCurve size="20" color="#828282" />
+                              Logout{" "}
+                              {isPending ? (
+                                <SpinnerIcon width={15} height={15} />
+                              ) : null}
+                            </li>
+                          </ul>
+                        </PopoverContent>
+                      </Popover>
+                    );
+
+                  return (
+                    <span
+                      key={cta.id}
+                      className={cn(
+                        cta.name !== "Cart" &&
+                          "p-2 md:p-4 border border-secondary rounded-full"
+                      )}
+                    >
+                      {cta.icon}
+
+                      {cta?.notification?.status ? (
+                        <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                          {cta?.notification?.value}
+                        </span>
+                      ) : null}
+                    </span>
+                  );
+                })}
               </div>
             ) : (
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">

@@ -89,11 +89,11 @@ const BottomNavbarMobile: FC = () => {
         ))}
       </div>
       <Drawer
-        className="bg-green-50"
+        className="bg-green-50 h-[400px]"
         open={isOpen}
         onClose={toggleDrawer}
         direction="bottom"
-        // size="100%"
+        size="100%"
       >
         <CartAddToCartDrawerMobile onClose={toggleDrawer} />
       </Drawer>
