@@ -14,6 +14,9 @@ export const login = async (
     const response = await POST("/auth/login", loginData);
 
     if (response?.success) {
+      if (!response?.data?.isVerified) {
+        // throw new Error(response?.error || "Check email to verify your Account");
+      }
       setCookie("token", response?.data?.token);
       return response;
     } else {
@@ -32,6 +35,35 @@ export const register = async (
 
     if (response?.success) {
       setCookie("token", response?.data?.token);
+      return response;
+    } else {
+      throw new Error(response?.error);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const activate = async (token: any): Promise<any> => {
+  try {
+    setCookie("token", token);
+    const response = await POST("/auth/activate", { token: token });
+
+    if (response?.success) {
+      return response;
+    } else {
+      throw new Error(response?.error);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const reSendActivationLink = async (token: any): Promise<any> => {
+  try {
+    const response = await POST("/auth/send-verification", { token: token });
+
+    if (response?.success) {
       return response;
     } else {
       throw new Error(response?.error);

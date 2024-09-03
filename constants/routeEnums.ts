@@ -7,6 +7,8 @@ export enum RoutesEnum {
   // AUTH
   LOGIN="/login",
   REGISTER="/register",
+  OTP="/otp",
+  ACTIVATE_EMAIL="/activate",
 
   // App
   CART = "/cart",

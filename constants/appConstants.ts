@@ -2,7 +2,7 @@ const PHONE_NUMBER = "7072215324";
 const PHONE_NUMBER_2 = "8116370946";
 const PHONE_NUMBER_3 = "9027338732";
 const COUNTRY_CODE = "+234";
-const EMAIL = "support@sportygalaxy.com";
+export const EMAIL = "support@sportygalaxy.com";
 const ADDRESS = "";
 const ADDRESS_LINK =
   "";

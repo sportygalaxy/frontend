@@ -20,6 +20,7 @@ export type UserData = Partial<{
   email: string;
   phone: string;
   address: string;
+  isVerified: boolean;
   googleId: string | null;
   avatar: string | null;
   bio: string | null;

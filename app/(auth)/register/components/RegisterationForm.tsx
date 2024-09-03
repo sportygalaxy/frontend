@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
 import useUserStore from "@/store/userStore";
 import Link from "next/link";
+import EmailVerificationSentModal from "./EmailVerificationSentModal";
 
 interface FormValues {
   email: string;
@@ -62,7 +63,12 @@ const RegistrationForm: React.FC = () => {
     onSuccess: (data) => {
       setUser(data?.data as UserData);
       NotifySuccess(data?.message as string);
-      router.push(RoutesEnum.LANDING_PAGE);
+
+      if (data?.data?.isVerified === true) {
+        router.push(RoutesEnum.LANDING_PAGE);
+      } else {
+        return <EmailVerificationSentModal triggerButton={<></>} />;
+      }
     },
     onError: (error, variables, context) => {
       NotifyError(error?.message || "An error occured");
@@ -85,6 +91,10 @@ const RegistrationForm: React.FC = () => {
     registerUser(registerData);
     setSubmitting(false);
   };
+
+  if (data?.success && !data?.data?.isVerified ) {
+    return <EmailVerificationSentModal triggerButton={<></>} />;
+  }
 
   return (
     <Formik

@@ -9,6 +9,7 @@ import Products from "@/components/product/Products";
 import Featured from "@/components/featured/Featured";
 import Categories from "@/components/category/Categories";
 import SeeAll from "./_components/SeeAll";
+import VerifyBanner from "./_components/VerifyBanner";
 
 export default function LandingPage() {
   return (
@@ -20,6 +21,7 @@ export default function LandingPage() {
 
       {/* Desktop contents */}
       <>
+        <VerifyBanner />
         <div className="relative">
           <Hero />
         </div>
@@ -37,18 +39,15 @@ export default function LandingPage() {
         <div className="desktop-tablet-view wrapper mt-8 xl:mt-10">
           <Divider />
         </div>
-
         <div className="desktop-tablet-view wrapper mt-24">
           <Introduction
             title="Our Varied Collections"
             subtitle="Enhance your training sessions with our cutting-edge sports equipment. From ergonomic weights to resistance bands and smart fitness trackers, our collection includes everything you need to optimize your performance and track your progress."
           />
         </div>
-
         <div className="desktop-tablet-view wrapper mt-28">
           <Featured />
         </div>
-
         <div className="desktop-tablet-view wrapper mt-32">
           <Introduction
             title="Introducing our Exclusive coming soon"
@@ -59,7 +58,6 @@ export default function LandingPage() {
             caption="collection."
           />
         </div>
-
         <div className="desktop-tablet-view wrapper mt-28">
           <Categories />
         </div>
@@ -68,7 +66,6 @@ export default function LandingPage() {
           path="/"
           className="desktop-tablet-view wrapper mt-28"
         />
-
         <div className="desktop-tablet-view mt-24 w-full">
           <NewsLetter />
         </div>
