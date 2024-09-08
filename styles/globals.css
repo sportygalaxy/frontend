@@ -134,3 +134,19 @@ html {
     transition: all;
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000;
+}

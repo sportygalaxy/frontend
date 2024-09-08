@@ -19,6 +19,7 @@ import { RoutesEnum } from "@/constants/routeEnums";
 import useUserStore from "@/store/userStore";
 import Link from "next/link";
 import EmailVerificationSentModal from "./EmailVerificationSentModal";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 interface FormValues {
   email: string;
@@ -51,6 +52,12 @@ const RegistrationForm: React.FC = () => {
   const { setUser } = useUserStore();
   const [countryOptions] = useState<[]>(countryList().getData());
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const {
     mutate: registerUser,
@@ -92,7 +99,7 @@ const RegistrationForm: React.FC = () => {
     setSubmitting(false);
   };
 
-  if (data?.success && !data?.data?.isVerified ) {
+  if (data?.success && !data?.data?.isVerified) {
     return <EmailVerificationSentModal triggerButton={<></>} />;
   }
 
@@ -250,16 +257,29 @@ const RegistrationForm: React.FC = () => {
                   >
                     * Login Password
                   </label>
-                  <Field
-                    className={cn(
-                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
-                      placeholderClassName,
-                      focusClassName
-                    )}
-                    name="password"
-                    type="password"
-                    placeholder="Set login password"
-                  />
+                  <div className="relative flex flex-[3] items-center">
+                    <Field
+                      className={cn(
+                        "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                        placeholderClassName,
+                        focusClassName
+                      )}
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Set login password"
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    >
+                      {showPassword ? (
+                        <EyeIcon className="w-5 h-5 text-gray-500" />
+                      ) : (
+                        <EyeOffIcon className="w-5 h-5 text-gray-500" />
+                      )}
+                    </button>
+                  </div>
                   {errors.password && touched.password ? (
                     <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
                       {errors.password}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { activate, reSendActivationLink } from "@/lib/apiAuth";
 import { NotifyError, NotifySuccess } from "@/helpers/toasts";
@@ -15,7 +15,7 @@ interface ActivateProps {
 }
 
 const ActivatePage: FC<ActivateProps> = (props) => {
-  const { setUser } = useUserStore();
+  const { setUser, user } = useUserStore();
   const { params, searchParams } = props;
 
   const router = useRouter();
@@ -40,6 +40,10 @@ const ActivatePage: FC<ActivateProps> = (props) => {
     },
   });
 
+  useEffect(() => {
+    if (user?.isVerified) return router.push(RoutesEnum.LANDING_PAGE);
+  }, [user]);
+
   const {
     mutate: resend,
     isPending: isPendingResend,
@@ -57,7 +61,7 @@ const ActivatePage: FC<ActivateProps> = (props) => {
   });
 
   return (
-    <div className="h-80 w-full flex items-center justify-center flex-col space-y-3">
+    <div className="h-80 w-full flex items-center justify-center flex-col space-y-3 bg-secondary-foreground">
       {isPending ? (
         <span>loading.......</span>
       ) : (

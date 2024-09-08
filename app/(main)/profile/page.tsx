@@ -3,6 +3,7 @@ import CartIcon from "@/assets/icons/pack/Cart";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import Divider from "@/common/Divider";
 import { useLogout } from "@/hooks/useLogout";
+import useUserStore from "@/store/userStore";
 import {
   InfoCircle,
   MessageQuestion,
@@ -11,7 +12,9 @@ import {
 } from "iconsax-react";
 
 export default function Profile() {
+   const { setUser, user } = useUserStore();
   const { logoutUser, isPending } = useLogout();
+
   const profileCtas = [
     {
       id: 1,
@@ -75,26 +78,35 @@ export default function Profile() {
   const imagePlaceholder =
     "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
   return (
-    <section className="wrapper mt-10 bg-white">
+    <section className="wrapper my-10 bg-white">
       <div className="flex items-center justify-center flex-col gap-3 p-7">
         <img
           className="bg-gray-500 w-20 h-20 rounded-full"
           src={imagePlaceholder}
           alt="profic-placeholder"
         />
-        <p className="text-black font-medium text-mobile-3xl md:text-3xl">
-          Chibueze Junior
-        </p>
+        <div className="text-center">
+          <p className="text-black font-medium text-mobile-3xl md:text-3xl capitalize">
+            {user?.firstName} {user?.lastName}
+          </p>
+          <p className="text-black font-normal lowercase">
+            {user?.email}
+          </p>
+        </div>
       </div>
 
       <div className="flex items-center justify-center flex-col gap-3 space-y-5 py-6 w-full">
         <div className="flex items-center justify-center flex-col">
           <p className="capitalize font-bold">Pick up location</p>
-          <p>NA, London, Captown.</p>
+          <p>{user?.address}</p>
         </div>
         <div className="flex items-center justify-center flex-col">
           <p className="capitalize font-bold">Payment Method</p>
           <p>PayStack</p>
+        </div>
+        <div className="flex items-center justify-center flex-col">
+          <p className="capitalize font-bold">Phone Number</p>
+          <p>+{user?.phone}</p>
         </div>
       </div>
 

@@ -12,6 +12,16 @@ export interface ILoginUserPayload {
   password: string;
 }
 
+export interface IResetUserPayload {
+  email: string;
+}
+
+export interface IOtpUserPayload {
+  code: string;
+  newPassword: string;
+  email: string;
+}
+
 export type UserData = Partial<{
   token: string;
   id: string | number;
@@ -31,3 +41,5 @@ export type UserData = Partial<{
 
 export type ICreateUserResponse = ServerResponse<UserData>;
 export type ILoginUserResponse = ServerResponse<UserData>;
+export type IResetUserResponse = ServerResponse<{ email: string }>;
+export type IOtpUserResponse = ServerResponse<any>;

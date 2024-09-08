@@ -27,11 +27,13 @@ const VerifyBanner: FC<VerifyBannerProps> = () => {
     },
   });
 
+  if (!user) return <></>;
+
   return (
     <>
       {user?.isVerified ? null : (
         <div className="flex w-full mx-auto text-center justify-center gap-0 py-2">
-          <div className="bg-[#7a0000] rounded-sm px-8 py-3 flex items-center justify-center">
+          <div className="bg-[#9c1c1c] rounded-full px-8 py-0 flex items-center justify-center">
             <p className="min-w-fit text-white capitalize">
               Verify your account. Check your inbox
             </p>

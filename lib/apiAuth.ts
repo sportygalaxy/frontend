@@ -3,6 +3,10 @@ import {
   ICreateUserResponse,
   ILoginUserPayload,
   ILoginUserResponse,
+  IOtpUserPayload,
+  IOtpUserResponse,
+  IResetUserPayload,
+  IResetUserResponse,
 } from "@/types/auth";
 import { POST } from "./apiFacade";
 import { deleteCookie, setCookie } from "cookies-next";
@@ -62,6 +66,41 @@ export const activate = async (token: any): Promise<any> => {
 export const reSendActivationLink = async (token: any): Promise<any> => {
   try {
     const response = await POST("/auth/send-verification", { token: token });
+
+    if (response?.success) {
+      return response;
+    } else {
+      throw new Error(response?.error);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const reset = async (
+  resetData: IResetUserPayload
+): Promise<IResetUserResponse> => {
+  try {
+    const response = await POST("/auth/send-reset-password-code", resetData);
+
+    if (response?.success) {
+      return response;
+    } else {
+      throw new Error(response?.error);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const otp = async (
+  otpData: IOtpUserPayload
+): Promise<IOtpUserResponse> => {
+  try {
+    const response = await POST(
+      "/auth/validate-reset-password-code",
+      otpData
+    );
 
     if (response?.success) {
       return response;
