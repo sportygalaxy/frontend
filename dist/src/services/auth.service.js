@@ -24,7 +24,7 @@ const crypto_1 = require("crypto");
 const email_service_1 = require("./integration/email.service");
 const redis_service_1 = require("./integration/redis.service");
 const helpers_1 = require("../helpers");
-// import { sendVerificationEmail } from "../helpers/mailer";
+const mailer_1 = require("../helpers/mailer");
 const userService = new user_service_1.UserService();
 const redisService = new redis_service_1.RedisService();
 redisService.testConnection();
@@ -197,7 +197,7 @@ class AuthService {
                 }
                 const emailVerificationToken = yield this.generateCookieToken(userId, THIRTY_MINUTES, isAdmin);
                 const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
-                yield (0, email_service_1.sendVerificationEmail)("gmail", userEmail, userFirstName, url);
+                yield (0, mailer_1.sendVerificationEmail)(userEmail, userFirstName, url);
                 return true;
             }
             catch (err) {

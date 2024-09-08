@@ -15,13 +15,13 @@ import { UserService } from "./user.service";
 import { randomUUID } from "crypto";
 import {
   sendResetCodeEmail,
-  sendVerificationEmail,
+  // sendVerificationEmail,
 } from "./integration/email.service";
 import { RedisService } from "./integration/redis.service";
 import { generateCode } from "../helpers";
 import { User } from "../models";
 import { IJwtPayload } from "../middleware/verifyToken";
-// import { sendVerificationEmail } from "../helpers/mailer";
+import { sendVerificationEmail } from "../helpers/mailer";
 
 const userService = new UserService();
 const redisService = new RedisService();
@@ -266,7 +266,8 @@ export class AuthService {
       );
 
       const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
-      await sendVerificationEmail("gmail", userEmail, userFirstName, url);
+
+      await sendVerificationEmail(userEmail, userFirstName, url);
 
       return true;
     } catch (err) {

@@ -46,7 +46,7 @@ exports.register = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 
         return;
     const emailVerificationToken = yield authService.generateCookieToken(newUser === null || newUser === void 0 ? void 0 : newUser.id, THIRTY_MINUTES, isAdmin);
     const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
-    (0, mailer_1.sendVerificationEmail)(newUser === null || newUser === void 0 ? void 0 : newUser.email, newUser === null || newUser === void 0 ? void 0 : newUser.firstName, url);
+    yield (0, mailer_1.sendVerificationEmail)(newUser === null || newUser === void 0 ? void 0 : newUser.email, newUser === null || newUser === void 0 ? void 0 : newUser.firstName, url);
     const token = yield authService.generateCookieToken(newUser === null || newUser === void 0 ? void 0 : newUser.id, SEVEN_DAYS, isAdmin);
     const { password: userPassword, isVerified } = newUser, userInfo = __rest(newUser, ["password", "isVerified"]);
     const result = Object.assign({ token }, userInfo);
@@ -76,10 +76,12 @@ exports.activate = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 
     const jwtUser = yield authService.activate({ userId: user === null || user === void 0 ? void 0 : user.id, isVerified: user === null || user === void 0 ? void 0 : user.isVerified }, next);
     if (!jwtUser)
         return;
+    const { password: userPassword } = jwtUser, userInfo = __rest(jwtUser, ["password"]);
+    const result = Object.assign({ token }, userInfo);
     res.status(201).json({
         message: "Account has been activated successfully.",
-        data: jwtUser,
-        success: !!jwtUser,
+        data: result,
+        success: !!result,
     });
 }));
 exports.sendVerification = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -108,18 +110,21 @@ exports.sendResetPasswordCode = (0, async_1.asyncHandler)((req, res, next) => __
         return;
     res.status(201).json({
         message: "Email reset code has been sent to your email",
-        data: sentResetPasswordCode,
+        data: { email },
         success: !!sentResetPasswordCode,
     });
 }));
 exports.validateResetPasswordCode = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, code } = req.body;
-    // TODO: Return a token, when decoded, check if the email matches the email on change password body
+    const { email, code, newPassword } = req.body;
     const validateResetPasswordCode = yield authService.validateResetPasswordCode(email, code, next);
     if (!validateResetPasswordCode)
         return;
+    console.log(validateResetPasswordCode, "validate");
+    const changePassword = yield authService.changePassword(email, newPassword, next);
+    if (!changePassword)
+        return;
     res.status(201).json({
-        message: "Email reset code validated",
+        message: "Password reset successful, kindly login!",
         data: validateResetPasswordCode,
         success: !!validateResetPasswordCode,
     });

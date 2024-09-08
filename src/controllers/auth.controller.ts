@@ -37,7 +37,7 @@ export const register = asyncHandler(
     );
 
     const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
-    sendVerificationEmail(newUser?.email, newUser?.firstName, url);
+    await sendVerificationEmail(newUser?.email, newUser?.firstName, url);
 
     const token = await authService.generateCookieToken(
       newUser?.id,
@@ -81,10 +81,13 @@ export const activate = asyncHandler(
     );
     if (!jwtUser) return;
 
+    const { password: userPassword, ...userInfo } = jwtUser;
+    const result = { token, ...userInfo };
+
     res.status(201).json({
       message: "Account has been activated successfully.",
-      data: jwtUser,
-      success: !!jwtUser,
+      data: result,
+      success: !!result,
     });
   }
 );
@@ -118,16 +121,16 @@ export const sendVerification = asyncHandler(
 export const sendResetPasswordCode = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
+
     const sentResetPasswordCode = await authService.sendResetPasswordCode(
       email,
       next
     );
-
     if (!sentResetPasswordCode) return;
 
     res.status(201).json({
       message: "Email reset code has been sent to your email",
-      data: sentResetPasswordCode,
+      data: { email },
       success: !!sentResetPasswordCode,
     });
   }
@@ -135,16 +138,23 @@ export const sendResetPasswordCode = asyncHandler(
 
 export const validateResetPasswordCode = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, code } = req.body;
+    const { email, code, newPassword } = req.body;
 
-    // TODO: Return a token, when decoded, check if the email matches the email on change password body
     const validateResetPasswordCode =
       await authService.validateResetPasswordCode(email, code, next);
-
     if (!validateResetPasswordCode) return;
 
+    console.log(validateResetPasswordCode, "validate")
+
+    const changePassword = await authService.changePassword(
+      email,
+      newPassword,
+      next
+    );
+    if (!changePassword) return;
+
     res.status(201).json({
-      message: "Email reset code validated",
+      message: "Password reset successful, kindly login!",
       data: validateResetPasswordCode,
       success: !!validateResetPasswordCode,
     });
@@ -232,7 +242,7 @@ export const login = asyncHandler(
         .status(200)
         .json({
           message: "User login successfully",
-          data: {...userInfo, token},
+          data: { ...userInfo, token },
           success: !!userInfo,
         });
     }
