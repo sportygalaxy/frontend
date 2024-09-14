@@ -1,12 +1,28 @@
+import { cn } from "@/lib/utils";
 import { Play } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
-const VideoPlayer: React.FC = () => {
+interface VideoPlayerProps {
+  pauseTime: number;
+  src: string;
+  poster: string;
+  watermark: string | JSX.Element;
+  link: string;
+  className?: string;
+}
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  pauseTime,
+  src,
+  poster,
+  watermark,
+  link,
+  className = "",
+}) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [showLink, setShowLink] = useState<boolean>(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const pauseTime = 10; // Time in seconds after which the video pauses
 
   // Play the video and update state
   const handlePlayVideo = (): void => {
@@ -36,16 +52,19 @@ const VideoPlayer: React.FC = () => {
   }, [isPlaying, pauseTime]);
 
   return (
-    <div className="relative w-full max-w-lg mx-auto">
+    <>
       {/* Video Player */}
       <video
         ref={videoRef}
-        className="w-full h-auto"
-        src="/videos/prod-1.mp4" // Update with your video path
-        poster="/images/product/prod-1.png" // Update with your video poster path
+        className={cn("w-full h-auto", className)}
+        src={src}
+        poster={poster}
         onPause={() => setIsPlaying(false)}
         onPlay={() => setIsPlaying(true)}
         controls={isPlaying} // Show controls when the video is playing
+        autoPlay
+        // muted
+        // loop
       />
 
       {/* Overlay (shown when the video is not playing) */}
@@ -62,23 +81,23 @@ const VideoPlayer: React.FC = () => {
 
       {/* Watermark */}
       <div className="absolute top-4 left-4 bg-white bg-opacity-50 p-2 text-xs">
-        Your Brand Watermark
+        {typeof watermark === "string" ? watermark : watermark}
       </div>
 
       {/* Link when video pauses */}
       {showLink && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
           <a
-            href="https://www.youtube-nocookie.com/embed/FMrtSHAAPhM"
+            href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white underline"
+            className="text-white underline text-pretty text-xs"
           >
             Watch the full video on YouTube
           </a>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
