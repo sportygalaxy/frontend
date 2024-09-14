@@ -1,10 +1,12 @@
 import { Play } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const VideoPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [showLink, setShowLink] = useState<boolean>(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const pauseTime = 10; // Time in seconds after which the video pauses
 
   // Play the video and update state
   const handlePlayVideo = (): void => {
@@ -14,13 +16,24 @@ const VideoPlayer: React.FC = () => {
     }
   };
 
-  // Pause the video and update state
-  const handlePauseVideo = (): void => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      setIsPlaying(false);
+  // Pause video at specified time and show link
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      const handleTimeUpdate = () => {
+        if (video.currentTime >= pauseTime && isPlaying) {
+          video.pause();
+          setIsPlaying(false);
+          setShowLink(true); // Show the link after pausing
+        }
+      };
+
+      video.addEventListener("timeupdate", handleTimeUpdate);
+      return () => {
+        video.removeEventListener("timeupdate", handleTimeUpdate);
+      };
     }
-  };
+  }, [isPlaying, pauseTime]);
 
   return (
     <div className="relative w-full max-w-lg mx-auto">
@@ -36,7 +49,7 @@ const VideoPlayer: React.FC = () => {
       />
 
       {/* Overlay (shown when the video is not playing) */}
-      {!isPlaying && (
+      {!isPlaying && !showLink && (
         <div
           className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50"
           onClick={handlePlayVideo}
@@ -47,27 +60,23 @@ const VideoPlayer: React.FC = () => {
         </div>
       )}
 
-      {/* Customizable Control Button */}
-      {isPlaying && (
-        <button
-          className="absolute top-4 right-4 bg-white p-2 rounded-full"
-          onClick={handlePauseVideo}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6 text-black"
+      {/* Watermark */}
+      <div className="absolute top-4 left-4 bg-white bg-opacity-50 p-2 text-xs">
+        Your Brand Watermark
+      </div>
+
+      {/* Link when video pauses */}
+      {showLink && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
+          <a
+            href="https://www.youtube-nocookie.com/embed/FMrtSHAAPhM"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white underline"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6.75 5.25v13.5m10.5-13.5v13.5"
-            />
-          </svg>
-        </button>
+            Watch the full video on YouTube
+          </a>
+        </div>
       )}
     </div>
   );
