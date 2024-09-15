@@ -10,6 +10,7 @@ import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 import { Button } from "@/components/ui/button";
 import VideoPlayer from "../VidepPlayer";
 import { videoPath, youTubeLink } from "@/constants/appConstants";
+import { cn } from "@/lib/utils";
 
 // Interface for image data
 interface ImageData {
@@ -29,7 +30,47 @@ const images: ImageData[] = [
   },
 ];
 
+const medias = [
+  {
+    displayImage: "/images/product/prod-1.png",
+    images: ["/images/product/prod-1.png", "/images/product/prod-2.png"],
+    type: "image",
+  },
+  {
+    displayImage: "/images/product/prod-1.png",
+    links: {
+      introVideo: videoPath, // link to short video clip
+      completeVideo: youTubeLink, // link to full video clip
+    },
+    type: "video",
+  },
+];
 
+const products = [
+  {
+    name: "10kg Dumbbell | Enhance Your Strength Training",
+    description:
+      "Elevate your workout routine with our premium 10kg dumbbell, designed to meet the needs of both beginners and seasoned fitness enthusiasts. Whether you’re aiming to build muscle, tone your body, or improve overall fitness, this versatile dumbbell is the perfect addition to your home gym.",
+    src: "/images/product/prod-1.png",
+    type: "image",
+    price: "$1200",
+    colors: ["blue", "black"],
+    sizes: ["X", "XL"],
+  },
+  {
+    name: "10kg Dumbbell | Enhance Your Strength Training",
+    description:
+      "Elevate your workout routine with our premium 10kg dumbbell, designed to meet the needs of both beginners and seasoned fitness enthusiasts. Whether you’re aiming to build muscle, tone your body, or improve overall fitness, this versatile dumbbell is the perfect addition to your home gym.",
+    src: videoPath, // link to short video clip
+    poster: "/images/product/prod-1.png", // path to thumbnail
+    link: youTubeLink, // link to full video clip
+    type: "video",
+    medias,
+    price: "$1200",
+    colors: ["red", "green"],
+    sizes: ["X", "XL"],
+  },
+];
 
 export default function ImageSlider(): any {
   // State to keep track of the current image index
@@ -77,44 +118,53 @@ export default function ImageSlider(): any {
 
   return (
     <div className="relative w-full h-[450px] md:h-full mx-auto pb-1 space-y-3 overflow-hidden">
-      {images.map((image, index) => (
-        // <div
-        //   key={index}
-        //   className="bg-[#E8EAEC] relative h-[150px] w-[200px] md:w-full group transition-transform duration-500 ease-in-out flex-shrink-0"
-        //   onMouseOver={handleMouseOver}
-        //   onMouseLeave={handleMouseLeave}
-        //   style={{
-        //     transform: `translateY(-${currentIndex * 100}%)`,
-        //   }}
-        // >
-        //   <Image
-        //     fill
-        //     sizes="100%"
-        //     style={{
-        //       objectFit: "contain",
-        //       display: "block",
-        //       margin: "0 auto",
-        //     }}
-        //     src={image.src}
-        //     alt={`Slider Image ${index + 1}`}
-        //     className="w-full transition-all duration-500 ease-in-out cursor-pointer"
-        //     priority
-        //   />
-        //   <div className="absolute top-4 left-4 watermark">
-        //     <LogoMobileIcon width={30} height={30} />
-        //   </div>
-        // </div>
-        <div key={index} className="relative min-h-[150px] w-[200px]">
-          <VideoPlayer
-            pauseTime={10} // Pause after 10 seconds
-            src={videoPath}
-            poster="/images/product/prod-1.png"
-            watermark={<LogoMobileIcon width={30} height={30} />}
-            link={youTubeLink}
-            className=""
-          />
-        </div>
-      ))}
+      {medias.map((media, index) => {
+        const isVideoType = media.type === "video";
+        return (
+          <div
+            key={index}
+            className={cn(
+              "bg-[#E8EAEC] relative  w-[200px] md:w-full group transition-transform duration-500 ease-in-out flex-shrink-0",
+              isVideoType ? "min-h-[150px]" : "h-[150px]"
+            )}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              transform: `translateY(-${currentIndex * 100}%)`,
+            }}
+          >
+            {isVideoType ? (
+              <VideoPlayer
+                pauseTime={10} // Pause after 10 seconds
+                src={media?.links?.introVideo || videoPath}
+                poster={media?.displayImage}
+                watermark={<LogoMobileIcon width={30} height={30} />}
+                link={media?.links?.completeVideo || youTubeLink}
+                className=""
+              />
+            ) : (
+              <>
+                <Image
+                  fill
+                  sizes="100%"
+                  style={{
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
+                  src={media?.displayImage}
+                  alt={`Slider Image ${index + 1}`}
+                  className="w-full transition-all duration-500 ease-in-out cursor-pointer"
+                  priority
+                />
+                <div className="absolute top-4 left-4 watermark">
+                  <LogoMobileIcon width={30} height={30} />
+                </div>
+              </>
+            )}
+          </div>
+        );
+      })}
 
       <Button
         variant="ghost"
