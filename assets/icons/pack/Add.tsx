@@ -5,8 +5,8 @@ type AddIconType = Partial<SVGIconProps>;
 
 const AddIcon: FC<AddIconType> = ({ ...props }) => (
   <SVGIcon
-    width="44"
-    height="43"
+    width={ props?.size || 44}
+    height={props?.size || 43}
     viewBox="0 0 44 43"
     fill="none"
     {...props}

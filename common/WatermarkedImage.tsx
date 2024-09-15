@@ -1,12 +1,30 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
+import { Button } from "@/components/ui/button";
+import { useEffect, useRef } from "react";
 
 interface WatermarkedImageProps {
   watermark: React.ReactNode | string; // Allow Element or string as watermark
+  src: string;
+  watermarkImageSrc: string;
 }
 
-const WatermarkedImage: React.FC<WatermarkedImageProps> = ({ watermark }) => {
+const FILE_DOWNLOAD_NAME = "sporty-galaxy-product-image.png";
+
+const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
+  watermark,
+  src,
+  watermarkImageSrc,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Function to download the watermarked image
+  const downloadImage = () => {
+    if (canvasRef.current) {
+      const link = document.createElement("a");
+      link.href = canvasRef.current.toDataURL("image/png");
+      link.download = FILE_DOWNLOAD_NAME; // The file name for the download
+      link.click();
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,7 +32,7 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({ watermark }) => {
       const ctx = canvas.getContext("2d");
       const img = new window.Image();
 
-      img.src = "/images/product/prod-1.png"; // Path to the original image
+      img.src = src; // Path to the original image
 
       img.onload = () => {
         canvas.width = img.width;
@@ -35,7 +53,7 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({ watermark }) => {
           } else if (canvas && watermark) {
             // Convert React element (like an icon or image) to an image and draw it on the canvas
             const watermarkImage = new window.Image();
-            watermarkImage.src = "/images/logo/sg_logo.svg"; // Update with the correct path
+            watermarkImage.src = watermarkImageSrc; // Update with the correct path
 
             watermarkImage.onload = () => {
               const watermarkWidth = 150; // Desired width for the watermark
@@ -65,9 +83,19 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({ watermark }) => {
   return (
     <div className="relative bg-[#E8EAEC]">
       <canvas ref={canvasRef} className="w-full h-auto"></canvas>
+      {/* Top water marker */}
       {typeof watermark !== "string" && (
         <div className="absolute top-4 left-4 watermark">{watermark}</div>
       )}
+
+      {/* Download Button */}
+      <Button
+        onClick={downloadImage}
+        variant="default"
+        className="absolute left-0 bottom-0 rounded-none"
+      >
+        Download Image
+      </Button>
     </div>
   );
 };

@@ -24,6 +24,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  // Function to check if the src is a YouTube link
+  const isYouTubeLink = (url: string) => {
+    return url.includes("youtube.com") || url.includes("youtu.be");
+  };
+
   // Play the video and update state
   const handlePlayVideo = (): void => {
     if (videoRef.current) {
@@ -54,18 +59,30 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   return (
     <>
       {/* Video Player */}
-      <video
-        ref={videoRef}
-        className={cn("w-full h-auto", className)}
-        src={src}
-        poster={poster}
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
-        controls={isPlaying} // Show controls when the video is playing
-        autoPlay
-        // muted
-        // loop
-      />
+      {/* Conditionally render based on whether it's a YouTube link */}
+      {isYouTubeLink(src) ? (
+        <iframe
+          className="w-full h-auto"
+          src={src.replace("watch?v=", "embed/")} // Format the URL to be embeddable
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title="YouTube Video"
+        ></iframe>
+      ) : (
+        <video
+          ref={videoRef}
+          className={cn("w-full h-auto", className)}
+          src={src}
+          poster={poster}
+          onPause={() => setIsPlaying(false)}
+          onPlay={() => setIsPlaying(true)}
+          controls={isPlaying} // Show controls when the video is playing
+          autoPlay
+          // muted
+          // loop
+        />
+      )}
 
       {/* Overlay (shown when the video is not playing) */}
       {!isPlaying && !showLink && (

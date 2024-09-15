@@ -9,7 +9,7 @@ const MinusLineIcon: FC<MinusLineIconType> = ({ ...props }) => (
     height={props?.size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
+    stroke={props?.color}
     strokeWidth="2"
     strokeLinejoin="round"
     {...props}

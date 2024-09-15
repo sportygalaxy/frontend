@@ -15,6 +15,4 @@ export enum RoutesEnum {
   CART = "/cart",
   NOTIFICATION = "/notification",
   PROFILE = "/profile",
-
-  // Auth
 }

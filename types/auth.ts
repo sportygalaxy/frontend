@@ -42,4 +42,4 @@ export type UserData = Partial<{
 export type ICreateUserResponse = ServerResponse<UserData>;
 export type ILoginUserResponse = ServerResponse<UserData>;
 export type IResetUserResponse = ServerResponse<{ email: string }>;
-export type IOtpUserResponse = ServerResponse<any>;
+export type IOtpUserResponse = ServerResponse<{ email: string }>;
