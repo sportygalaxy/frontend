@@ -1,76 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { StaticImageData } from "next/image";
-import image1 from "@/public/images/product/prod-1.png";
-import image2 from "@/public/images/product/prod-2.png";
-import image3 from "@/public/images/product/prod-3.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 import { Button } from "@/components/ui/button";
 import VideoPlayer from "../VidepPlayer";
 import { videoPath, youTubeLink } from "@/constants/appConstants";
 import { cn } from "@/lib/utils";
-
-// Interface for image data
-interface ImageData {
-  src: StaticImageData;
-}
-
-// Image data array
-const images: ImageData[] = [
-  {
-    src: image1,
-  },
-  {
-    src: image2,
-  },
-  {
-    src: image3,
-  },
-];
-
-const medias = [
-  {
-    displayImage: "/images/product/prod-1.png",
-    images: ["/images/product/prod-1.png", "/images/product/prod-2.png"],
-    type: "image",
-  },
-  {
-    displayImage: "/images/product/prod-1.png",
-    links: {
-      introVideo: videoPath, // link to short video clip
-      completeVideo: youTubeLink, // link to full video clip
-    },
-    type: "video",
-  },
-];
-
-const products = [
-  {
-    name: "10kg Dumbbell | Enhance Your Strength Training",
-    description:
-      "Elevate your workout routine with our premium 10kg dumbbell, designed to meet the needs of both beginners and seasoned fitness enthusiasts. Whether you’re aiming to build muscle, tone your body, or improve overall fitness, this versatile dumbbell is the perfect addition to your home gym.",
-    src: "/images/product/prod-1.png",
-    type: "image",
-    price: "$1200",
-    colors: ["blue", "black"],
-    sizes: ["X", "XL"],
-  },
-  {
-    name: "10kg Dumbbell | Enhance Your Strength Training",
-    description:
-      "Elevate your workout routine with our premium 10kg dumbbell, designed to meet the needs of both beginners and seasoned fitness enthusiasts. Whether you’re aiming to build muscle, tone your body, or improve overall fitness, this versatile dumbbell is the perfect addition to your home gym.",
-    src: videoPath, // link to short video clip
-    poster: "/images/product/prod-1.png", // path to thumbnail
-    link: youTubeLink, // link to full video clip
-    type: "video",
-    medias,
-    price: "$1200",
-    colors: ["red", "green"],
-    sizes: ["X", "XL"],
-  },
-];
+import { medias } from "@/app/(main)/product/[productId]/data";
 
 export default function ImageSlider(): any {
   // State to keep track of the current image index
@@ -82,13 +19,13 @@ export default function ImageSlider(): any {
   // Function to show the previous slide
   const prevSlide = (): void => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+      (prevIndex) => (prevIndex - 1 + medias.length) % medias.length
     );
   };
 
   // Function to show the next slide
   const nextSlide = (): void => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % medias.length);
   };
 
   // useEffect hook to handle automatic slide transition
@@ -97,7 +34,7 @@ export default function ImageSlider(): any {
     if (!isHovered) {
       const interval = setInterval(() => {
         nextSlide();
-      }, 3000);
+      }, 2000);
 
       // Cleanup the interval on component unmount
       return () => {
@@ -117,14 +54,14 @@ export default function ImageSlider(): any {
   };
 
   return (
-    <div className="relative w-full h-[450px] md:h-full mx-auto pb-1 space-y-3 overflow-hidden">
+    <div className="relative w-full h-full md:flex md:flex-col md:items-center md:justify-center mx-auto pb-0 space-y-4 overflow-hidden">
       {medias.map((media, index) => {
         const isVideoType = media.type === "video";
         return (
           <div
             key={index}
             className={cn(
-              "bg-[#E8EAEC] relative  w-[200px] md:w-full group transition-transform duration-500 ease-in-out flex-shrink-0",
+              "bg-[#E8EAEC] relative w-[200px] group transition-transform duration-500 ease-in-out flex-shrink-0",
               isVideoType ? "min-h-[150px]" : "h-[150px]"
             )}
             onMouseOver={handleMouseOver}
@@ -182,7 +119,7 @@ export default function ImageSlider(): any {
       </Button>
 
       <div className="absolute bottom-0 flex w-full justify-center">
-        {images.map((_, index) => (
+        {medias.map((_, index) => (
           <div
             key={index}
             className={`h-1 w-10 mx-1 ${
