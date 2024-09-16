@@ -5,8 +5,8 @@ import "@splidejs/splide/dist/css/splide.min.css";
 import { flattenMediaStructure } from "@/helpers/product";
 import { videoPath, WATERMARK, youTubeLink } from "@/constants/appConstants";
 import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
-import VideoPlayer from "../VidepPlayer";
-import WatermarkedImage from "../WatermarkedImage";
+import VideoPlayer from "../../../../common/VidepPlayer";
+import WatermarkedImage from "../../../../common/WatermarkedImage";
 
 interface ImageSliderProps {
   medias: any[];

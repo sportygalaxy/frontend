@@ -4,7 +4,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import Image from "next/image";
 import { useMemo } from "react";
-import VideoPlayer from "../VidepPlayer";
+import VideoPlayer from "../../../../common/VidepPlayer";
 import { videoPath, youTubeLink } from "@/constants/appConstants";
 import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 

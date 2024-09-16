@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import VerticalProductMediaSlider from "./VerticalProductMediaSlider";
-import HorizontalProductMediaSlider from "./HorizontalProductMediaSlider";
+import ProductVerticalMediaSlider from "./ProductVerticalMediaSlider";
+import ProductHorizontalMediaSlider from "./ProductHorizontalMediaSlider";
 
 const ProductMediaSliders = ({ medias }: { medias: any[] }) => {
   const horizontalSliderRef = useRef<any>(null);
@@ -13,11 +13,11 @@ const ProductMediaSliders = ({ medias }: { medias: any[] }) => {
 
   return (
     <div className="flex flex-1 gap-8">
-      <VerticalProductMediaSlider
+      <ProductVerticalMediaSlider
         medias={medias}
         onMediaClick={handleMediaClick}
       />
-      <HorizontalProductMediaSlider ref={horizontalSliderRef} medias={medias} />
+      <ProductHorizontalMediaSlider ref={horizontalSliderRef} medias={medias} />
     </div>
   );
 };

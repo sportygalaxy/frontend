@@ -43,9 +43,35 @@ export const products = [
         type: "video",
       },
     ],
-    price: "$1200",
-    colors: ["blue", "black"],
-    sizes: ["X", "XL"],
+    price: "1200",
+    sizes: [
+      {
+        size: {
+          id: "123e4567-e89b-12d3-a456-426614174005",
+          name: "Small",
+        },
+      },
+      {
+        size: {
+          id: "123e4567-e89b-12d3-a456-426614174006",
+          name: "Medium",
+        },
+      },
+    ],
+    colors: [
+      {
+        color: {
+          id: "123e4567-e89b-12d3-a456-426614174007",
+          name: "#000",
+        },
+      },
+      {
+        color: {
+          id: "123e4567-e89b-12d3-a456-426614174008",
+          name: "#583808",
+        },
+      },
+    ],
   },
   {
     name: "10kg Dumbbell | Enhance Your Strength Training",
@@ -70,8 +96,34 @@ export const products = [
         type: "video",
       },
     ],
-    price: "$1200",
-    colors: ["red", "green"],
-    sizes: ["X", "XL"],
+    price: "1200",
+    sizes: [
+      {
+        size: {
+          id: "123e4567-e89b-12d3-a456-426614174005",
+          name: "Small",
+        },
+      },
+      {
+        size: {
+          id: "123e4567-e89b-12d3-a456-426614174006",
+          name: "Medium",
+        },
+      },
+    ],
+    colors: [
+      {
+        color: {
+          id: "123e4567-e89b-12d3-a456-426614174007",
+          name: "Red",
+        },
+      },
+      {
+        color: {
+          id: "123e4567-e89b-12d3-a456-426614174008",
+          name: "Blue",
+        },
+      },
+    ],
   },
 ];
