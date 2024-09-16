@@ -72,7 +72,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       ) : (
         <video
           ref={videoRef}
-          className={cn("w-full h-auto", className)}
+          className={cn("w-full h-fill-available", className)}
           src={src}
           poster={poster}
           onPause={() => setIsPlaying(false)}

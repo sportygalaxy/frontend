@@ -1,8 +1,11 @@
 import { useRef } from "react";
 import ProductVerticalMediaSlider from "./ProductVerticalMediaSlider";
 import ProductHorizontalMediaSlider from "./ProductHorizontalMediaSlider";
+import useBreakpoint from "@/hooks/useBreakpoint";
+import { cn } from "@/lib/utils";
 
 const ProductMediaSliders = ({ medias }: { medias: any[] }) => {
+  const { isXl } = useBreakpoint();
   const horizontalSliderRef = useRef<any>(null);
 
   const handleMediaClick = (index: number) => {
@@ -12,7 +15,7 @@ const ProductMediaSliders = ({ medias }: { medias: any[] }) => {
   };
 
   return (
-    <div className="flex flex-1 gap-8">
+    <div className={cn("flex gap-8 flex-col-reverse", isXl ? "flex-row" : "")}>
       <ProductVerticalMediaSlider
         medias={medias}
         onMediaClick={handleMediaClick}

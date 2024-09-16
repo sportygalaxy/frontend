@@ -34,6 +34,7 @@ const config = {
     extend: {
       height: {
         "full-minus-80": "calc(100% - 80px)",
+        "fill-available": "-webkit-fill-available",
       },
       colors: {
         border: "var(--border)",

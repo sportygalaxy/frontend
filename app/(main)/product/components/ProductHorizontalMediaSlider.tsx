@@ -42,7 +42,7 @@ const HorizontalProductMediaSlider = forwardRef(
       );
     };
     return (
-      <div className="max-w-[400px] md:max-w-[500px]">
+      <div className="md:max-w-[500px]">
         <Splide
           ref={splideRef}
           options={{
@@ -68,7 +68,7 @@ const HorizontalProductMediaSlider = forwardRef(
             return (
               <SplideSlide
                 key={index}
-                className="max-w-[400px] md:max-w-[500px] min-w-[400px] max-h-[500px] min-h-[450px]"
+                className=" md:max-w-[500px] md:min-w-[400px] max-h-[500px] min-h-[450px]"
               >
                 {isVideo ? (
                   videoCount ? (

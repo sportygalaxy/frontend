@@ -12,6 +12,8 @@ import { DesktopTitle } from "@/common/Title";
 import ProductSpecifications from "../components/ProductSpecifications";
 import ProductKeyattributes from "../components/ProductKeyattributes";
 import ProductRatings from "../components/ProductRatings";
+import useBreakpoint from "@/hooks/useBreakpoint";
+import { cn } from "@/lib/utils";
 
 interface ProductProps {
   params: { productId: string };
@@ -19,6 +21,7 @@ interface ProductProps {
 }
 
 const ProductPage: FC<ProductProps> = (props) => {
+  const { isLg } = useBreakpoint();
   const { params, searchParams } = props;
 
   const productId = "15b2e08c-b395-4bff-bed9-bbcd68c7d6dd";
@@ -36,22 +39,28 @@ const ProductPage: FC<ProductProps> = (props) => {
     return <div>Error: {JSON.stringify(error, null, 2)}</div>;
 
   const productData =
-  //  data?.data || 
-  products?.[0] || {};
+    //  data?.data ||
+    products?.[0] || {};
 
   return (
     <div className="wrapper my-12">
-      Product {productId}
+      {/* Product {productId} */}
       {isLoading ? (
         <span>loading.......</span>
       ) : (
         <>
-          <section className="flex gap-8 flex-wrap">
-            <ProductMediaSliders medias={productData?.medias} />
+          <section
+            className={cn("flex flex-col gap-8", isLg ? "flex-row" : "")}
+          >
+            <div className="flex-1">
+              <ProductMediaSliders medias={productData?.medias} />
+            </div>
 
-            <ProductDetails product={productData} />
-            <Divider className="mt-8" />
+            <div className="flex-1">
+              <ProductDetails product={productData} />
+            </div>
           </section>
+          <Divider className="mt-8" />
 
           <section className="desktop-tablet-view flex-col lg:mt-5">
             <DesktopTitle noLine title="Other recommended products" />
@@ -63,7 +72,7 @@ const ProductPage: FC<ProductProps> = (props) => {
 
           <ProductRatings />
 
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         </>
       )}
     </div>

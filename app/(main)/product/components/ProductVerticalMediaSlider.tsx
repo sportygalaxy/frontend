@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import VideoPlayer from "../../../../common/VidepPlayer";
 import { videoPath, youTubeLink } from "@/constants/appConstants";
 import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
+import useBreakpoint from "@/hooks/useBreakpoint";
 
 interface ImageSliderProps {
   medias: any[];
@@ -17,6 +18,7 @@ const VerticalProductMediaSlider = ({
   medias,
   onMediaClick,
 }: ImageSliderProps) => {
+  const { isXl } = useBreakpoint();
   const sortedMedias = useMemo(
     () =>
       flattenMediaStructure(
@@ -36,12 +38,13 @@ const VerticalProductMediaSlider = ({
     );
   };
 
+  // ltr
   return (
-    <div className="w-full h-[500px] overflow-hidden">
+    <div className="w-full lg:h-[500px] overflow-hidden">
       <Splide
         options={{
-          direction: "ttb",
-          height: "400px",
+          direction: `${isXl ? "ttb" : "ltr"}`,
+          height: `${isXl ? "400px" : "120px"}`,
           wheel: true,
           arrows: true,
           perPage: 2,
@@ -63,7 +66,7 @@ const VerticalProductMediaSlider = ({
             <SplideSlide
               className={cn(
                 "bg-[#E8EAEC] relative w-[200px] group transition-transform duration-500 ease-in-out flex-shrink-0",
-                isVideo ? "min-h-[200px]" : "h-[150px]"
+                isVideo ?  isXl ? "min-h-[200px]" : "min-h-[100px]" : "h-[150px]"
               )}
               key={index}
               onClick={() => onMediaClick(index)} // Call the onMediaClick function with the index

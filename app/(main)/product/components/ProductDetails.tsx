@@ -61,22 +61,23 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
               {product?.colors && (
                 <div className="space-y-3">
                   <p className="font-jost text-black text-mobile-xl md:text-xl font-light leading-normal tracking-wide">
-                    Total options: {product?.colors.length} colour
-                    {product?.colors.length >= 2 ? "s" : null}
+                    Total options: {product?.colors?.length} colour
+                    {product?.colors?.length >= 2 ? "s" : null}
                   </p>
                   <div className="flex items-center flex-wrap gap-3">
-                    {product?.colors.map((color: any, index: number) => (
+                    {product?.colors?.map((color: any, index: number) => (
                       <span key={index} className="h-fit w-fit rounded-full">
                         <Button
                           type="button"
                           variant="tertiary"
+                          style={{ backgroundColor: color?.color?.name }}
                           className={`w-10 h-10 rounded-full ${
                             values.color === color.color.name
-                              ? "border-3 border-green-400"
+                              ? "border-1 border-green-400"
                               : ""
                           } bg-[${color.color.name}]`}
                           onClick={() =>
-                            setFieldValue("color", color.color.name)
+                            setFieldValue("color", color?.color?.name)
                           }
                         />
                       </span>
@@ -91,21 +92,21 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
               {product?.sizes && (
                 <div className="space-y-3">
                   <p className="font-jost text-black text-mobile-xl md:text-xl font-light leading-normal tracking-wide">
-                    Total options: {product?.sizes.length} size
-                    {product?.sizes.length >= 2 ? "s" : null}
+                    Total options: {product?.sizes?.length} size
+                    {product?.sizes?.length >= 2 ? "s" : null}
                   </p>
                   <div className="flex items-center flex-wrap gap-3">
-                    {product?.sizes.map((size: any, index: number) => (
+                    {product?.sizes?.map((size: any, index: number) => (
                       <Button
                         key={index}
                         type="button"
                         variant="tertiary"
                         className={`rounded-none ${
                           values.size === size.size.name
-                            ? "border-3 border-green-400"
+                            ? "border-1 border-green-400"
                             : ""
                         }`}
-                        onClick={() => setFieldValue("size", size.size.name)}
+                        onClick={() => setFieldValue("size", size?.size?.name)}
                       >
                         {size.size.name}
                       </Button>

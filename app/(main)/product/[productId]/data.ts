@@ -91,7 +91,7 @@ export const products = [
       {
         images: [
           "/images/product/prod-1.png",
-          "/images/product/prod-2.png",
+          // "/images/product/prod-2.png",
           "/images/product/prod-3.png",
           "/images/product/prod-4.png",
         ],

@@ -83,7 +83,7 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
 
   return (
     <div className="relative bg-[#E8EAEC]">
-      <canvas ref={canvasRef} className="w-full h-auto"></canvas>
+      <canvas ref={canvasRef} className="w-[97%] md:w-full h-auto"></canvas>
       {/* Top water marker */}
       {typeof watermark !== "string" && (
         <div className="absolute top-4 left-4 watermark">{watermark}</div>
@@ -93,7 +93,7 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
       <Button
         onClick={downloadImage}
         variant="default"
-        className="absolute left-0 bottom-0 rounded-none bg-secondary hover:bg-black"
+        className="absolute right-0 top-0 rounded-none bg-secondary hover:bg-black"
       >
         <DownloadIcon size="18px" />
       </Button>
