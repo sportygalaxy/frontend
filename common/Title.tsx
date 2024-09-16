@@ -32,12 +32,15 @@ export default Title;
 
 interface DesktopTitleProps {
   title: string;
+  noLine?: boolean;
 }
-export const DesktopTitle = ({ title }: DesktopTitleProps) => {
+export const DesktopTitle = ({ title, noLine = false }: DesktopTitleProps) => {
   return (
     <div className="desktop-tablet-view mt-20 flex items-end gap-1 w-full">
       <h1 className="min-w-[190px] text-3xl font-bold">{title}</h1>
-      <Divider />
+      {noLine ? null : (
+        <Divider className="bg-gray-200 border-[0.2px] border-[#e7e7e7]" />
+      )}
     </div>
   );
 };

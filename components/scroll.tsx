@@ -16,7 +16,7 @@ export const ScrollAreaHorizontal = <T,>({
     <>
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
-          height: 8px;
+          height: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: #888;
@@ -29,7 +29,7 @@ export const ScrollAreaHorizontal = <T,>({
           background: #f1f1f1;
         }
       `}</style>
-      <div className="wrapper overflow-x-auto whitespace-nowrap py-6 custom-scrollbar">
+      <div className="overflow-x-auto whitespace-nowrap py-6 custom-scrollbar">
         <div className="inline-flex space-x-6">
           {data?.map((item, index) => (
             <div

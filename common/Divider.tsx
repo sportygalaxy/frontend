@@ -9,7 +9,7 @@ const Divider: React.FC<props> = ({ children, className }) => {
   return (
     <div
       className={cn(
-        "border-[0.2px] border-dark mb-3 w-full min-w-[200px]",
+        "bg-gray-200 border-[0.2px] border-[#e7e7e7] mb-3 w-full min-w-[200px]",
         className
       )}
     >

@@ -1,5 +1,66 @@
 import { videoPath, youTubeLink } from "@/constants/appConstants";
 
+export const keyattribute = [
+  {
+    id: 1,
+    key: "Premium Quality Material",
+    value:
+      "Crafted from high-grade cast iron, ensuring durability and longevity.",
+  },
+  {
+    id: 2,
+    key: "Ergonomic Design",
+    value:
+      "The comfortable, non-slip grip ensures a secure hold during even the most intense workouts.",
+  },
+  {
+    id: 3,
+    key: "Compact and Versatile",
+    value:
+      "Ideal for a wide range of exercises, including bicep curls, tricep extensions, shoulder presses, and more.",
+  },
+  {
+    id: 4,
+    key: "Space-Saving",
+    value: "Compact size makes it easy to store and perfect for home use.",
+  },
+  {
+    id: 5,
+    key: "Rust-Resistant Finish",
+    value:
+      "Coated with a protective layer to prevent rust and corrosion, maintaining a sleek look for years.",
+  },
+];
+
+export const specifications = [
+  {
+    id: 1,
+    key: "Weight",
+    value: "10 kilograms (22 pounds)",
+  },
+  {
+    id: 2,
+    key: "Material",
+    value: "Cast iron with anti-rust coating",
+  },
+  {
+    id: 3,
+    key: "Grip",
+    value: "Textured, non-slip handle",
+  },
+  {
+    id: 4,
+    key: "Dimensions",
+    value: "Compact size makes it easy to store and perfect for home use.",
+  },
+  {
+    id: 5,
+    key: "Colour",
+    value:
+      "Coated with a protective layer to prevent rust and corrosion, maintaining a sleek look for years.dddd",
+  },
+];
+
 export const medias = [
   {
     displayImage: "/images/product/prod-1.png",
@@ -73,6 +134,8 @@ export const products = [
         },
       },
     ],
+    keyattribute,
+    specifications,
   },
   {
     name: "10kg Dumbbell | Enhance Your Strength Training",
@@ -99,33 +162,9 @@ export const products = [
       },
     ],
     price: "1200",
-    sizes: [
-      {
-        size: {
-          id: "123e4567-e89b-12d3-a456-426614174005",
-          name: "Small",
-        },
-      },
-      {
-        size: {
-          id: "123e4567-e89b-12d3-a456-426614174006",
-          name: "Medium",
-        },
-      },
-    ],
-    colors: [
-      {
-        color: {
-          id: "123e4567-e89b-12d3-a456-426614174007",
-          name: "Red",
-        },
-      },
-      {
-        color: {
-          id: "123e4567-e89b-12d3-a456-426614174008",
-          name: "Blue",
-        },
-      },
-    ],
+    sizes: [],
+    colors: [],
+    keyattribute: [],
+    specifications: [],
   },
 ];
