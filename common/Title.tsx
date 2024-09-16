@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import React, { FC } from "react";
 import Divider from "./Divider";
+import { cn } from "@/lib/utils";
 
 interface Props {}
 
@@ -33,11 +34,21 @@ export default Title;
 interface DesktopTitleProps {
   title: string;
   noLine?: boolean;
+  general?: boolean;
 }
-export const DesktopTitle = ({ title, noLine = false }: DesktopTitleProps) => {
+export const DesktopTitle = ({
+  title,
+  noLine = false,
+  general = false,
+}: DesktopTitleProps) => {
   return (
-    <div className="desktop-tablet-view mt-20 flex items-end gap-1 w-full">
-      <h1 className="min-w-[190px] text-3xl font-bold">{title}</h1>
+    <div
+      className={cn(
+        "mt-20 flex items-end gap-1 w-full",
+        general ? "" : "desktop-tablet-view "
+      )}
+    >
+      <h1 className="min-w-[190px] text-xl md:text-3xl font-bold">{title}</h1>
       {noLine ? null : (
         <Divider className="bg-gray-200 border-[0.2px] border-[#e7e7e7]" />
       )}

@@ -14,6 +14,7 @@ interface ProductDetailsProps {
 }
 
 const ProductSchema = Yup.object().shape({
+  id: Yup.string().required("Product Id is required"),
   color: Yup.string().required("Color is required"),
   size: Yup.string().required("Size is required"),
   qty: Yup.number().required("Quantity is required"),
@@ -24,6 +25,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
   const STOCK_COUNT = product?.stock;
 
   const initialValues = {
+    id: product?.id || "",
     color: product?.colors?.[0]?.color?.name || "", // Default to the first color
     size: product?.sizes?.[0]?.size?.name || "", // Default to the first size
     qty: 1, // Default to 1

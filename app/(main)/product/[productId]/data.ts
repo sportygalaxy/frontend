@@ -32,7 +32,7 @@ export const keyattribute = [
   },
 ];
 
-export const specifications = [
+export const specification = [
   {
     id: 1,
     key: "Weight",
@@ -79,6 +79,7 @@ export const medias = [
 
 export const products = [
   {
+    id: 1,
     name: "10kg Dumbbell | Enhance Your Strength Training",
     description:
       "Elevate your workout routine with our premium 10kg dumbbell, designed to meet the needs of both beginners and seasoned fitness enthusiasts. Whether you’re aiming to build muscle, tone your body, or improve overall fitness, this versatile dumbbell is the perfect addition to your home gym.",
@@ -135,9 +136,10 @@ export const products = [
       },
     ],
     keyattribute,
-    specifications,
+    specification,
   },
   {
+    id: 2,
     name: "10kg Dumbbell | Enhance Your Strength Training",
     description:
       "Elevate your workout routine with our premium 10kg dumbbell, designed to meet the needs of both beginners and seasoned fitness enthusiasts. Whether you’re aiming to build muscle, tone your body, or improve overall fitness, this versatile dumbbell is the perfect addition to your home gym.",
@@ -165,6 +167,6 @@ export const products = [
     sizes: [],
     colors: [],
     keyattribute: [],
-    specifications: [],
+    specification: [],
   },
 ];

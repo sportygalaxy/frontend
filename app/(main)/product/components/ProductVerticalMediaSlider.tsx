@@ -20,7 +20,7 @@ const VerticalProductMediaSlider = ({
   const sortedMedias = useMemo(
     () =>
       flattenMediaStructure(
-        medias.sort((a, b) => (a.type === "video" ? 1 : -1))
+        medias?.sort((a, b) => (a.type === "video" ? 1 : -1))
       ),
     [medias]
   );

@@ -73,26 +73,3 @@ export function flattenMediaStructure(
 
   return newStructure;
 }
-
-// Example usage:
-const oldStructure: MediaItem[] = [
-  {
-    images: [
-      "/images/product/prod-1.png",
-      "/images/product/prod-2.png",
-      "/images/product/prod-3.png",
-    ],
-    type: "image",
-  },
-  {
-    displayImage: "/images/product/prod-1.png",
-    links: {
-      introVideo: "/videos/prod-1.mp4",
-      completeVideo: "https://www.youtube.com/watch?v=6qg7UHgkq-U",
-    },
-    type: "video",
-  },
-];
-
-const newStructure = flattenMediaStructure(oldStructure);
-console.log(newStructure);
