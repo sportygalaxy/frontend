@@ -48,13 +48,13 @@ export const products = [
       {
         size: {
           id: "123e4567-e89b-12d3-a456-426614174005",
-          name: "Small",
+          name: "X",
         },
       },
       {
         size: {
           id: "123e4567-e89b-12d3-a456-426614174006",
-          name: "Medium",
+          name: "XL",
         },
       },
     ],
