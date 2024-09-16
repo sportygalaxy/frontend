@@ -26,7 +26,12 @@ export const products = [
     displayImage: "/images/product/prod-1.png",
     medias: [
       {
-        images: ["/images/product/prod-1.png", "/images/product/prod-2.png"],
+        images: [
+          "/images/product/prod-1.png",
+          "/images/product/prod-2.png",
+          "/images/product/prod-3.png",
+          "/images/product/prod-4.png",
+        ],
         type: "image",
       },
       {
@@ -59,7 +64,7 @@ export const products = [
       {
         displayImage: "/images/product/prod-1.png",
         links: {
-          introVideo: videoPath, // link to short video clip
+          introVideo: "", // link to short video clip
           completeVideo: youTubeLink, // link to full video clip
         },
         type: "video",
@@ -70,54 +75,3 @@ export const products = [
     sizes: ["X", "XL"],
   },
 ];
-
-const oldStructure = [
-  {
-    images: [
-      "/images/product/prod-1.png",
-      "/images/product/prod-2.png",
-      "/images/product/prod-3.png",
-    ],
-    type: "image",
-  },
-  {
-    displayImage: "/images/product/prod-1.png",
-    links: {
-      introVideo: "/videos/prod-1.mp4",
-      completeVideo: "https://www.youtube.com/watch?v=6qg7UHgkq-U",
-    },
-    type: "video",
-  },
-];
-
-// I need you study the structure and write me a javascript helper function to flatten the object with type image such that it now looks like this. Take care of error cases like (null, undefined, zero length count)
-
-const newStructure = [
-  {
-    images: "/images/product/prod-1.png",
-    type: "image",
-  },
-  {
-    images: "/images/product/prod-2.png",
-    type: "image",
-  },
-  {
-    images: "/images/product/prod-3.png",
-    type: "image",
-  },
-  {
-    displayImage: "/images/product/prod-1.png",
-    links: {
-      introVideo: "/videos/prod-1.mp4",
-      completeVideo: "https://www.youtube.com/watch?v=6qg7UHgkq-U",
-    },
-    type: "video",
-  },
-];
-
-// if there is an error case, return a fallback structure
-
-const fallBackStructure = {
-  images: "",
-  type: "image",
-};

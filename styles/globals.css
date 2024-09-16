@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap");
+@import url("@splidejs/splide/dist/css/splide.min.css");
 
 html {
   scroll-behavior: smooth;
@@ -148,4 +149,10 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #000;
+}
+
+.splide__slide img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }

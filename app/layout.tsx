@@ -53,6 +53,13 @@ export default function RootLayout({
       <body className={`${jost.className}`}>
         <ReactQueryProvider>
           <Script
+            src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"
+          />
+          <link
+            href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
+            rel="stylesheet"
+          />
+          <Script
             id="schema-organization"
             type="application/ld+json"
             dangerouslySetInnerHTML={{

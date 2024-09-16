@@ -14,6 +14,8 @@ import ImageSlider from "@/common/Swiper/ImageSlider";
 import { videoPath, WATERMARK, youTubeLink } from "@/constants/appConstants";
 import Divider from "@/common/Divider";
 import { medias, products } from "./data";
+import SplideImageSlider from "@/common/Swiper/VerticalProductMediaSlider";
+import VerticalProductMediaSlider from "@/common/Swiper/VerticalProductMediaSlider";
 
 interface ProductProps {
   params: { productId: string };
@@ -48,10 +50,10 @@ const ProductPage: FC<ProductProps> = (props) => {
           <section className="flex gap-8">
             {/* left */}
             <div className="flex flex-1 gap-8">
-              <ImageSlider medias={products[0]?.medias} />
+              <VerticalProductMediaSlider medias={products[0]?.medias} />
 
               <div className="max-h-[700px] max-w-[500px] min-w-[400px] min-h-[450px]">
-                {isVideoMode ? (
+                {!isVideoMode ? (
                   <div className="relative bg-[#E8EAEC]">
                     <VideoPlayer
                       pauseTime={10} // Pause after 10 seconds
@@ -157,6 +159,8 @@ const ProductPage: FC<ProductProps> = (props) => {
             </div>
           </section>
           <Divider className="mt-8" />
+
+          {/* <SplideImageSlider /> */}
 
           {/* <ImageSlider /> */}
 

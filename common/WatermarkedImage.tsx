@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { DownloadIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface WatermarkedImageProps {
@@ -92,9 +93,9 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
       <Button
         onClick={downloadImage}
         variant="default"
-        className="absolute left-0 bottom-0 rounded-none"
+        className="absolute left-0 bottom-0 rounded-none bg-secondary hover:bg-black"
       >
-        Download Image
+        <DownloadIcon size="18px" />
       </Button>
     </div>
   );

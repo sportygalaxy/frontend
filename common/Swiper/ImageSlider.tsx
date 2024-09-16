@@ -9,17 +9,6 @@ import { videoPath, youTubeLink } from "@/constants/appConstants";
 import { cn } from "@/lib/utils";
 import { flattenMediaStructure } from "@/helpers/product";
 
-// Define media interface for TypeScript
-interface Media {
-  displayImage: string;
-  type: "image" | "video";
-  images?: string[];
-  links?: {
-    introVideo?: string;
-    completeVideo?: string;
-  };
-}
-
 interface ImageSliderProps {
   medias: any[];
 }
