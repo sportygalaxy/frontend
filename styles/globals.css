@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap");
-@import url("@splidejs/splide/dist/css/splide.min.css");
+/* @import url("@splidejs/splide/dist/css/splide.min.css"); */
 
 html {
   scroll-behavior: smooth;

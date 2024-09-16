@@ -6,8 +6,7 @@ import "@splidejs/splide/dist/css/splide.min.css";
 import Image from "next/image";
 import { useMemo } from "react";
 import VideoPlayer from "../VidepPlayer";
-import { videoPath, WATERMARK, youTubeLink } from "@/constants/appConstants";
-import WatermarkedImage from "../WatermarkedImage";
+import { videoPath, youTubeLink } from "@/constants/appConstants";
 
 interface ImageSliderProps {
   medias: any[];

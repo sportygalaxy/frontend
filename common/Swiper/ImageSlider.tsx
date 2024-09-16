@@ -137,6 +137,29 @@ export default function ImageSlider({ medias }: ImageSliderProps): JSX.Element {
           ></div>
         ))}
       </div>
+
+      {/* extras */}
+
+      <div className="flex items-center gap-2 mt-5">
+        <video
+          className="h-[200px] w-[200px]"
+          src="/videos/prod-1.mp4"
+          autoPlay
+          muted
+          loop
+        />
+
+        <div className="relative bg-red-500 w-[200px] h-[200px]">
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src="https://www.youtube.com/embed/1FLYZdxsteo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="YouTube Video"
+          ></iframe>
+        </div>
+      </div>
     </div>
   );
 }

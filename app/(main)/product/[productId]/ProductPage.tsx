@@ -3,19 +3,13 @@
 import React, { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductData } from "@/lib/apiProduct";
-import Image from "next/image";
-import VideoPlayer from "@/common/VidepPlayer";
-import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 import MinusOutlinedIcon from "@/assets/icons/pack/MinusOutlined";
 import { Button } from "@/components/ui/button";
 import AddIcon from "@/assets/icons/pack/Add";
-import WatermarkedImage from "@/common/WatermarkedImage";
-import ImageSlider from "@/common/Swiper/ImageSlider";
-import { videoPath, WATERMARK, youTubeLink } from "@/constants/appConstants";
 import Divider from "@/common/Divider";
-import { medias, products } from "./data";
-import SplideImageSlider from "@/common/Swiper/VerticalProductMediaSlider";
+import { products } from "./data";
 import VerticalProductMediaSlider from "@/common/Swiper/VerticalProductMediaSlider";
+import HorizontalProductMediaSlider from "@/common/Swiper/HorizontalProductMediaSlider";
 
 interface ProductProps {
   params: { productId: string };
@@ -39,7 +33,6 @@ const ProductPage: FC<ProductProps> = (props) => {
   if (error instanceof Error)
     return <div>Error: {JSON.stringify(error, null, 2)}</div>;
 
-  const isVideoMode = true;
   return (
     <div className="wrapper my-12">
       Product {productId}
@@ -47,44 +40,12 @@ const ProductPage: FC<ProductProps> = (props) => {
         <span>loading.......</span>
       ) : (
         <>
-          <section className="flex gap-8">
+          <section className="flex gap-8 flex-wrap">
             {/* left */}
             <div className="flex flex-1 gap-8">
               <VerticalProductMediaSlider medias={products[0]?.medias} />
 
-              <div className="max-h-[700px] max-w-[500px] min-w-[400px] min-h-[450px]">
-                {!isVideoMode ? (
-                  <div className="relative bg-[#E8EAEC]">
-                    <VideoPlayer
-                      pauseTime={10} // Pause after 10 seconds
-                      src={videoPath}
-                      poster="/images/product/prod-1.png"
-                      watermark={<LogoMobileIcon />}
-                      link={youTubeLink}
-                      className=""
-                    />
-                  </div>
-                ) : (
-                  // <div className="relative bg-[#E8EAEC]">
-                  //   <Image
-                  //     src="/images/product/prod-1.png"
-                  //     width={700}
-                  //     height={700}
-                  //     alt="prod-1"
-                  //     className="bg-cover"
-                  //   />
-                  //   <div className="absolute top-4 left-4 bg-white bg-opacity-50 p-2 text-xs">
-                  //     <LogoMobileIcon />
-                  //   </div>
-                  // </div>
-
-                  <WatermarkedImage
-                    src="/images/product/prod-1.png"
-                    watermark={<LogoMobileIcon />}
-                    watermarkImageSrc={WATERMARK}
-                  />
-                )}
-              </div>
+              <HorizontalProductMediaSlider medias={products[0]?.medias} />
             </div>
 
             {/* right */}
@@ -160,31 +121,6 @@ const ProductPage: FC<ProductProps> = (props) => {
           </section>
           <Divider className="mt-8" />
 
-          {/* <SplideImageSlider /> */}
-
-          {/* <ImageSlider /> */}
-
-          {/* Extras */}
-          <div className="flex items-center gap-2 mt-5">
-            <video
-              className="h-[200px] w-[200px]"
-              src="/videos/prod-1.mp4"
-              autoPlay
-              muted
-              loop
-            />
-
-            <div className="relative bg-red-500 w-[200px] h-[200px]">
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/1FLYZdxsteo"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title="YouTube Video"
-              ></iframe>
-            </div>
-          </div>
           <pre>{JSON.stringify(data, null, 2)}</pre>
         </>
       )}
