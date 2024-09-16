@@ -11,6 +11,7 @@ import Products from "@/components/product/Products";
 import { DesktopTitle } from "@/common/Title";
 import ProductSpecifications from "../components/ProductSpecifications";
 import ProductKeyattributes from "../components/ProductKeyattributes";
+import ProductRatings from "../components/ProductRatings";
 
 interface ProductProps {
   params: { productId: string };
@@ -59,6 +60,8 @@ const ProductPage: FC<ProductProps> = (props) => {
 
           <ProductKeyattributes keyattributes={productData.keyattribute} />
           <ProductSpecifications specifications={productData.specification} />
+
+          <ProductRatings />
 
           <pre>{JSON.stringify(data, null, 2)}</pre>
         </>
