@@ -1,4 +1,3 @@
-import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 import { flattenMediaStructure } from "@/helpers/product";
 import { cn } from "@/lib/utils";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -7,11 +6,17 @@ import Image from "next/image";
 import { useMemo } from "react";
 import VideoPlayer from "../VidepPlayer";
 import { videoPath, youTubeLink } from "@/constants/appConstants";
+import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 
 interface ImageSliderProps {
   medias: any[];
+  onMediaClick: (index: number) => void; // Function to trigger the horizontal slider movement
 }
-const VerticalProductMediaSlider = ({ medias }: ImageSliderProps) => {
+
+const VerticalProductMediaSlider = ({
+  medias,
+  onMediaClick,
+}: ImageSliderProps) => {
   const sortedMedias = useMemo(
     () =>
       flattenMediaStructure(
@@ -35,17 +40,16 @@ const VerticalProductMediaSlider = ({ medias }: ImageSliderProps) => {
     <div className="w-full h-[500px] overflow-hidden">
       <Splide
         options={{
-          direction: "ttb", // 'ttb' for top-to-bottom scrolling
-          height: "400px", // Set height for the visible area of the carousel
-          wheel: true, // Enable mouse scroll
-          //  pagination: false, // Disable pagination
-          arrows: true, // Show arrows for navigation
+          direction: "ttb",
+          height: "400px",
+          wheel: true,
+          arrows: true,
           perPage: 2,
-          perMove: 1, // Move one slide at a time
-          gap: "1rem", // Add some gap between slides
-          drag: true, // Enable dragging slides
-          rewind: true, // Rewind to the first slide after the last
-          autoplay: true, // Disable autoplay to avoid re-adding slides
+          perMove: 1,
+          gap: "1rem",
+          drag: true,
+          rewind: true,
+          autoplay: true,
         }}
         className="w-full"
       >
@@ -62,6 +66,7 @@ const VerticalProductMediaSlider = ({ medias }: ImageSliderProps) => {
                 isVideo ? "min-h-[200px]" : "h-[150px]"
               )}
               key={index}
+              onClick={() => onMediaClick(index)} // Call the onMediaClick function with the index
             >
               {isVideo ? (
                 videoCount ? (

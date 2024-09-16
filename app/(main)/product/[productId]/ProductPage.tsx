@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import AddIcon from "@/assets/icons/pack/Add";
 import Divider from "@/common/Divider";
 import { products } from "./data";
-import VerticalProductMediaSlider from "@/common/Swiper/VerticalProductMediaSlider";
-import HorizontalProductMediaSlider from "@/common/Swiper/HorizontalProductMediaSlider";
+import ProductMediaSliders from "@/common/Swiper/ProductMediaSliders";
 
 interface ProductProps {
   params: { productId: string };
@@ -42,11 +41,7 @@ const ProductPage: FC<ProductProps> = (props) => {
         <>
           <section className="flex gap-8 flex-wrap">
             {/* left */}
-            <div className="flex flex-1 gap-8">
-              <VerticalProductMediaSlider medias={products[0]?.medias} />
-
-              <HorizontalProductMediaSlider medias={products[0]?.medias} />
-            </div>
+            <ProductMediaSliders medias={products[0]?.medias} />
 
             {/* right */}
             <div className="flex flex-col flex-1">
@@ -119,6 +114,7 @@ const ProductPage: FC<ProductProps> = (props) => {
               </div>
             </div>
           </section>
+
           <Divider className="mt-8" />
 
           <pre>{JSON.stringify(data, null, 2)}</pre>
