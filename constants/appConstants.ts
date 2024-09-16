@@ -27,3 +27,7 @@ export const NAV_CONSTANT = {
 };
 
 export const AUTHENTIATED = false
+
+export const WATERMARK = "/images/logo/sg_logo.svg";
+export const videoPath = "/videos/prod-1.mp4";
+export const youTubeLink = "https://www.youtube.com/watch?v=6qg7UHgkq-U";

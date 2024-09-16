@@ -10,15 +10,15 @@ import MinusOutlinedIcon from "@/assets/icons/pack/MinusOutlined";
 import { Button } from "@/components/ui/button";
 import AddIcon from "@/assets/icons/pack/Add";
 import WatermarkedImage from "@/common/WatermarkedImage";
+import ImageSlider from "@/common/Swiper/ImageSlider";
+import { videoPath, WATERMARK, youTubeLink } from "@/constants/appConstants";
+import Divider from "@/common/Divider";
+import { medias, products } from "./data";
 
 interface ProductProps {
   params: { productId: string };
   searchParams: {};
 }
-
-const WATERMARK = "/images/logo/sg_logo.svg";
-const videoPath = "/videos/prod-1.mp4";
-const youTubeLink = "https://www.youtube.com/watch?v=6qg7UHgkq-U";
 
 const ProductPage: FC<ProductProps> = (props) => {
   const { params, searchParams } = props;
@@ -46,59 +46,13 @@ const ProductPage: FC<ProductProps> = (props) => {
       ) : (
         <>
           <section className="flex gap-8">
+            {/* left */}
             <div className="flex flex-1 gap-8">
-              <div className="flex flex-col gap-5">
-                <div className="relative h-[150px] w-[200px] bg-[#E8EAEC] px-6 py-2">
-                  <Image
-                    fill
-                    sizes="100%"
-                    style={{
-                      objectFit: "contain",
-                      display: "block",
-                      margin: "0 auto",
-                    }}
-                    src="/images/product/prod-1.png"
-                    alt="prod-2"
-                    className="w-full transition-transform duration-700 group-hover:scale-110"
-                    priority
-                  />
-                  <div className="absolute top-4 left-4 watermark">
-                    <LogoMobileIcon width={30} height={30} />
-                  </div>
-                </div>
-                <div className="relative h-[150px] w-[200px] bg-[#E8EAEC] px-6 py-2">
-                  <Image
-                    fill
-                    sizes="100%"
-                    style={{
-                      objectFit: "contain",
-                      display: "block",
-                      margin: "0 auto",
-                    }}
-                    src="/images/product/prod-2.png"
-                    alt="prod-2"
-                    className="w-full transition-transform duration-700 group-hover:scale-110"
-                    priority
-                  />
-                  <div className="absolute top-4 left-4 watermark">
-                    <LogoMobileIcon width={30} height={30} />
-                  </div>
-                </div>
-                <div className="relative min-h-[150px] w-[200px]">
-                  <VideoPlayer
-                    pauseTime={10} // Pause after 10 seconds
-                    src={videoPath}
-                    poster="/images/product/prod-1.png"
-                    watermark={<LogoMobileIcon width={30} height={30} />}
-                    link={youTubeLink}
-                    className=""
-                  />
-                </div>
-              </div>
+              <ImageSlider medias={products[0]?.medias} />
 
               <div className="max-h-[700px] max-w-[500px] min-w-[400px] min-h-[450px]">
                 {isVideoMode ? (
-                  <div className="relative">
+                  <div className="relative bg-[#E8EAEC]">
                     <VideoPlayer
                       pauseTime={10} // Pause after 10 seconds
                       src={videoPath}
@@ -131,6 +85,7 @@ const ProductPage: FC<ProductProps> = (props) => {
               </div>
             </div>
 
+            {/* right */}
             <div className="flex flex-col flex-1">
               <div className="space-y-2">
                 <p className="font-jost text-black text-mobile-3xl md:text-3xl font-medium">
@@ -201,6 +156,9 @@ const ProductPage: FC<ProductProps> = (props) => {
               </div>
             </div>
           </section>
+          <Divider className="mt-8" />
+
+          {/* <ImageSlider /> */}
 
           {/* Extras */}
           <div className="flex items-center gap-2 mt-5">
