@@ -56,8 +56,8 @@ const ProductRatings: FC<ProductRatingsProps> = () => {
           />
         </div>
         <p className="font-jost text-base font-normal text-primary">
-          "Excellent quality! This dumbbell is exactly what I needed for my home
-          workouts. The grip is comfortable and secure."
+          &quot; Excellent quality! This dumbbell is exactly what I needed for
+          my home workouts. The grip is comfortable and secure.&quot;
         </p>
       </div>
 

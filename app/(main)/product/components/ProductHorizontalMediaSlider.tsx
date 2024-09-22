@@ -11,7 +11,6 @@ import WatermarkedImage from "../../../../common/WatermarkedImage";
 interface ImageSliderProps {
   medias: any[];
 }
-
 const HorizontalProductMediaSlider = forwardRef(
   ({ medias }: ImageSliderProps, ref) => {
     const splideRef = useRef<SplideProps>(null); // Splide instance reference
@@ -31,6 +30,7 @@ const HorizontalProductMediaSlider = forwardRef(
         ),
       [medias]
     );
+
     const NoMediaContent = ({ text }: { text: string }): JSX.Element => {
       return (
         <div className="bg-secondary h-full flex items-center justify-center cursor-not-allowed">
@@ -41,6 +41,7 @@ const HorizontalProductMediaSlider = forwardRef(
         </div>
       );
     };
+
     return (
       <div className="md:max-w-[500px]">
         <Splide
@@ -104,5 +105,8 @@ const HorizontalProductMediaSlider = forwardRef(
     );
   }
 );
+
+// Fix for react/display-name warning
+HorizontalProductMediaSlider.displayName = "HorizontalProductMediaSlider";
 
 export default HorizontalProductMediaSlider;

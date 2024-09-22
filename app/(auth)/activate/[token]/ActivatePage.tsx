@@ -42,7 +42,7 @@ const ActivatePage: FC<ActivateProps> = (props) => {
 
   useEffect(() => {
     if (user?.isVerified) return router.push(RoutesEnum.LANDING_PAGE);
-  }, [user]);
+  }, [user, router]);
 
   const {
     mutate: resend,

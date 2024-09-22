@@ -10,9 +10,10 @@ import {
   ShoppingCart,
   LogoutCurve,
 } from "iconsax-react";
+import Image from "next/image";
 
 export default function Profile() {
-   const { setUser, user } = useUserStore();
+  const { setUser, user } = useUserStore();
   const { logoutUser, isPending } = useLogout();
 
   const profileCtas = [
@@ -75,12 +76,13 @@ export default function Profile() {
     },
   ];
 
-  const imagePlaceholder =
-    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+  const imagePlaceholder = "/images/default-image.png";
   return (
     <section className="wrapper my-10 bg-white">
       <div className="flex items-center justify-center flex-col gap-3 p-7">
-        <img
+        <Image
+          width={100}
+          height={100}
           className="bg-gray-500 w-20 h-20 rounded-full"
           src={imagePlaceholder}
           alt="profic-placeholder"
@@ -89,9 +91,7 @@ export default function Profile() {
           <p className="text-black font-medium text-mobile-3xl md:text-3xl capitalize">
             {user?.firstName} {user?.lastName}
           </p>
-          <p className="text-black font-normal lowercase">
-            {user?.email}
-          </p>
+          <p className="text-black font-normal lowercase">{user?.email}</p>
         </div>
       </div>
 
