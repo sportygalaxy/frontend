@@ -257,7 +257,7 @@ const RegistrationForm: React.FC = () => {
                   >
                     * Login Password
                   </label>
-                  <div className="relative flex flex-[3] items-center">
+                  <div className="relative flex flex-[3] w-full sm:min-w-[480px] items-center">
                     <Field
                       className={cn(
                         "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
@@ -294,21 +294,34 @@ const RegistrationForm: React.FC = () => {
                   >
                     * Confirm Password
                   </label>
-                  <Field
-                    className={cn(
-                      "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
-                      placeholderClassName,
-                      focusClassName
-                    )}
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="Enter the login password again"
-                  />
-                  {errors.confirmPassword && touched.confirmPassword ? (
-                    <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
-                      {errors.confirmPassword}
-                    </div>
-                  ) : null}
+                  <div className="relative flex flex-[3] w-full sm:min-w-[480px] items-center">
+                    <Field
+                      className={cn(
+                        "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
+                        placeholderClassName,
+                        focusClassName
+                      )}
+                      name="confirmPassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter the login password again"
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    >
+                      {showPassword ? (
+                        <EyeIcon className="w-5 h-5 text-gray-500" />
+                      ) : (
+                        <EyeOffIcon className="w-5 h-5 text-gray-500" />
+                      )}
+                    </button>
+                    {errors.confirmPassword && touched.confirmPassword ? (
+                      <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
+                        {errors.confirmPassword}
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className="relative flex flex-col items-center gap-5 xs:flex-row">

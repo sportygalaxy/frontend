@@ -93,7 +93,7 @@ const LoginForm: React.FC = () => {
             <Form className="flex flex-col items-center justify-start w-full h-screen my-20 bg-background">
               <div className="flex flex-col items-center justify-start w-full">
                 <div className="w-full mx-auto md:max-w-screen-sm space-y-11">
-                  <div className="relative flex flex-col items-center gap-5 xs:flex-row">
+                  <div className="relative flex flex-col items-center sm:min-w-[480px] gap-5 xs:flex-row">
                     <label
                       className="flex justify-start flex-1 w-full xs:justify-end"
                       htmlFor="email"
@@ -124,7 +124,7 @@ const LoginForm: React.FC = () => {
                     >
                       * Login Password
                     </label>
-                    <div className="relative flex flex-[3] items-center">
+                    <div className="relative flex flex-[3] w-full sm:min-w-[480px] items-center">
                       <Field
                         className={cn(
                           "w-full border-1 lightDarkGrey rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0",
