@@ -27,7 +27,7 @@ const ProductCard: FC<Props> = (props) => {
     "overflow-hidden text-ellipsis whitespace-nowrap truncate max-w-44 sm:max-w-72";
 
   const contentProps = {
-    href: `/product/${item.id}`,
+    href: `/product/${item?.id}`,
     className: "w-full cursor-pointer",
   };
 
@@ -54,7 +54,7 @@ const ProductCard: FC<Props> = (props) => {
               display: "block",
               margin: "0 auto",
             }}
-            src={item?.image || ""}
+            src={item?.displayImage || ""}
             alt={item?.title || ""}
             className="w-full transition-[transform] duration-1000 hover:scale-110"
             priority

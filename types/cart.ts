@@ -3,7 +3,7 @@ export type TCart = {
   title: string;
   description: string;
   price: string;
-  image: string;
+  displayImage: string | null;
   qty: number;
 };
 

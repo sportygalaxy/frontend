@@ -1,4 +1,5 @@
 import { DesktopTitle } from "@/common/Title";
+import { getKeyValue } from "@/utils/objectUtils";
 import { FC } from "react";
 
 interface ProductKeyattributesProps {
@@ -8,6 +9,7 @@ const ProductKeyattributes: FC<ProductKeyattributesProps> = ({
   keyattributes,
 }) => {
   const keyattributesCount = (keyattributes?.length || 0) >= 1;
+
   return (
     <section className="space-y-4">
       <DesktopTitle general noLine title="Key attributes" />
@@ -18,10 +20,10 @@ const ProductKeyattributes: FC<ProductKeyattributesProps> = ({
               {keyattributes?.map((attribute: any, index: number) => (
                 <tr key={index} className="grid grid-cols-6">
                   <td className="bg-[#F0F0F0] border border-dark p-5 font-normal text-mobile-2xl md:text-2xl font-jost col-span-2">
-                    {attribute.key}
+                    {getKeyValue(attribute)?.key}
                   </td>
                   <td className="border border-dark p-5 font-normal text-mobile-xl md:text-lg font-jost col-span-4">
-                    {attribute.value}
+                    {getKeyValue(attribute)?.value}
                   </td>
                 </tr>
               ))}

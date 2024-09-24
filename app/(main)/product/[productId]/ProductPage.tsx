@@ -14,6 +14,7 @@ import ProductKeyattributes from "../components/ProductKeyattributes";
 import ProductRatings from "../components/ProductRatings";
 import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
+import { PRODUCT_ID } from "@/constants/appConstants";
 
 interface ProductProps {
   params: { productId: string };
@@ -24,8 +25,7 @@ const ProductPage: FC<ProductProps> = (props) => {
   const { isLg } = useBreakpoint();
   const { params, searchParams } = props;
 
-  const productId = "15b2e08c-b395-4bff-bed9-bbcd68c7d6dd";
-  // params?.productId ||
+  const productId = params?.productId || PRODUCT_ID;
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["product", productId],
@@ -38,9 +38,8 @@ const ProductPage: FC<ProductProps> = (props) => {
   if (error instanceof Error)
     return <div>Error: {JSON.stringify(error, null, 2)}</div>;
 
-  const productData =
-    //  data?.data ||
-    products?.[0] || {};
+  const productData = data?.data || {};
+  // products?.[0] || {};
 
   return (
     <div className="wrapper my-12">

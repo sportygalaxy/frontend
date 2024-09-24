@@ -62,3 +62,4 @@ export const uploadConfig = {
   ], // Allowed MIME types, // Allowed MIME types
 };
 
+export const PRODUCT_ID = "70e232f2-eee3-4027-b672-34cdf175b93b"

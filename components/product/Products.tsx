@@ -9,6 +9,8 @@ import { useHydration } from "@/hooks/useHydration";
 import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import AppLoader from "@/common/Loaders/AppLoader";
 import { useCounterStore } from "@/providers/CounterStoreProvider";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProductsData } from "@/lib/apiProduct";
 
 interface Props {
   isMobile?: boolean;
@@ -20,9 +22,6 @@ const Products: FC<Props> = ({
   isHorizontalScroll = false,
 }) => {
   const hydrated = useHydration();
-  const products: TProduct[] = PRODUCTS || [];
-
-  const productList: TProduct[] = isMobile ? products?.slice(0, 4) : products;
 
   // const { count, incrementCount, decrementCount } = useCounterStore(
   //   (state) => state
@@ -31,6 +30,21 @@ const Products: FC<Props> = ({
   // if (!hydrated) {
   //   return <AppLoader />;
   // }
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["product"],
+    queryFn: () => fetchProductsData(),
+    retry: 2,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error instanceof Error)
+    return <div>Error: {JSON.stringify(error, null, 2)}</div>;
+
+  const products: TProduct[] = data?.data || PRODUCTS || [];
+
+  const productList: TProduct[] = isMobile ? products?.slice(0, 4) : products;
 
   return (
     <div className="w-full">

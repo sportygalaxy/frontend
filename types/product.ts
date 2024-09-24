@@ -3,5 +3,5 @@ export type TProduct = {
   title: string;
   description: string;
   price: string;
-  image: string;
+  displayImage: string | null;
 };

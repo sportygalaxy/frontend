@@ -1,4 +1,5 @@
 import { DesktopTitle } from "@/common/Title";
+import { getKeyValue } from "@/utils/objectUtils";
 import { FC } from "react";
 
 interface ProductSpecificationsProps {
@@ -18,10 +19,10 @@ const ProductSpecifications: FC<ProductSpecificationsProps> = ({
               {specifications?.map((specification: any, index: number) => (
                 <tr key={index} className="grid grid-cols-6">
                   <td className="bg-[#F0F0F0] border border-dark p-5 font-normal text-mobile-2xl md:text-2xl font-jost col-span-2">
-                    {specification.key}
+                    {getKeyValue(specification)?.key}
                   </td>
                   <td className="border border-dark p-5 font-normal text-mobile-xl md:text-lg font-jost col-span-4">
-                    {specification.value}
+                    {getKeyValue(specification)?.value}
                   </td>
                 </tr>
               ))}
