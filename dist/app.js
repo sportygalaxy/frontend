@@ -8,11 +8,14 @@ require("module-alias/register");
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const console_log_colors_1 = require("console-log-colors");
 const constants_1 = require("./src/constants");
 const EnvKeys_1 = require("./src/common/EnvKeys");
 const error_1 = require("./src/middleware/error");
+const express_2 = require("uploadthing/express");
 const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
+const upload_route_1 = __importDefault(require("./src/routes/upload.route"));
 const user_route_1 = __importDefault(require("./src/routes/user.route"));
 const coupon_route_1 = __importDefault(require("./src/routes/coupon.route"));
 const coupon_route_2 = __importDefault(require("./src/routes/coupon.route"));
@@ -24,8 +27,10 @@ const product_size_route_1 = __importDefault(require("./src/routes/product-size.
 const product_color_route_1 = __importDefault(require("./src/routes/product-color.route"));
 const product_category_route_1 = __importDefault(require("./src/routes/product-category.route"));
 const product_subcategory_route_1 = __importDefault(require("./src/routes/product-subcategory.route"));
+const uploadthing_1 = require("./src/services/providers/uploadthing");
 const app = (0, express_1.default)();
 const apiPath = "/api/v1";
+app.use((0, express_fileupload_1.default)());
 app.use((0, cors_1.default)({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
@@ -44,6 +49,12 @@ app.use(`${apiPath}/bookmarks`, bookmark_route_1.default);
 app.use(`${apiPath}/reviews`, coupon_route_1.default);
 app.use(`${apiPath}/coupons`, coupon_route_2.default);
 app.use(`${apiPath}/payments`, payment_route_1.default);
+app.use(`${apiPath}/uploads`, (0, express_2.createRouteHandler)({
+    router: uploadthing_1.uploadRouter,
+    config: {
+    // callbackUrl: "https://b3cd-102-89-44-29.ngrok-free.app",
+    },
+}), upload_route_1.default);
 app.use(error_1.errorHandler);
 const PORT = process.env.PORT || constants_1.DEFAULT_PORT;
 app.listen(PORT, () => {

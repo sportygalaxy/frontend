@@ -3,12 +3,15 @@ import "module-alias/register";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import fileUpload from "express-fileupload";
 import { green, white } from "console-log-colors";
 import { DEFAULT_PORT } from "./src/constants";
 import { EnvKeys } from "./src/common/EnvKeys";
 import { errorHandler } from "./src/middleware/error";
+import { createRouteHandler } from "uploadthing/express";
 
 import authRoute from "./src/routes/auth.route";
+import uploadRoute from "./src/routes/upload.route";
 import userRoute from "./src/routes/user.route";
 import reviewRoute from "./src/routes/coupon.route";
 import couponRoute from "./src/routes/coupon.route";
@@ -20,10 +23,12 @@ import productSizeRoute from "./src/routes/product-size.route";
 import productColorRoute from "./src/routes/product-color.route";
 import productCategoryRoute from "./src/routes/product-category.route";
 import productSubcategoryRoute from "./src/routes/product-subcategory.route";
+import { uploadRouter } from "./src/services/providers/uploadthing";
 
 const app: Express = express();
 const apiPath = "/api/v1";
 
+app.use(fileUpload());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -44,6 +49,16 @@ app.use(`${apiPath}/bookmarks`, bookmarkRoute);
 app.use(`${apiPath}/reviews`, reviewRoute);
 app.use(`${apiPath}/coupons`, couponRoute);
 app.use(`${apiPath}/payments`, paymentRoute);
+app.use(
+  `${apiPath}/uploads`,
+  createRouteHandler({
+    router: uploadRouter,
+    config: {
+      // callbackUrl: "https://b3cd-102-89-44-29.ngrok-free.app",
+    },
+  }),
+  uploadRoute
+);
 
 app.use(errorHandler);
 

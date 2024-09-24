@@ -17,3 +17,7 @@ declare module "console-log-colors" {
   };
   export = colors;
 }
+
+// declare module "uploadthing" {
+//   export function upload(filePath: any): Promise<{ url: string }>;
+// }
