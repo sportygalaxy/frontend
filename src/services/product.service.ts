@@ -15,7 +15,7 @@ import {
   UpdateProductSizeDTO,
   UpdateProductSizeResponse,
 } from "../types/product.types";
-import { createProductSchema } from "../types/dto/product.dto";
+import { createProductSchema, Medias } from "../types/dto/product.dto";
 import { validateData } from "../helpers/validation";
 import { updateProductAttribute } from "../helpers/update-product-attributes";
 import { Product } from "models";
@@ -146,6 +146,8 @@ export class ProductService {
       sizeIds,
       colorIds,
       typeIds,
+      displayImage,
+      medias,
     } = _payload;
 
     try {
@@ -169,6 +171,8 @@ export class ProductService {
           types: {
             create: typeIds?.map((typeId: string) => ({ typeId })),
           },
+          displayImage,
+          medias: medias as Medias,
         },
         include: {
           category: true,
@@ -214,6 +218,8 @@ export class ProductService {
       description,
       price,
       stock,
+      displayImage,
+      medias,
       specification,
       keyattribute,
       categoryId,
@@ -227,6 +233,12 @@ export class ProductService {
           ...(description && { description }),
           ...(price && { price }),
           ...(stock && { stock }),
+          ...(displayImage && { displayImage }),
+          ...(medias && {
+            medias: Array.isArray(medias)
+              ? medias
+              : JSON.parse(medias),
+          }),
           ...(specification && {
             specification: Array.isArray(specification)
               ? specification

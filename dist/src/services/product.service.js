@@ -111,7 +111,7 @@ class ProductService {
     createProduct(_payload, _next) {
         return __awaiter(this, void 0, void 0, function* () {
             const validateProduct = (product) => (0, validation_1.validateData)(product_dto_1.createProductSchema, product);
-            const { name, description, price, stock, specification, keyattribute, categoryId, subcategoryId, sizeIds, colorIds, typeIds, } = _payload;
+            const { name, description, price, stock, specification, keyattribute, categoryId, subcategoryId, sizeIds, colorIds, typeIds, displayImage, medias, } = _payload;
             try {
                 validateProduct(_payload);
                 const product = yield prisma_1.default.product.create({
@@ -133,6 +133,8 @@ class ProductService {
                         types: {
                             create: typeIds === null || typeIds === void 0 ? void 0 : typeIds.map((typeId) => ({ typeId })),
                         },
+                        displayImage,
+                        medias: medias,
                     },
                     include: {
                         category: true,
@@ -163,11 +165,15 @@ class ProductService {
      */
     updateProduct(_id, _payload, _next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description, price, stock, specification, keyattribute, categoryId, subcategoryId, } = _payload;
+            const { name, description, price, stock, displayImage, medias, specification, keyattribute, categoryId, subcategoryId, } = _payload;
             try {
                 const updatedProduct = yield prisma_1.default.product.update({
                     where: { id: _id },
-                    data: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (name && { name })), (description && { description })), (price && { price })), (stock && { stock })), (specification && {
+                    data: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (name && { name })), (description && { description })), (price && { price })), (stock && { stock })), (displayImage && { displayImage })), (medias && {
+                        medias: Array.isArray(medias)
+                            ? medias
+                            : JSON.parse(medias),
+                    })), (specification && {
                         specification: Array.isArray(specification)
                             ? specification
                             : JSON.parse(specification),

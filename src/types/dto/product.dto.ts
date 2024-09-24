@@ -13,12 +13,33 @@ const keyValuePairSchema = z
   .optional()
   .nullable();
 
+export const MediasSchema = z.array(
+  z.union([
+    z.object({
+      type: z.literal("image"),
+      images: z.array(z.string().url()),
+    }),
+    z.object({
+      type: z.literal("video"),
+      displayImage: z.string().url(),
+      links: z.object({
+        introVideo: z.string().url(),
+        completeVideo: z.string().url(),
+      }),
+    }),
+  ])
+);
+
+export type Medias = z.infer<typeof MediasSchema>;
+
 export const createProductSchema = z.object({
   id: z.string().uuid().optional(),
   name: z.string(),
   description: z.string().optional().nullable(),
   price: z.number(),
   stock: z.number().optional().nullable(),
+  displayImage: z.string().optional().nullable(),
+  medias: MediasSchema,
   specification: z.array(keyValuePairSchema).optional().nullable(),
   keyattribute: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string(),
@@ -41,6 +62,8 @@ export const updateAllProductSchema = z.object({
   description: z.string().optional(),
   price: z.number().optional(),
   stock: z.number().optional(),
+  displayImage: z.string().optional(),
+  medias: z.array(keyValuePairSchema).optional().nullable(),
   specification: z.array(keyValuePairSchema).optional().nullable(),
   keyattribute: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string().optional(),
@@ -57,6 +80,8 @@ export const updateProductSchema = z.object({
   description: z.string().optional(),
   price: z.number().optional(),
   stock: z.number().optional(),
+  displayImage: z.string().optional(),
+  medias: z.array(keyValuePairSchema).optional().nullable(),
   specification: z.array(keyValuePairSchema).optional().nullable(),
   keyattribute: z.array(keyValuePairSchema).optional().nullable(),
   categoryId: z.string().optional(),

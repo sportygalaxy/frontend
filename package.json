@@ -11,7 +11,7 @@
     "start": "node dist/app.js",
     "serve": "concurrently \"npx tsc -w\"  \"console-ninja node --watch dist/app.js\"",
     "seeder": "npx ts-node seeder.ts",
-    "seed:users": "npx ts-node seeder.ts users",
+
     "seed:categories": "npx ts-node seeder.ts categoriesAndProducts",
     "seed:sizes": "npx ts-node seeder.ts sizesAndColors",
     "seed:types": "npx ts-node seeder.ts typesAndAssociations",

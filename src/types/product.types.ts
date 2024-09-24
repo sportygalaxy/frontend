@@ -18,6 +18,7 @@ type KeyValuePair = {
 // export type Specification = Prisma.JsonValue;
 export type Specification = KeyValuePair[];
 export type Keyattribute = KeyValuePair[];
+export type Medias = KeyValuePair[];
 
 export interface GetProductsResponse {
   id: string;
@@ -25,8 +26,10 @@ export interface GetProductsResponse {
   description: string | null;
   price: number;
   stock: number | null;
+  displayImage: string;
   specification: Specification;
   keyattribute: Keyattribute;
+  medias: Medias;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -45,8 +48,10 @@ export interface GetProductResponse {
   description: string | null;
   price: number;
   stock: number | null;
+  displayImage: string;
   specification: Specification;
   keyattribute: Keyattribute;
+  medias: Medias;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -64,6 +69,8 @@ export type GetProductApiResponse = ApiResponse<GetProductResponse>;
 //   stock: number;
 //   categoryId: string;
 //   subcategoryId: string;
+//   displayImage: string;
+//   keyattribute: Keyattribute;
 //   sizeIds: string[];
 //   colorIds: string[];
 //   typeIds: string[];
@@ -77,6 +84,8 @@ export interface CreateProductResponse {
   stock: number | null;
   specification: Specification;
   keyattribute: Keyattribute;
+  medias: Medias;
+  displayImage: string;
   categoryId: string;
   subcategoryId: string;
   createdAt: Date;
@@ -105,8 +114,10 @@ export interface UpdateAllProductResponse {
   description?: string | null;
   price?: number;
   stock?: number | null;
-  specification: Specification;
+  displayImage: string;
+  medias: Medias;
   keyattribute: Keyattribute;
+  specification: Specification;
   categoryId?: string;
   subcategoryId?: string;
   sizeIds?: string[];
@@ -125,6 +136,8 @@ export type UpdateAllProductApiResponse = ApiResponse<UpdateAllProductResponse>;
 //   description: string;
 //   price: number;
 //   stock: number;
+//   displayImage: string;
+//   medias: Medias;
 //   specification: Specification;
 //   keyattribute: Keyattribute;
 //   categoryId: string;
@@ -140,6 +153,8 @@ export interface UpdateProductResponse {
   description?: string | null;
   price?: number;
   stock?: number | null;
+  displayImage: string;
+  medias: Medias;
   specification: Specification;
   keyattribute: Keyattribute;
   categoryId?: string;
