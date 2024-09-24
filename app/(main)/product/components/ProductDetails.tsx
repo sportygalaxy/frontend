@@ -22,7 +22,7 @@ const ProductSchema = Yup.object().shape({
 });
 
 const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
-  const STOCK_COUNT = product?.stock;
+  const STOCK_COUNT = product?.stock || 0;
 
   const initialValues = {
     id: product?.id || "",

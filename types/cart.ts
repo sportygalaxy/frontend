@@ -1,6 +1,6 @@
 export type TCart = {
   id: number;
-  title: string;
+  name: string;
   description: string;
   price: string;
   displayImage: string | null;

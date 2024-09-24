@@ -12,6 +12,7 @@ import {
 } from "iconsax-react";
 import Image from "next/image";
 import FileUploadForm from "./FileUploadForm";
+import { DEFAULT_USER_IMAGE } from "@/constants/appConstants";
 
 export default function Profile() {
   const { setUser, user } = useUserStore();
@@ -77,7 +78,6 @@ export default function Profile() {
     },
   ];
 
-  const imagePlaceholder = "/images/default-image.png";
   return (
     <section className="wrapper my-10 bg-white">
       <FileUploadForm />
@@ -86,7 +86,7 @@ export default function Profile() {
           width={100}
           height={100}
           className="bg-gray-500 w-20 h-20 rounded-full"
-          src={imagePlaceholder}
+          src={user?.avatar || DEFAULT_USER_IMAGE}
           alt="profic-placeholder"
         />
         <div className="text-center">

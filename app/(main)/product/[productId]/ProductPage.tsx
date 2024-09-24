@@ -4,7 +4,6 @@ import React, { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductData } from "@/lib/apiProduct";
 import Divider from "@/common/Divider";
-import { products } from "./data";
 import ProductMediaSliders from "@/app/(main)/product/components/ProductMediaSliders";
 import ProductDetails from "../components/ProductDetails";
 import Products from "@/components/product/Products";
@@ -43,7 +42,6 @@ const ProductPage: FC<ProductProps> = (props) => {
 
   return (
     <div className="wrapper my-12">
-      {/* Product {productId} */}
       {isLoading ? (
         <span>loading.......</span>
       ) : (
@@ -66,12 +64,10 @@ const ProductPage: FC<ProductProps> = (props) => {
             <Products isMobile isHorizontalScroll />
           </section>
 
-          <ProductKeyattributes keyattributes={productData.keyattribute} />
-          <ProductSpecifications specifications={productData.specification} />
+          <ProductKeyattributes keyattributes={productData?.keyattribute} />
+          <ProductSpecifications specifications={productData?.specification} />
 
           <ProductRatings />
-
-          {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         </>
       )}
     </div>

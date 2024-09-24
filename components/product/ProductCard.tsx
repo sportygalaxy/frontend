@@ -1,7 +1,6 @@
 "use client";
 import Add from "@/common/Add";
 import LinkComponent from "@/common/Link";
-import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import TooltipWrapper from "@/components/tooltip";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { useHydration } from "@/hooks/useHydration";
@@ -12,6 +11,7 @@ import { TProduct } from "@/types/product";
 import Image from "next/image";
 import React, { FC } from "react";
 import Minus from "@/common/Minus";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
 
 interface Props {
   item: TProduct;
@@ -38,6 +38,7 @@ const ProductCard: FC<Props> = (props) => {
   function isItemInCart(itemId: number): any {
     return cart.some((item) => item.id === itemId);
   }
+
   return (
     <Card
       key={item.id}
@@ -54,8 +55,8 @@ const ProductCard: FC<Props> = (props) => {
               display: "block",
               margin: "0 auto",
             }}
-            src={item?.displayImage || ""}
-            alt={item?.title || ""}
+            src={item?.displayImage || DEFAULT_PRODUCT_IMAGE}
+            alt={item?.name || `product ${item?.id}`}
             className="w-full transition-[transform] duration-1000 hover:scale-110"
             priority
             // blurDataURL="data:..."
@@ -74,10 +75,10 @@ const ProductCard: FC<Props> = (props) => {
                   cardTextTruncate
                 )}
               >
-                {item?.title || ""}
+                {item?.name || ""}
               </p>
             }
-            title={item?.title || ""}
+            title={item?.name || ""}
           />
         </LinkComponent>
 
@@ -107,8 +108,8 @@ const ProductCard: FC<Props> = (props) => {
             className="mb-1 cursor-pointer"
             onClick={() => toggleIndicateAddToCart()}
           >
-            {isItemInCart(item.id) ? (
-              <div className="" onClick={() => removeFromCart(item.id)}>
+            {isItemInCart(item?.id) ? (
+              <div className="" onClick={() => removeFromCart(item?.id)}>
                 <Minus />
               </div>
             ) : (

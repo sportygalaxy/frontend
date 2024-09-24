@@ -8,6 +8,7 @@ import PlusIcon from "@/assets/icons/pack/Plus";
 import DeleteIcon from "@/assets/icons/pack/Delete";
 import { TCart } from "@/types/cart";
 import useCartStore from "@/store/cartStore";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
 
 function CartProductCard({
   item,
@@ -66,8 +67,8 @@ function CartProductCard({
                   display: "block",
                   margin: "0 auto",
                 }}
-                src={cart?.image}
-                alt={cart?.title}
+                src={cart?.displayImage || DEFAULT_PRODUCT_IMAGE}
+                alt={cart?.name}
                 className="w-full transition-transform duration-700 group-hover:scale-110"
                 priority
               />
@@ -76,7 +77,7 @@ function CartProductCard({
             <div className="w-[60%] h-full flex flex-col justify-between">
               <div className="flex flex-col gap-2">
                 <p className="font-medium text-mobile-2xl md:text-2xl text-primary">
-                  {cart?.title}
+                  {cart?.name}
                 </p>
                 <p className="font-light text-mobile-2xl sm:text-2xl text-primary opacity-50">
                   {cart?.description}

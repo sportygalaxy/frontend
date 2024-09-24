@@ -1,7 +1,7 @@
 export const PRODUCTS = [
   {
     id: 1,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "19.99",
     image:
@@ -9,7 +9,7 @@ export const PRODUCTS = [
   },
   {
     id: 2,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "19.99",
     image:
@@ -17,7 +17,7 @@ export const PRODUCTS = [
   },
   {
     id: 3,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "19.99",
     image:
@@ -25,7 +25,7 @@ export const PRODUCTS = [
   },
   {
     id: 4,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "19.99",
     image:
@@ -33,28 +33,28 @@ export const PRODUCTS = [
   },
   {
     id: 5,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "29.99",
     image: "https://via.placeholder.com/350",
   },
   {
     id: 6,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "29.99",
     image: "https://via.placeholder.com/350",
   },
   {
     id: 7,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "29.99",
     image: "https://via.placeholder.com/150",
   },
   {
     id: 8,
-    title: "T5x treadmil",
+    name: "T5x treadmil",
     description: "Yiaoxing",
     price: "29.99",
     image: "https://via.placeholder.com/150",
