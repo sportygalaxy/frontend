@@ -11,6 +11,7 @@ import {
   LogoutCurve,
 } from "iconsax-react";
 import Image from "next/image";
+import FileUploadForm from "./FileUploadForm";
 
 export default function Profile() {
   const { setUser, user } = useUserStore();
@@ -79,6 +80,7 @@ export default function Profile() {
   const imagePlaceholder = "/images/default-image.png";
   return (
     <section className="wrapper my-10 bg-white">
+      <FileUploadForm />
       <div className="flex items-center justify-center flex-col gap-3 p-7">
         <Image
           width={100}
