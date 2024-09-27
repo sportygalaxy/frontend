@@ -44,10 +44,10 @@ export default function Products() {
     price: {
       isCustom: searchParams.get("customPrice") === "true",
       range: searchParams.get("price")
-        ? searchParams.get("price").split(",").map(Number)
+        ? searchParams.get("price")?.split(",").map(Number)
         : DEFAULT_CUSTOM_PRICE,
-    },
-    sort: searchParams.get("sort") || undefined,
+    } as any,
+    sort: searchParams.get("sort") || (undefined as any),
   });
 
   const { data, error, isLoading, refetch } = useQuery({
@@ -66,16 +66,16 @@ export default function Products() {
   const updateUrlQuery = (updatedFilter: TProductQuery) => {
     const query = new URLSearchParams();
 
-    if (updatedFilter.color.length)
+    if (updatedFilter?.color?.length)
       query.set("color", updatedFilter.color.join(","));
-    if (updatedFilter.size.length)
-      query.set("size", updatedFilter.size.join(","));
-    if (updatedFilter.type.length)
-      query.set("type", updatedFilter.type.join(","));
-    if (updatedFilter.price)
-      query.set("price", updatedFilter.price.range.join(","));
-    if (updatedFilter.price?.isCustom) query.set("customPrice", "true");
-    if (updatedFilter.sort) query.set("sort", updatedFilter.sort);
+    if (updatedFilter?.size?.length)
+      query.set("size", updatedFilter?.size.join(","));
+    if (updatedFilter?.type?.length)
+      query.set("type", updatedFilter?.type.join(","));
+    if (updatedFilter?.price)
+      query.set("price", updatedFilter?.price?.range.join(","));
+    if (updatedFilter?.price?.isCustom) query.set("customPrice", "true");
+    if (updatedFilter?.sort) query.set("sort", updatedFilter?.sort);
 
     router.replace(`?${query.toString()}`); // Update the URL without refreshing the page
   };
@@ -116,12 +116,12 @@ export default function Products() {
       price: {
         isCustom: searchParams.get("customPrice") === "true",
         range: searchParams.get("price")
-          ? searchParams.get("price").split(",").map(Number)
+          ? searchParams.get("price")?.split(",").map(Number)
           : DEFAULT_CUSTOM_PRICE,
       },
       sort: searchParams.get("sort") || undefined,
     };
-    setFilter(initialFilter);
+    setFilter(initialFilter as any);
   }, [searchParams]);
 
   const minPrice: number = Math.min(
@@ -318,7 +318,7 @@ export default function Products() {
                             ...prev,
                             price: {
                               isCustom: false,
-                              range: [...option.value],
+                              range: [...(option.value as [number, number])],
                             },
                           }));
 
@@ -392,7 +392,7 @@ export default function Products() {
                           ...prev,
                           price: {
                             isCustom: true,
-                            range: [newMin, newMax],
+                            range: [newMin, newMax] as [number, number],
                           },
                         }));
 
