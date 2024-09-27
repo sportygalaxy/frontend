@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/erons/.nvm/versions/node/v20.11.1/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js add -D @types/uploadthing
+  /Users/erons/.nvm/versions/node/v20.11.1/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js add ramda@0.29.0
 
 PATH: 
   /Users/erons/.console-ninja/.bin:/Users/erons/.nvm/versions/node/v20.11.1/bin:/Library/Frameworks/Python.framework/Versions/3.11/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/erons/.console-ninja/.bin:/Users/erons/.nvm/versions/node/v18.12.1/bin:/Library/Frameworks/Python.framework/Versions/3.11/bin:/opt/homebrew/bin:/opt/homebrew/sbin
@@ -14,17 +14,8 @@ Platform:
   darwin arm64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fuploadthing: Not found
-      at params.callback [as _callback] (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:66145:18)
-      at self.callback (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:140890:22)
-      at Request.emit (node:events:518:28)
-      at Request.<anonymous> (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:141862:10)
-      at Request.emit (node:events:518:28)
-      at IncomingMessage.<anonymous> (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:141784:12)
-      at Object.onceWrapper (node:events:632:28)
-      at IncomingMessage.emit (node:events:530:35)
-      at endReadableNT (node:internal/streams/readable:1696:12)
-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:118:26)
 
 npm manifest: 
   {
@@ -40,7 +31,7 @@ npm manifest:
       "start": "node dist/app.js",
       "serve": "concurrently \"npx tsc -w\"  \"console-ninja node --watch dist/app.js\"",
       "seeder": "npx ts-node seeder.ts",
-      "seed:users": "npx ts-node seeder.ts users",
+  
       "seed:categories": "npx ts-node seeder.ts categoriesAndProducts",
       "seed:sizes": "npx ts-node seeder.ts sizesAndColors",
       "seed:types": "npx ts-node seeder.ts typesAndAssociations",
@@ -80,6 +71,7 @@ npm manifest:
       "cors": "^2.8.5",
       "dotenv": "^16.4.5",
       "express": "^4.18.3",
+      "express-fileupload": "^1.5.1",
       "googleapis": "^140.0.1",
       "jsonwebtoken": "^9.0.2",
       "module-alias": "^2.2.3",
@@ -102,6 +94,7 @@ npm manifest:
       "@types/bcryptjs": "^2.4.6",
       "@types/cookie-parser": "^1.4.7",
       "@types/cors": "^2.8.17",
+      "@types/express-fileupload": "^1.5.1",
       "@types/jsonwebtoken": "^9.0.6",
       "@types/morgan": "^1.9.9",
       "@types/multer": "^1.4.12",
@@ -305,6 +298,13 @@ Lockfile:
       "@types/connect" "*"
       "@types/node" "*"
   
+  "@types/busboy@*":
+    version "1.5.4"
+    resolved "https://registry.yarnpkg.com/@types/busboy/-/busboy-1.5.4.tgz#0038c31102ca90f2a7f0d8bc27ee5ebf1088e230"
+    integrity sha512-kG7WrUuAKK0NoyxfQHsVE6j1m01s6kMma64E+OZenQABMQyTJop1DumUWcLwAQ2JzpefU7PDYoRDKl8uZosFjw==
+    dependencies:
+      "@types/node" "*"
+  
   "@types/connect@*":
     version "3.4.38"
     resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.38.tgz#5ba7f3bc4fbbdeaff8dded952e5ff2cc53f8d858"
@@ -325,6 +325,14 @@ Lockfile:
     integrity sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==
     dependencies:
       "@types/node" "*"
+  
+  "@types/express-fileupload@^1.5.1":
+    version "1.5.1"
+    resolved "https://registry.yarnpkg.com/@types/express-fileupload/-/express-fileupload-1.5.1.tgz#3c00e22f5515d4179a4b11b1b340d78197959819"
+    integrity sha512-DllImBVI1lCyjl2klky/TEwk60mbNebgXv1669h66g9TfptWSrEFq5a/raHSutaFzjSm1tmn9ypdNfu4jPSixQ==
+    dependencies:
+      "@types/busboy" "*"
+      "@types/express" "*"
   
   "@types/express-serve-static-core@^4.17.33":
     version "4.19.5"
@@ -627,7 +635,7 @@ Lockfile:
       ieee754 "^1.1.4"
       isarray "^1.0.0"
   
-  busboy@^1.0.0:
+  busboy@^1.0.0, busboy@^1.6.0:
     version "1.6.0"
     resolved "https://registry.yarnpkg.com/busboy/-/busboy-1.6.0.tgz#966ea36a9502e43cdb9146962523b92f531f6893"
     integrity sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==
@@ -930,6 +938,13 @@ Lockfile:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
     integrity sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==
+  
+  express-fileupload@^1.5.1:
+    version "1.5.1"
+    resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.5.1.tgz#a8be859e9d0ffb4497634b025ecb6d17796c370e"
+    integrity sha512-LsYG1ALXEB7vlmjuSw8ABeOctMp8a31aUC5ZF55zuz7O2jLFnmJYrCv10py357ky48aEoBQ/9bVXgFynjvaPmA==
+    dependencies:
+      busboy "^1.6.0"
   
   express@4.21.0:
     version "4.21.0"

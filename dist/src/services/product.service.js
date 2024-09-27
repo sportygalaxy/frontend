@@ -19,6 +19,7 @@ const errorResponse_1 = require("../utils/errorResponse");
 const product_dto_1 = require("../types/dto/product.dto");
 const validation_1 = require("../helpers/validation");
 const update_product_attributes_1 = require("../helpers/update-product-attributes");
+const utils_1 = require("../utils");
 class ProductService {
     /**
      *
@@ -29,13 +30,76 @@ class ProductService {
     getProducts(_query, _next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const products = yield prisma_1.default.product.findMany({
-                    where: Object.assign({}, (_query && _query)),
-                });
-                if (!products) {
+                const { limit, page, q, category, subcategory, stock, color, type, size, minPrice, maxPrice, createdAt, updatedAt, } = _query;
+                const { take, offset: skip, page: currentPage, limit: queryLimit, } = (0, utils_1.getPaginationParams)(page, limit);
+                const whereFilter = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ deletedAt: null }, (category && {
+                    category: {
+                        name: category,
+                    },
+                })), (subcategory && {
+                    subcategory: {
+                        name: subcategory,
+                    },
+                })), (stock && { stock: { gte: parseInt(stock) } })), (createdAt && {
+                    createdAt: {
+                        gte: new Date(createdAt),
+                    },
+                })), (updatedAt && {
+                    updatedAt: {
+                        gte: new Date(updatedAt),
+                    },
+                })), (minPrice && {
+                    price: {
+                        gte: parseFloat(minPrice),
+                    },
+                })), (maxPrice && {
+                    price: {
+                        lte: parseFloat(maxPrice),
+                    },
+                })), (q && {
+                    OR: [
+                        { name: { contains: q, mode: "insensitive" } },
+                        { description: { contains: q, mode: "insensitive" } },
+                    ],
+                })), { colors: {
+                        some: {
+                            colorId: Object.assign({}, (color ? { in: color === null || color === void 0 ? void 0 : color.split(",") } : {})),
+                        },
+                    }, sizes: {
+                        some: {
+                            sizeId: Object.assign({}, (size ? { in: size === null || size === void 0 ? void 0 : size.split(",") } : {})),
+                        },
+                    }, types: {
+                        some: {
+                            typeId: Object.assign({}, (type ? { in: type === null || type === void 0 ? void 0 : type.split(",") } : {})),
+                        },
+                    } });
+                const [results, count] = yield Promise.all([
+                    prisma_1.default.product.findMany({
+                        where: whereFilter,
+                        include: {
+                            category: true,
+                            subcategory: true,
+                            sizes: true,
+                            colors: true,
+                            types: true,
+                        },
+                        take,
+                        skip,
+                    }),
+                    prisma_1.default.product.count({
+                        where: whereFilter,
+                    }),
+                ]);
+                if (!results) {
                     return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code));
                 }
-                return products;
+                return {
+                    currentPage,
+                    count,
+                    pageCount: (0, utils_1.getPageCount)(count, queryLimit),
+                    results,
+                };
             }
             catch (err) {
                 _next(err);
@@ -170,9 +234,7 @@ class ProductService {
                 const updatedProduct = yield prisma_1.default.product.update({
                     where: { id: _id },
                     data: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (name && { name })), (description && { description })), (price && { price })), (stock && { stock })), (displayImage && { displayImage })), (medias && {
-                        medias: Array.isArray(medias)
-                            ? medias
-                            : JSON.parse(medias),
+                        medias: Array.isArray(medias) ? medias : JSON.parse(medias),
                     })), (specification && {
                         specification: Array.isArray(specification)
                             ? specification

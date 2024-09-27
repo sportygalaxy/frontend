@@ -37,6 +37,22 @@ export interface GetProductsResponse {
   deletedAt: Date | null;
 }
 
+export type ProductListQueryDTO = {
+  limit?: string;
+  page?: string;
+  q?: string;
+  category?: string;
+  subcategory?: string;
+  stock?: string;
+  color?: string;
+  type?: string;
+  size?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+};
+
 export type GetProductsDTO = GetProductsSchemaDTO;
 export type GetProductsApiResponse = ApiResponse<GetProductsResponse>;
 

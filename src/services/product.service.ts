@@ -4,21 +4,19 @@ import { ErrorResponse } from "../utils/errorResponse";
 import { NextFunction } from "express";
 import {
   CreateProductDTO,
-  CreateProductResponse,
-  GetProductDTO,
-  GetProductsDTO,
   ProductAttributeUpdateResponse,
   Specification,
   Keyattribute,
   UpdateProductDTO,
-  UpdateProductResponse,
   UpdateProductSizeDTO,
   UpdateProductSizeResponse,
+  ProductListQueryDTO,
 } from "../types/product.types";
 import { createProductSchema, Medias } from "../types/dto/product.dto";
 import { validateData } from "../helpers/validation";
 import { updateProductAttribute } from "../helpers/update-product-attributes";
-import { Product } from "models";
+import { Product } from "../models";
+import { getPageCount, getPaginationParams } from "../utils";
 
 export class ProductService {
   /**
@@ -27,15 +25,125 @@ export class ProductService {
    * @param _next
    * @returns products list
    */
-  async getProducts(_query: GetProductsDTO, _next: NextFunction) {
+  async getProducts(_query: ProductListQueryDTO, _next: NextFunction) {
     try {
-      const products = await prisma.product.findMany({
-        where: {
-          ...(_query && _query),
-        },
-      });
+      const {
+        limit,
+        page,
+        q,
+        category,
+        subcategory,
+        stock,
+        color,
+        type,
+        size,
+        minPrice,
+        maxPrice,
+        createdAt,
+        updatedAt,
+      } = _query;
 
-      if (!products) {
+      const {
+        take,
+        offset: skip,
+        page: currentPage,
+        limit: queryLimit,
+      } = getPaginationParams(page as string, limit as string);
+
+      const whereFilter: any = {
+        deletedAt: null, // Products that aren't soft-deleted
+
+        // Filter by category and subcategory if provided
+        ...(category && {
+          category: {
+            name: category,
+          },
+        }),
+        ...(subcategory && {
+          subcategory: {
+            name: subcategory,
+          },
+        }),
+
+        // Filter by stock count
+        ...(stock && { stock: { gte: parseInt(stock) } }),
+
+        // Filter by date created and updated
+        ...(createdAt && {
+          createdAt: {
+            gte: new Date(createdAt),
+          },
+        }),
+        ...(updatedAt && {
+          updatedAt: {
+            gte: new Date(updatedAt),
+          },
+        }),
+
+        ...(minPrice && {
+          price: {
+            gte: parseFloat(minPrice),
+          },
+        }),
+        ...(maxPrice && {
+          price: {
+            lte: parseFloat(maxPrice),
+          },
+        }),
+
+        // Dynamic search across various fields
+        ...(q && {
+          OR: [
+            { name: { contains: q, mode: "insensitive" } },
+            { description: { contains: q, mode: "insensitive" } },
+          ],
+        }),
+
+        colors: {
+          some: {
+            colorId: {
+              ...(color ? { in: color?.split(",") } : {}),
+            },
+          },
+        },
+
+        sizes: {
+          some: {
+            sizeId: {
+              ...(size ? { in: size?.split(",") } : {}),
+            },
+          },
+        },
+
+        types: {
+          some: {
+            typeId: {
+              ...(type ? { in: type?.split(",") } : {}),
+            },
+          },
+        },
+      };
+
+      const [results, count] = await Promise.all([
+        prisma.product.findMany({
+          where: whereFilter,
+          include: {
+            category: true,
+            subcategory: true,
+            sizes: true,
+            colors: true,
+            types: true,
+          },
+          take,
+          skip,
+        }),
+
+        prisma.product.count({
+          where: whereFilter,
+        }),
+      ]);
+
+      if (!results) {
         return _next(
           new ErrorResponse(
             ERROR_MESSAGES.PRODUCT_NOT_FOUND,
@@ -44,7 +152,12 @@ export class ProductService {
         );
       }
 
-      return products;
+      return {
+        currentPage,
+        count,
+        pageCount: getPageCount(count, queryLimit),
+        results,
+      };
     } catch (err) {
       _next(err);
       throw new ErrorResponse(
@@ -235,9 +348,7 @@ export class ProductService {
           ...(stock && { stock }),
           ...(displayImage && { displayImage }),
           ...(medias && {
-            medias: Array.isArray(medias)
-              ? medias
-              : JSON.parse(medias),
+            medias: Array.isArray(medias) ? medias : JSON.parse(medias),
           }),
           ...(specification && {
             specification: Array.isArray(specification)
