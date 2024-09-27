@@ -3,10 +3,11 @@ import { DesktopTitle } from "@/common/Title";
 import ProductList from "../product/components/ProductList";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductsData } from "@/lib/apiProduct";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TProductQuery } from "@/types/product";
 import { cn } from "@/lib/utils";
 import debounce from "lodash.debounce";
+import { useSearchParams, useRouter } from "next/navigation"; // Import Next.js hooks
 import { Filter } from "iconsax-react";
 import {
   Accordion,
@@ -21,45 +22,65 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { DEFAULT_CUSTOM_PRICE, SORT_OPTIONS, SUBCATEGORIES, COLOR_FILTERS, SIZE_FILTERS, TYPE_FILTERS, PRICE_FILTERS } from "./ProductConstant";
+import {
+  DEFAULT_CUSTOM_PRICE,
+  SORT_OPTIONS,
+  SUBCATEGORIES,
+  COLOR_FILTERS,
+  SIZE_FILTERS,
+  TYPE_FILTERS,
+  PRICE_FILTERS,
+} from "./ProductConstant";
 
-interface ProductsProps {}
-export default function Products({}: ProductsProps) {
+export default function Products() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Initialize filter state from URL query params
   const [filter, setFilter] = useState<TProductQuery>({
-    color: [],
-    size: [],
-    type: [],
-    price: { isCustom: false, range: DEFAULT_CUSTOM_PRICE },
-    sort: undefined,
+    color: searchParams.get("color")?.split(",") || [],
+    size: searchParams.get("size")?.split(",") || [],
+    type: searchParams.get("type")?.split(",") || [],
+    price: {
+      isCustom: searchParams.get("customPrice") === "true",
+      range: searchParams.get("price")
+        ? searchParams.get("price").split(",").map(Number)
+        : DEFAULT_CUSTOM_PRICE,
+    },
+    sort: searchParams.get("sort") || undefined,
   });
 
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["products", {}],
+    queryKey: ["products", filter],
     queryFn: () =>
       fetchProductsData({
         page: String(1),
         limit: String(3),
-        filter: {
-          ...(filter.sort && { sort: filter.sort }),
-          ...(filter.color && { color: filter.color }),
-          ...(filter.type && { type: filter.type }),
-          ...(filter.price && {
-            price: {
-              range: filter.price.range,
-            },
-          }),
-          ...(filter.size && { size: filter.size }),
-        },
+        filter,
       }),
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  const onSubmit = () => refetch();
+  // Function to update the URL query string with the current filter state
+  const updateUrlQuery = (updatedFilter: TProductQuery) => {
+    const query = new URLSearchParams();
 
-  const debouncedSubmit = debounce(onSubmit, 400);
-  const _debouncedSubmit = useCallback(debouncedSubmit, []);
+    if (updatedFilter.color.length)
+      query.set("color", updatedFilter.color.join(","));
+    if (updatedFilter.size.length)
+      query.set("size", updatedFilter.size.join(","));
+    if (updatedFilter.type.length)
+      query.set("type", updatedFilter.type.join(","));
+    if (updatedFilter.price)
+      query.set("price", updatedFilter.price.range.join(","));
+    if (updatedFilter.price?.isCustom) query.set("customPrice", "true");
+    if (updatedFilter.sort) query.set("sort", updatedFilter.sort);
 
+    router.replace(`?${query.toString()}`); // Update the URL without refreshing the page
+  };
+
+  // Handle filter updates
   const applyArrayFilter = ({
     category,
     value,
@@ -67,24 +88,41 @@ export default function Products({}: ProductsProps) {
     category: keyof Omit<typeof filter, "price" | "sort">;
     value: string;
   }) => {
-    // Check if the current filter value is an array before using the includes method
     if (Array.isArray(filter[category])) {
       const isFilterApplied = filter[category].includes(value as never);
 
-      if (isFilterApplied) {
-        setFilter((prev) => ({
-          ...prev,
-          [category]: (prev[category] as string[]).filter((v) => v !== value),
-        }));
-      } else {
-        setFilter((prev) => ({
-          ...prev,
-          [category]: [...(prev[category] as string[]), value],
-        }));
-      }
+      const updatedFilter = {
+        ...filter,
+        [category]: isFilterApplied
+          ? (filter[category] as string[]).filter((v) => v !== value)
+          : [...(filter[category] as string[]), value],
+      };
+      setFilter(updatedFilter);
+      updateUrlQuery(updatedFilter); // Sync filters to the URL
       _debouncedSubmit();
     }
   };
+
+  const onSubmit = () => refetch();
+  const debouncedSubmit = debounce(onSubmit, 400);
+  const _debouncedSubmit = useCallback(debouncedSubmit, [filter]);
+
+  // Sync URL params to filter state when the component mounts
+  useEffect(() => {
+    const initialFilter = {
+      color: searchParams.get("color")?.split(",") || [],
+      size: searchParams.get("size")?.split(",") || [],
+      type: searchParams.get("type")?.split(",") || [],
+      price: {
+        isCustom: searchParams.get("customPrice") === "true",
+        range: searchParams.get("price")
+          ? searchParams.get("price").split(",").map(Number)
+          : DEFAULT_CUSTOM_PRICE,
+      },
+      sort: searchParams.get("sort") || undefined,
+    };
+    setFilter(initialFilter);
+  }, [searchParams]);
 
   const minPrice: number = Math.min(
     filter?.price?.range[0] || 0,
