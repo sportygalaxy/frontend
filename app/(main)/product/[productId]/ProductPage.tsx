@@ -6,7 +6,7 @@ import { fetchProductData } from "@/lib/apiProduct";
 import Divider from "@/common/Divider";
 import ProductMediaSliders from "@/app/(main)/product/components/ProductMediaSliders";
 import ProductDetails from "../components/ProductDetails";
-import Products from "@/components/product/Products";
+
 import { DesktopTitle } from "@/common/Title";
 import ProductSpecifications from "../components/ProductSpecifications";
 import ProductKeyattributes from "../components/ProductKeyattributes";
@@ -14,6 +14,7 @@ import ProductRatings from "../components/ProductRatings";
 import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
 import { PRODUCT_ID } from "@/constants/appConstants";
+import ProductList from "../components/ProductList";
 
 interface ProductProps {
   params: { productId: string };
@@ -61,7 +62,7 @@ const ProductPage: FC<ProductProps> = (props) => {
 
           <section className="desktop-tablet-view flex-col lg:mt-5">
             <DesktopTitle noLine title="Other recommended products" />
-            <Products isMobile isHorizontalScroll />
+            <ProductList isMobile isHorizontalScroll />
           </section>
 
           <ProductKeyattributes keyattributes={productData?.keyattribute} />

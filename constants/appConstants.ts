@@ -65,3 +65,8 @@ export const uploadConfig = {
 export const PRODUCT_ID = "70e232f2-eee3-4027-b672-34cdf175b93b";
 export const DEFAULT_PRODUCT_IMAGE = "/favicon-16x16.png";
 export const DEFAULT_USER_IMAGE = "/images/default-image.png";
+
+export const PAGINATION_DEFAULT = {
+  page: "1",
+  limit: "1",
+};

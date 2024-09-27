@@ -5,18 +5,19 @@ import Hero from "./_components/Hero";
 import Introduction from "./_components/Introduction";
 import NewsLetter from "./_components/NewsLetter";
 
-import Products from "@/components/product/Products";
+
 import Featured from "@/components/featured/Featured";
 import Categories from "@/components/category/Categories";
 import SeeAll from "./_components/SeeAll";
 import VerifyBanner from "./_components/VerifyBanner";
+import ProductList from "../product/components/ProductList";
 
 export default function LandingPage() {
   return (
     <>
       {/* Development */}
       {/* <div className="desktop-tablet-view wrapper mt-5 sm:mt-0">
-        <Products />
+        <ProductList />
       </div> */}
 
       {/* Desktop contents */}
@@ -29,7 +30,7 @@ export default function LandingPage() {
           <DesktopTitle title="NEW ARRIVAL." />
         </div>
         <div className="desktop-tablet-view wrapper mt-5 sm:mt-0">
-          <Products />
+          <ProductList />
         </div>
         <SeeAll
           text="See All"
@@ -77,14 +78,14 @@ export default function LandingPage() {
           <MobileTitle title="Best selling" path="" />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-5 sm:mt-0">
-          <Products isMobile />
+          <ProductList isMobile />
         </div>
 
         <div className="wrapper mt-10 sm:mt-0">
           <MobileTitle title="Recently viewed" path="" />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-0 sm:mt-0">
-          <Products isMobile isHorizontalScroll />
+          <ProductList isMobile isHorizontalScroll />
         </div>
       </>
     </>

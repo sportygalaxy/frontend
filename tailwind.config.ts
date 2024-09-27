@@ -19,8 +19,8 @@ const config = {
     container: {
       center: false,
       padding: {
-        DEFAULT: "1rem", // Default padding
-        sm: "2rem", // Padding for screens >= 640px
+        DEFAULT: "1rem",
+        sm: "2rem",
       },
       screens: {
         xs: "445px",
@@ -82,24 +82,32 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       borderWidth: {
-        "1": "1px", // Custom border width
-        "3": "3px", // Custom border width
-        "6": "6px", // Another custom border width
+        "1": "1px",
+        "3": "3px",
+        "6": "6px",
       },
       borderColor: {
-        dark: "var(--grey)", // Custom border color
-        light: "var(--light-grey)", // Another custom border color
-        grey: "var(--border-grey)", // Another custom border color
-        lightDarkGrey: "var(--light-dark-grey)", // Another custom border color
+        dark: "var(--grey)",
+        light: "var(--light-grey)",
+        grey: "var(--border-grey)",
+        lightDarkGrey: "var(--light-dark-grey)",
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
         },
       },
       animation: {
@@ -125,20 +133,20 @@ const config = {
         normal: "400",
       },
       fontSize: {
-        xs: "0.75rem", // 12px
-        sm: "0.875rem", // 14px
-        base: "1rem", // 16px
-        lg: "1.125rem", // 18px
-        xl: "1.25rem", // 20px
-        "mobile-xl": "0.6312rem", // 10.1px
-        "2xl": "1.5rem", // 24px
-        "mobile-2xl": "0.9375rem", // 15px
-        "3xl": "1.875rem", // 30px
-        "mobile-3xl": "1.25rem", // 20px
-        "4xl": "2.25rem", // 36px
-        "5xl": "3rem", // 48px
-        "mobile-5xl": "1.75rem", // 28px
-        "6xl": "4rem", // 64px
+        xs: "0.75rem",
+        sm: "0.875rem",
+        base: "1rem",
+        lg: "1.125rem",
+        xl: "1.25rem",
+        "mobile-xl": "0.6312rem",
+        "2xl": "1.5rem",
+        "mobile-2xl": "0.9375rem",
+        "3xl": "1.875rem",
+        "mobile-3xl": "1.25rem",
+        "4xl": "2.25rem",
+        "5xl": "3rem",
+        "mobile-5xl": "1.75rem",
+        "6xl": "4rem",
       },
     },
   },

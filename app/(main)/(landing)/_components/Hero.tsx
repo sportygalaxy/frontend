@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { RoutesEnum } from "@/constants/routeEnums";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Hero = () => {
+  const router = useRouter();
   return (
     <>
       <div className="desktop-tablet-view relative mt-7 w-full h-full bg-dark-gradient bg-cover bg-no-repeat py-44">
@@ -19,6 +24,7 @@ const Hero = () => {
             variant="tertiary"
             size="lg"
             className="bg-primary-foreground w-fit text-mobile-xl md:text-xl"
+            onClick={() => router.push(RoutesEnum.PRODUCTS, { scroll: false })}
           >
             Shop now
           </Button>
