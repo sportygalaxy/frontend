@@ -60,12 +60,16 @@ export const PRICE_FILTERS = {
   ],
 } as const;
 
-export const SUBCATEGORIES = [
-  { name: "Strength Training Equipment", selected: true, href: "#" },
-  { name: "Cardio Equipment", selected: false, href: "#" },
+export const CATEGORIES = [
+  { name: "Cardio Equipment", selected: true, href: "#" },
   { name: "Yoga & Pilates Equipment", selected: false, href: "#" },
   { name: "Sports Accessories", selected: false, href: "#" },
-  { name: "Functional Training Equipment", selected: false, href: "#" },
+];
+
+export const SUBCATEGORIES = [
+  { name: "Thread-mill", selected: true, href: "#" },
+  { name: "Rowing Machines", selected: false, href: "#" },
+  { name: "Stationary Bikes", selected: false, href: "#" },
 ];
 
 export const DEFAULT_CUSTOM_PRICE = [0, 100] as [number, number];
