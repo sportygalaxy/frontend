@@ -602,7 +602,7 @@ export default function Products() {
         </div>
 
         <section className="flex flex-col w-full">
-          <ProductList productData={data?.data?.results} />
+          <ProductList isolated={false} productData={data?.data?.results} />
 
           {/* PAGINATION */}
           <section className="flex items-center justify-between mt-10">

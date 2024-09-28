@@ -62,7 +62,7 @@ const ProductPage: FC<ProductProps> = (props) => {
 
           <section className="desktop-tablet-view flex-col lg:mt-5">
             <DesktopTitle noLine title="Other recommended products" />
-            <ProductList isMobile isHorizontalScroll />
+            <ProductList isolated isMobile isHorizontalScroll />
           </section>
 
           <ProductKeyattributes keyattributes={productData?.keyattribute} />

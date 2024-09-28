@@ -30,7 +30,7 @@ export default function LandingPage() {
           <DesktopTitle title="NEW ARRIVAL." />
         </div>
         <div className="desktop-tablet-view wrapper mt-5 sm:mt-0">
-          <ProductList />
+          <ProductList isolated />
         </div>
         <SeeAll
           text="See All"
@@ -78,14 +78,14 @@ export default function LandingPage() {
           <MobileTitle title="Best selling" path="" />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-5 sm:mt-0">
-          <ProductList isMobile />
+          <ProductList isolated isMobile />
         </div>
 
         <div className="wrapper mt-10 sm:mt-0">
           <MobileTitle title="Recently viewed" path="" />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-0 sm:mt-0">
-          <ProductList isMobile isHorizontalScroll />
+          <ProductList isolated isMobile isHorizontalScroll />
         </div>
       </>
     </>
