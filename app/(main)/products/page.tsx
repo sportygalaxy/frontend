@@ -65,7 +65,6 @@ export default function Products() {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  const query = new URLSearchParams();
   // Function to update the URL query string with the current filter state
   const updateUrlQuery = (updatedFilter: TProductQuery) => {
     const query = new URLSearchParams();
@@ -148,6 +147,9 @@ export default function Products() {
   const currentPage = data?.data?.currentPage || 0;
   const totalPages = data?.data?.pageCount || 0;
 
+  // if (isLoading) return <p>Loading products...</p>;
+  // if (error) return <p>Error fetching products.</p>;
+
   return (
     <div className="wrapper">
       <div className="flex items-baseline gap-5">
@@ -168,12 +170,18 @@ export default function Products() {
                     "text-gray-500": option.value !== filter.sort,
                   })}
                   onClick={() => {
-                    setFilter((prev) => ({
-                      ...prev,
+                    const updatedFilter = {
+                      ...filter,
                       sort: option.value,
-                    }));
+                      page: 1, // Reset to first page when limit changes
+                    };
 
-                    updateUrlQuery(filter);
+                    setFilter(updatedFilter);
+
+                    updateUrlQuery({
+                      ...updatedFilter,
+                    });
+
                     _debouncedSubmit();
                   }}
                 >
@@ -330,14 +338,21 @@ export default function Products() {
                         type="radio"
                         id={`price-${optionIdx}`}
                         onChange={() => {
-                          setFilter((prev) => ({
-                            ...prev,
+                          const updatedFilter = {
+                            ...filter,
                             price: {
                               isCustom: false,
                               range: [...(option.value as [number, number])],
                             },
-                          }));
+                            page: 1, // Reset page to 1 when filters are updated
+                          };
 
+                          setFilter(updatedFilter as any);
+
+                          // Sync the new price filter with the URL
+                          updateUrlQuery(updatedFilter as any);
+
+                          // Debounced submit to refetch data with new filters
                           _debouncedSubmit();
                         }}
                         checked={
@@ -355,20 +370,28 @@ export default function Products() {
                       </label>
                     </li>
                   ))}
+
                   <li className="flex justify-center flex-col gap-2">
                     <div>
                       <input
                         type="radio"
                         id={`price-${PRICE_FILTERS.options.length}`}
                         onChange={() => {
-                          setFilter((prev) => ({
-                            ...prev,
+                          const updatedFilter = {
+                            ...filter,
                             price: {
                               isCustom: true,
                               range: [0, 100],
                             },
-                          }));
+                            page: 1, // Reset page to 1 when filters are updated
+                          };
 
+                          setFilter(updatedFilter as any);
+
+                          // Sync custom price filter with the URL
+                          updateUrlQuery(updatedFilter as any);
+
+                          // Debounced submit to refetch data with new filters
                           _debouncedSubmit();
                         }}
                         checked={filter?.price?.isCustom}
@@ -404,14 +427,21 @@ export default function Products() {
                       onValueChange={(range) => {
                         const [newMin, newMax] = range;
 
-                        setFilter((prev) => ({
-                          ...prev,
+                        const updatedFilter = {
+                          ...filter,
                           price: {
                             isCustom: true,
                             range: [newMin, newMax] as [number, number],
                           },
-                        }));
+                          page: 1, // Reset page to 1 when filters are updated
+                        };
 
+                        setFilter(updatedFilter);
+
+                        // Sync the custom price range with the URL
+                        updateUrlQuery(updatedFilter);
+
+                        // Debounced submit to refetch data with new filters
                         _debouncedSubmit();
                       }}
                       value={
