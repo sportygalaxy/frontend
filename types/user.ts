@@ -7,7 +7,11 @@ export type TUserState = {
 };
 
 export interface IUserPayload {
-  avatar: string;
+  avatar?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: string;
 }
 export interface IUserQueryParam {
   id: string;

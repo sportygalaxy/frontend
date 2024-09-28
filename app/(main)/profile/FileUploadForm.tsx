@@ -11,6 +11,7 @@ import { IUserPayload, IUserQueryParam, IUserResponse } from "@/types/user";
 import useUserStore from "@/store/userStore";
 import { UserData } from "@/types/auth";
 import { updateUser } from "@/lib/apiUser";
+import { deepReplace } from "@/utils/objectUtils";
 
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -102,8 +103,7 @@ const FileUploadForm: React.FC = () => {
     mutationFn: ({ userData, params }) => updateUser({ userData, params }),
     onMutate: async () => {},
     onSuccess: (data) => {
-      // TODO: revalidate only mutate properties in the user object
-      // setUser(data?.data as UserData);
+      setUser(deepReplace(user, ["avatar"], data?.data?.avatar) as UserData);
       NotifySuccess(data?.message as string);
     },
     onError: (error, variables, context) => {
