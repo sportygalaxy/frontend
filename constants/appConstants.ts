@@ -67,6 +67,6 @@ export const DEFAULT_PRODUCT_IMAGE = "/favicon-16x16.png";
 export const DEFAULT_USER_IMAGE = "/images/default-image.png";
 
 export const PAGINATION_DEFAULT = {
-  page: "1",
-  limit: "1",
+  page: 1,
+  limit: 20,
 };

@@ -30,6 +30,7 @@ import {
   SIZE_FILTERS,
   TYPE_FILTERS,
   PRICE_FILTERS,
+  PAGINATE_VIEW_OPTIONS,
 } from "./ProductConstant";
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
@@ -151,6 +152,9 @@ export default function Products() {
   );
 
   console.log("FILTER ::", filter);
+
+  const currentPage = data?.data?.currentPage || 0;
+  const totalPages = data?.data?.pageCount || 0;
 
   return (
     <div className="wrapper">
@@ -432,7 +436,12 @@ export default function Products() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+        </div>
 
+        <section className="flex flex-col w-full">
+          <ProductList productData={data?.data?.results} />
+
+          {/* PAGINATION */}
           <section className="flex items-center justify-between mt-10">
             <Button
               onClick={() => {
@@ -446,6 +455,49 @@ export default function Products() {
             >
               Prev
             </Button>
+
+            <section className="flex items-center justify-center gap-4">
+              <span>{`Page ${currentPage} of ${totalPages}`}</span>
+              <div className="flex items-center">
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
+                    Sort
+                    <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="end">
+                    {PAGINATE_VIEW_OPTIONS.map((option) => (
+                      <button
+                        key={option.name}
+                        className={cn(
+                          "text-left w-full block px-4 py-2 text-sm",
+                          {
+                            "text-gray-900 bg-gray-100":
+                              option.value === filter.limit,
+                            "text-gray-500": option.value !== filter.limit,
+                          }
+                        )}
+                        onClick={() => {
+                          setFilter((prev) => ({
+                            ...prev,
+                            limit: option.value,
+                          }));
+
+                          _debouncedSubmit();
+                        }}
+                      >
+                        {option.name}
+                      </button>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+                  <Filter className="h-5 w-5" />
+                </button>
+              </div>
+            </section>
+
             <Button
               onClick={() => {
                 setFilter((prev) => ({
@@ -459,9 +511,7 @@ export default function Products() {
               Next
             </Button>
           </section>
-        </div>
-
-        <ProductList productData={data?.data?.results} />
+        </section>
       </div>
     </div>
   );
