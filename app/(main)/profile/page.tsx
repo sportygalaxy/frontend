@@ -9,14 +9,20 @@ import {
   MessageQuestion,
   ShoppingCart,
   LogoutCurve,
+  Edit2,
+  CloseCircle,
 } from "iconsax-react";
 import Image from "next/image";
 import FileUploadForm from "./FileUploadForm";
 import { DEFAULT_USER_IMAGE } from "@/constants/appConstants";
+import ProfileAvatarUploader from "./components/ProfileAvatarUploader";
+import useToggle from "@/hooks/useToggle";
+import { cn } from "@/lib/utils";
 
 export default function Profile() {
-  const { setUser, user } = useUserStore();
+  const { user } = useUserStore();
   const { logoutUser, isPending } = useLogout();
+  const [openUploadModal, toggleUploadModal] = useToggle();
 
   const profileCtas = [
     {
@@ -78,29 +84,104 @@ export default function Profile() {
     },
   ];
 
+  const focusClassName =
+    "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+  const placeholderClassName =
+    "placeholder-[#808080] placeholder:font-light focus:placeholder-opacity-50 disabled:placeholder-opacity-70";
   return (
     <section className="wrapper my-10 bg-white">
-      <FileUploadForm />
       <div className="flex items-center justify-center flex-col gap-3 p-7">
-        <Image
-          width={100}
-          height={100}
-          className="bg-gray-500 w-20 h-20 rounded-full"
-          src={user?.avatar || DEFAULT_USER_IMAGE}
-          alt="profic-placeholder"
-        />
+        <div className="relative flex items-center justify-center flex-col text-center">
+          <Image
+            width={200}
+            height={200}
+            className="bg-gray-500 w-40 h-40 rounded-full text-center"
+            src={user?.avatar || DEFAULT_USER_IMAGE}
+            alt="profic-placeholder"
+          />
+          <Edit2
+            color="green"
+            className={cn("absolute top-0 cursor-pointer", {
+              "-right-[75px]": !openUploadModal,
+              "right-2 hidden": openUploadModal,
+            })}
+            onClick={toggleUploadModal}
+          />
+          <CloseCircle
+            color="red"
+            className={cn("absolute top-0 cursor-pointer", {
+              "-right-20 hidden": !openUploadModal,
+              "-right-8": openUploadModal,
+            })}
+            onClick={toggleUploadModal}
+          />
+
+          {openUploadModal ? (
+            <ProfileAvatarUploader
+              toggle={toggleUploadModal}
+              show={openUploadModal}
+            />
+          ) : null}
+        </div>
         <div className="text-center">
           <p className="text-black font-medium text-mobile-3xl md:text-3xl capitalize">
             {user?.firstName} {user?.lastName}
           </p>
-          <p className="text-black font-normal lowercase">{user?.email}</p>
+
+          {openUploadModal ? (
+            <div
+              className={cn(
+                "flex items-center sm:flex-row flex-col justify-center gap-4"
+              )}
+            >
+              <input
+                className={cn(
+                  "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0 capitalize",
+                  placeholderClassName,
+                  focusClassName
+                )}
+                defaultValue={user?.firstName}
+                placeholder="Update First Name"
+                name="firstName"
+                type="text"
+              />
+              <input
+                className={cn(
+                  "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0 capitalize",
+                  placeholderClassName,
+                  focusClassName
+                )}
+                defaultValue={user?.lastName}
+                placeholder="Update Last Name"
+                name="lastName"
+                type="text"
+              />
+            </div>
+          ) : (
+            <p className="text-black font-normal lowercase">{user?.email}</p>
+          )}
         </div>
       </div>
 
       <div className="flex items-center justify-center flex-col gap-3 space-y-5 py-6 w-full">
         <div className="flex items-center justify-center flex-col">
           <p className="capitalize font-bold">Pick up location</p>
-          <p>{user?.address}</p>
+
+          {openUploadModal ? (
+            <input
+              className={cn(
+                "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0 normal-case",
+                placeholderClassName,
+                focusClassName
+              )}
+              defaultValue={user?.address}
+              placeholder="Update Pick up Location"
+              name="firstName"
+              type="text"
+            />
+          ) : (
+            <p>{user?.address}</p>
+          )}
         </div>
         <div className="flex items-center justify-center flex-col">
           <p className="capitalize font-bold">Payment Method</p>
