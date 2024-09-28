@@ -53,7 +53,9 @@ class ProductCategoryService {
             try {
                 const productCategory = yield prisma_1.default.category.findUnique({
                     where: { id: _id },
-                    include: {},
+                    include: {
+                        subcategories: true,
+                    },
                 });
                 if (!productCategory) {
                     return _next(new errorResponse_1.ErrorResponse(constants_1.ERROR_MESSAGES.PRODUCT_CATEGORY_NOT_FOUND, constants_1.HTTP_STATUS_CODE[400].code));

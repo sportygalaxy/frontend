@@ -59,7 +59,9 @@ export class ProductCategoryService {
     try {
       const productCategory = await prisma.category.findUnique({
         where: { id: _id },
-        include: {},
+        include: {
+          subcategories: true,
+        },
       });
 
       if (!productCategory) {

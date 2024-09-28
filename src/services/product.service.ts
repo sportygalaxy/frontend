@@ -25,11 +25,14 @@ export class ProductService {
    * @param _next
    * @returns products list
    */
-  async getProducts(_query: ProductListQueryDTO, _next: NextFunction) {
+  async getProducts(_query: any, _next: NextFunction) {
     try {
+      const { filter } = _query;
+
       const {
-        limit,
+        sort,
         page,
+        limit,
         q,
         category,
         subcategory,
@@ -37,11 +40,28 @@ export class ProductService {
         color,
         type,
         size,
+        price,
         minPrice,
         maxPrice,
         createdAt,
         updatedAt,
-      } = _query;
+      } = filter ?? {};
+
+      console.log({
+        sort,
+        q,
+        category,
+        subcategory,
+        stock,
+        color,
+        type,
+        size,
+        price: price?.range,
+        minPrice,
+        maxPrice,
+        createdAt,
+        updatedAt,
+      });
 
       const {
         take,
@@ -80,6 +100,7 @@ export class ProductService {
           },
         }),
 
+        // Filter by price range
         ...(minPrice && {
           price: {
             gte: parseFloat(minPrice),
@@ -88,6 +109,21 @@ export class ProductService {
         ...(maxPrice && {
           price: {
             lte: parseFloat(maxPrice),
+          },
+        }),
+
+        // Filter by price range (using array input)
+        ...(price?.range.length === 2 && {
+          price: {
+            gte: Number(price?.range?.[0]), // Lower bound of price range
+            lte: Number(price?.range?.[1]), // Upper bound of price range
+          },
+        }),
+
+        // Filter by creation date (newly uploaded products)
+        ...(createdAt && {
+          createdAt: {
+            gte: new Date(createdAt).toISOString(), // Only show products created after this date
           },
         }),
 
@@ -102,7 +138,7 @@ export class ProductService {
         colors: {
           some: {
             colorId: {
-              ...(color ? { in: color?.split(",") } : {}),
+              ...(color ? { in: color } : {}),
             },
           },
         },
@@ -110,7 +146,7 @@ export class ProductService {
         sizes: {
           some: {
             sizeId: {
-              ...(size ? { in: size?.split(",") } : {}),
+              ...(size ? { in: size } : {}),
             },
           },
         },
@@ -118,7 +154,7 @@ export class ProductService {
         types: {
           some: {
             typeId: {
-              ...(type ? { in: type?.split(",") } : {}),
+              ...(type ? { in: type } : {}),
             },
           },
         },
@@ -134,6 +170,11 @@ export class ProductService {
             colors: true,
             types: true,
           },
+          orderBy: {
+            ...(sort && {
+              price: sort === "asc" ? "asc" : "desc",
+            }),
+          }, // Add sorting here
           take,
           skip,
         }),

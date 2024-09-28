@@ -29,10 +29,27 @@ class ProductService {
      */
     getProducts(_query, _next) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             try {
-                const { limit, page, q, category, subcategory, stock, color, type, size, minPrice, maxPrice, createdAt, updatedAt, } = _query;
+                const { filter } = _query;
+                const { sort, page, limit, q, category, subcategory, stock, color, type, size, price, minPrice, maxPrice, createdAt, updatedAt, } = filter !== null && filter !== void 0 ? filter : {};
+                console.log({
+                    sort,
+                    q,
+                    category,
+                    subcategory,
+                    stock,
+                    color,
+                    type,
+                    size,
+                    price: price === null || price === void 0 ? void 0 : price.range,
+                    minPrice,
+                    maxPrice,
+                    createdAt,
+                    updatedAt,
+                });
                 const { take, offset: skip, page: currentPage, limit: queryLimit, } = (0, utils_1.getPaginationParams)(page, limit);
-                const whereFilter = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ deletedAt: null }, (category && {
+                const whereFilter = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ deletedAt: null }, (category && {
                     category: {
                         name: category,
                     },
@@ -56,6 +73,15 @@ class ProductService {
                     price: {
                         lte: parseFloat(maxPrice),
                     },
+                })), ((price === null || price === void 0 ? void 0 : price.range.length) === 2 && {
+                    price: {
+                        gte: Number((_a = price === null || price === void 0 ? void 0 : price.range) === null || _a === void 0 ? void 0 : _a[0]), // Lower bound of price range
+                        lte: Number((_b = price === null || price === void 0 ? void 0 : price.range) === null || _b === void 0 ? void 0 : _b[1]), // Upper bound of price range
+                    },
+                })), (createdAt && {
+                    createdAt: {
+                        gte: new Date(createdAt).toISOString(), // Only show products created after this date
+                    },
                 })), (q && {
                     OR: [
                         { name: { contains: q, mode: "insensitive" } },
@@ -63,15 +89,15 @@ class ProductService {
                     ],
                 })), { colors: {
                         some: {
-                            colorId: Object.assign({}, (color ? { in: color === null || color === void 0 ? void 0 : color.split(",") } : {})),
+                            colorId: Object.assign({}, (color ? { in: color } : {})),
                         },
                     }, sizes: {
                         some: {
-                            sizeId: Object.assign({}, (size ? { in: size === null || size === void 0 ? void 0 : size.split(",") } : {})),
+                            sizeId: Object.assign({}, (size ? { in: size } : {})),
                         },
                     }, types: {
                         some: {
-                            typeId: Object.assign({}, (type ? { in: type === null || type === void 0 ? void 0 : type.split(",") } : {})),
+                            typeId: Object.assign({}, (type ? { in: type } : {})),
                         },
                     } });
                 const [results, count] = yield Promise.all([
@@ -84,6 +110,9 @@ class ProductService {
                             colors: true,
                             types: true,
                         },
+                        orderBy: Object.assign({}, (sort && {
+                            price: sort === "asc" ? "asc" : "desc",
+                        })), // Add sorting here
                         take,
                         skip,
                     }),

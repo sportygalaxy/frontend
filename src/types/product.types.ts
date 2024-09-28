@@ -49,6 +49,7 @@ export type ProductListQueryDTO = {
   size?: string;
   minPrice?: string;
   maxPrice?: string;
+  sortByPrice?: "asc" | "desc" | undefined;
   createdAt?: Date | null;
   updatedAt?: Date | null;
 };
