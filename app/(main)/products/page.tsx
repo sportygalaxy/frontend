@@ -1,4 +1,5 @@
 "use client";
+
 import { DesktopTitle } from "@/common/Title";
 import ProductList from "../product/components/ProductList";
 import { useQuery } from "@tanstack/react-query";
@@ -32,6 +33,7 @@ import {
   PRICE_FILTERS,
   PAGINATE_VIEW_OPTIONS,
   CATEGORIES,
+  isFilterEmpty,
 } from "./ProductConstant";
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
@@ -165,8 +167,6 @@ export default function Products() {
   const currentPage = data?.data?.currentPage || 0;
   const totalPages = data?.data?.pageCount || 0;
 
-  console.log("FILTER ::", filter);
-
   // if (isLoading) return <p>Loading products...</p>;
   // if (error) return <p>Error fetching products.</p>;
 
@@ -214,13 +214,30 @@ export default function Products() {
           </DropdownMenu>
 
           <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
-            <Filter className="h-5 w-5" />
+            <Filter color="#000" className="h-5 w-5" />
           </button>
         </div>
+
+        {/* CLEAR */}
+        {isFilterEmpty(filter) ? null : (
+          <Button
+            variant="destructive"
+            onClick={() => {
+              const defaultFilter = {};
+              setFilter(defaultFilter);
+              updateUrlQuery(defaultFilter);
+              _debouncedSubmit();
+            }}
+            className="mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+          >
+            Clear Filters
+          </Button>
+        )}
       </div>
 
       <div className="flex gap-4 mt-10">
         <div className="block space-y-2">
+          {/* CATEGORY */}
           <div className="space-y-3">
             <p className="uppercase font-normal text-sm">Categories</p>
             <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
@@ -233,6 +250,8 @@ export default function Products() {
                         category: category.name, // Set the subcategory in the filter
                         page: 1, // Reset page to 1 when subcategory is selected
                       };
+
+                      if (category?.name === "All") return;
 
                       setFilter(updatedFilter);
 
@@ -250,6 +269,7 @@ export default function Products() {
             </ul>
           </div>
 
+          {/* SUB CATEGORY */}
           <div className="space-y-3">
             <p className="uppercase font-normal text-sm">Sub Categories</p>
             <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
@@ -262,6 +282,8 @@ export default function Products() {
                         subcategory: category.name, // Set the subcategory in the filter
                         page: 1, // Reset page to 1 when subcategory is selected
                       };
+
+                      if (category?.name === "All") return;
 
                       setFilter(updatedFilter);
 

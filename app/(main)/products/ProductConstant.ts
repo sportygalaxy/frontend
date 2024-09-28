@@ -1,3 +1,6 @@
+import { PAGINATION_DEFAULT } from "@/constants/appConstants";
+import { TProductQuery } from "@/types/product";
+
 export const PAGINATE_VIEW_OPTIONS = [
   { id: 1, name: "All", value: 500 },
   { id: 2, name: "20", value: 20 },
@@ -61,15 +64,50 @@ export const PRICE_FILTERS = {
 } as const;
 
 export const CATEGORIES = [
-  { name: "Cardio Equipment", selected: true, href: "#" },
-  { name: "Yoga & Pilates Equipment", selected: false, href: "#" },
-  { name: "Sports Accessories", selected: false, href: "#" },
+  { id: "1", name: "All", selected: true, href: "#" },
+  { id: "2", name: "Cardio Equipment", selected: false, href: "#" },
+  { id: "3", name: "Yoga & Pilates Equipment", selected: false, href: "#" },
+  { id: "4", name: "Sports Accessories", selected: false, href: "#" },
 ];
 
 export const SUBCATEGORIES = [
-  { name: "Thread-mill", selected: true, href: "#" },
-  { name: "Rowing Machines", selected: false, href: "#" },
-  { name: "Stationary Bikes", selected: false, href: "#" },
+  { id: "1", name: "All", selected: true, href: "#" },
+  { id: "2", name: "Thread-mill", selected: false, href: "#" },
+  { id: "3", name: "Rowing Machines", selected: false, href: "#" },
+  { id: "4", name: "Stationary Bikes", selected: false, href: "#" },
 ];
 
 export const DEFAULT_CUSTOM_PRICE = [0, 100] as [number, number];
+
+export const isFilterEmpty = (filter: TProductQuery): boolean => {
+  // Default state for comparison
+  const defaultFilter = {
+    color: [],
+    size: [],
+    type: [],
+    price: {
+      isCustom: false,
+      range: DEFAULT_CUSTOM_PRICE,
+    },
+    subcategory: undefined,
+    category: undefined,
+    sort: undefined,
+    page: PAGINATION_DEFAULT.page,
+    limit: PAGINATION_DEFAULT.limit,
+  };
+
+  // Compare filter with default state
+  return (
+    filter?.color?.length === 0 &&
+    filter?.size?.length === 0 &&
+    filter?.type?.length === 0 &&
+    filter?.price?.isCustom === defaultFilter?.price?.isCustom &&
+    filter?.price?.range[0] === defaultFilter?.price?.range[0] &&
+    filter?.price?.range[1] === defaultFilter?.price?.range[1] &&
+    filter?.subcategory === defaultFilter?.subcategory &&
+    filter?.category === defaultFilter?.category &&
+    filter?.sort === defaultFilter?.sort &&
+    filter?.page === defaultFilter?.page &&
+    filter?.limit === defaultFilter?.limit
+  );
+};
