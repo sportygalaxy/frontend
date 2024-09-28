@@ -31,6 +31,13 @@ import {
   TYPE_FILTERS,
   PRICE_FILTERS,
 } from "./ProductConstant";
+import { PAGINATION_DEFAULT } from "@/constants/appConstants";
+import { Button } from "@/components/ui/button";
+
+type QueryParams = {
+  page?: string; // using string since router query params are strings
+  limit?: string; // using string since router query params are strings
+};
 
 export default function Products() {
   const router = useRouter();
@@ -48,6 +55,8 @@ export default function Products() {
         : DEFAULT_CUSTOM_PRICE,
     } as any,
     sort: searchParams.get("sort") || (undefined as any),
+    page: searchParams.get("page") || PAGINATION_DEFAULT.page,
+    limit: searchParams.get("limit") || PAGINATION_DEFAULT.limit,
   });
 
   const { data, error, isLoading, refetch } = useQuery({
@@ -76,6 +85,10 @@ export default function Products() {
       query.set("price", updatedFilter?.price?.range.join(","));
     if (updatedFilter?.price?.isCustom) query.set("customPrice", "true");
     if (updatedFilter?.sort) query.set("sort", updatedFilter?.sort);
+
+    // Pagination
+    if (updatedFilter?.page) query.set("page", updatedFilter?.page);
+    if (updatedFilter?.limit) query.set("limit", updatedFilter?.limit);
 
     router.replace(`?${query.toString()}`); // Update the URL without refreshing the page
   };
@@ -120,6 +133,10 @@ export default function Products() {
           : DEFAULT_CUSTOM_PRICE,
       },
       sort: searchParams.get("sort") || undefined,
+
+      // pagination
+      page: searchParams.get("page") || PAGINATION_DEFAULT.page,
+      limit: searchParams.get("limit") || PAGINATION_DEFAULT.limit,
     };
     setFilter(initialFilter as any);
   }, [searchParams]);
@@ -132,6 +149,8 @@ export default function Products() {
     filter?.price?.range[0] || 0,
     filter?.price?.range[1] || 0
   );
+
+  console.log("FILTER ::", filter);
 
   return (
     <div className="wrapper">
@@ -413,6 +432,33 @@ export default function Products() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+
+          <section className="flex items-center justify-between mt-10">
+            <Button
+              onClick={() => {
+                setFilter((prev) => ({
+                  ...prev,
+                  ...(filter?.page && { page: Number(filter?.page) - 1 }),
+                }));
+
+                _debouncedSubmit();
+              }}
+            >
+              Prev
+            </Button>
+            <Button
+              onClick={() => {
+                setFilter((prev) => ({
+                  ...prev,
+                  ...(filter?.page && { page: Number(filter?.page) + 1 }),
+                }));
+
+                _debouncedSubmit();
+              }}
+            >
+              Next
+            </Button>
+          </section>
         </div>
 
         <ProductList productData={data?.data?.results} />

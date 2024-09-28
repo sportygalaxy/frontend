@@ -7,8 +7,8 @@ export type TProduct = {
 };
 
 export type TProductQuery = {
-  limit?: string;
-  page?: string;
+  limit?: any;
+  page?: any;
   q?: string;
   category?: string;
   subcategory?: string;
@@ -26,6 +26,8 @@ export type TProductQuery = {
   createdAt?: Date | null;
   updatedAt?: Date | null;
   filter?: {
+    limit?: any;
+    page?: any;
     category?: string;
     subcategory?: string;
     stock?: string;
