@@ -17,3 +17,11 @@ export const POST = async (url: string, data: any) => {
     data,
   });
 };
+
+export const PUT = async (url: string, data: any) => {
+  return axiosBaseQuery({
+    url,
+    method: "PUT",
+    data,
+  });
+};

@@ -6,6 +6,11 @@ import { NotifyError, NotifySuccess } from "@/helpers/toasts";
 import { uploadConfig } from "@/constants/appConstants";
 import { convertSizeToBytes } from "@/utils/fileUtils";
 import { UPLOAD_FORMATS } from "@/constants/appEnums";
+import { useMutation } from "@tanstack/react-query";
+import { IUserPayload, IUserQueryParam, IUserResponse } from "@/types/user";
+import useUserStore from "@/store/userStore";
+import { UserData } from "@/types/auth";
+import { updateUser } from "@/lib/apiUser";
 
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,6 +19,7 @@ const { uploadFiles } = generateReactHelpers({
 });
 
 const FileUploadForm: React.FC = () => {
+  const { setUser, user } = useUserStore();
   const [files, setFiles] = useState<FileList | null>(null);
   const [fileFormatType, setFileFormatType] = useState<string>(
     UPLOAD_FORMATS.IMAGE
@@ -63,7 +69,17 @@ const FileUploadForm: React.FC = () => {
       });
 
       if (result) {
-        console.log("FORM::", result);
+        const payloadData = {
+          userData: {
+            avatar: result[0]?.appUrl,
+          },
+          params: {
+            id: `${user?.id}`,
+          },
+        };
+
+        update(payloadData);
+
         NotifySuccess(`${result?.[0].name} Upload Successful`);
       } else {
         NotifyError("Upload failed. Please try again.");
@@ -72,6 +88,28 @@ const FileUploadForm: React.FC = () => {
       NotifyError(`Error uploading file: ${error}`);
     }
   };
+
+  const {
+    mutate: update,
+    isPending,
+    error,
+    data,
+  } = useMutation<
+    IUserResponse,
+    Error,
+    { userData: IUserPayload; params: IUserQueryParam }
+  >({
+    mutationFn: ({ userData, params }) => updateUser({ userData, params }),
+    onMutate: async () => {},
+    onSuccess: (data) => {
+      // TODO: revalidate only mutate properties in the user object
+      // setUser(data?.data as UserData);
+      NotifySuccess(data?.message as string);
+    },
+    onError: (error, variables, context) => {
+      NotifyError(error?.message || "An error occured");
+    },
+  });
 
   return (
     <div>
