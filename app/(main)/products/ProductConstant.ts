@@ -1,5 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { TProductQuery } from "@/types/product";
+import { substractDaysFromTodaysDate } from "@/utils/dateUtils";
 
 export const PAGINATE_VIEW_OPTIONS = [
   { id: 1, name: "All", value: 500 },
@@ -12,6 +13,12 @@ export const SORT_OPTIONS = [
   { name: "None", value: undefined },
   { name: "Price: Low to High", value: "asc" },
   { name: "Price: High to Low", value: "desc" },
+] as const;
+
+export const DATE_OPTIONS = [
+  { name: "None", value: undefined },
+  { name: "Hot Arrivals", value: substractDaysFromTodaysDate(1) },
+  { name: "Newly Arrivals", value: substractDaysFromTodaysDate(7) },
 ] as const;
 
 export const COLOR_FILTERS = {

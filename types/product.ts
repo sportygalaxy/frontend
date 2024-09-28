@@ -23,7 +23,8 @@ export type TProductQuery = {
     range: [number, number];
   };
   sort?: undefined | "asc" | "desc";
-  createdAt?: Date | null;
+
+  createdAt?: string | null | undefined;
   updatedAt?: Date | null;
   filter?: {
     limit?: any;
@@ -41,7 +42,7 @@ export type TProductQuery = {
       range?: [number, number];
     };
     sort?: undefined | "asc" | "desc";
-    createdAt?: Date | null;
+    createdAt?: string | null | undefined;
     updatedAt?: Date | null;
   };
 };

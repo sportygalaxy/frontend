@@ -34,6 +34,7 @@ import {
   PAGINATE_VIEW_OPTIONS,
   CATEGORIES,
   isFilterEmpty,
+  DATE_OPTIONS,
 } from "./ProductConstant";
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
@@ -59,6 +60,7 @@ export default function Products() {
     category: searchParams.get("category") || (undefined as any),
 
     sort: searchParams.get("sort") || (undefined as any),
+    createdAt: searchParams.get("createdAt") || (undefined as any),
 
     page: searchParams.get("page") || PAGINATION_DEFAULT.page,
     limit: searchParams.get("limit") || PAGINATION_DEFAULT.limit,
@@ -94,6 +96,8 @@ export default function Products() {
     if (updatedFilter?.category) query.set("category", updatedFilter?.category);
 
     if (updatedFilter?.sort) query.set("sort", updatedFilter?.sort);
+    if (updatedFilter?.createdAt)
+      query.set("createdAt", updatedFilter?.createdAt);
 
     // Pagination
     if (updatedFilter?.page) query.set("page", updatedFilter?.page);
@@ -107,7 +111,7 @@ export default function Products() {
     category,
     value,
   }: {
-    category: keyof Omit<typeof filter, "price" | "sort">;
+    category: keyof Omit<typeof filter, "price" | "sort" | "createdAt">;
     value: string;
   }) => {
     if (Array.isArray(filter[category])) {
@@ -147,6 +151,7 @@ export default function Products() {
       category: searchParams.get("category") || undefined,
 
       sort: searchParams.get("sort") || undefined,
+      createdAt: searchParams.get("createdAt") || undefined,
 
       // pagination
       page: searchParams.get("page") || PAGINATION_DEFAULT.page,
@@ -195,6 +200,49 @@ export default function Products() {
                     const updatedFilter = {
                       ...filter,
                       sort: option.value,
+                      page: 1, // Reset to first page when limit changes
+                    };
+
+                    setFilter(updatedFilter);
+
+                    updateUrlQuery({
+                      ...updatedFilter,
+                    });
+
+                    _debouncedSubmit();
+                  }}
+                >
+                  {option.name}
+                </button>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+            <Filter color="#000" className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
+              Recent
+              <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end">
+              {DATE_OPTIONS.map((option) => (
+                <button
+                  key={option.name}
+                  className={cn("text-left w-full block px-4 py-2 text-sm", {
+                    "text-gray-900 bg-gray-100":
+                      option.value === filter.createdAt,
+                    "text-gray-500": option.value !== filter.createdAt,
+                  })}
+                  onClick={() => {
+                    const updatedFilter = {
+                      ...filter,
+                      createdAt: option.value,
                       page: 1, // Reset to first page when limit changes
                     };
 
