@@ -35,11 +35,6 @@ import {
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
 
-type QueryParams = {
-  page?: string; // using string since router query params are strings
-  limit?: string; // using string since router query params are strings
-};
-
 export default function Products() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -64,14 +59,13 @@ export default function Products() {
     queryKey: ["products", filter],
     queryFn: () =>
       fetchProductsData({
-        page: String(1),
-        limit: String(3),
         filter,
       }),
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
+  const query = new URLSearchParams();
   // Function to update the URL query string with the current filter state
   const updateUrlQuery = (updatedFilter: TProductQuery) => {
     const query = new URLSearchParams();
@@ -151,8 +145,6 @@ export default function Products() {
     filter?.price?.range[1] || 0
   );
 
-  console.log("FILTER ::", filter);
-
   const currentPage = data?.data?.currentPage || 0;
   const totalPages = data?.data?.pageCount || 0;
 
@@ -181,6 +173,7 @@ export default function Products() {
                       sort: option.value,
                     }));
 
+                    updateUrlQuery(filter);
                     _debouncedSubmit();
                   }}
                 >
@@ -445,13 +438,13 @@ export default function Products() {
           <section className="flex items-center justify-between mt-10">
             <Button
               onClick={() => {
-                setFilter((prev) => ({
-                  ...prev,
-                  ...(filter?.page && { page: Number(filter?.page) - 1 }),
-                }));
-
+                const newPage = Math.max(1, parseInt(filter.page) - 1); // Decrease page but not below 1
+                const updatedFilter = { ...filter, page: String(newPage) };
+                setFilter(updatedFilter);
+                updateUrlQuery(updatedFilter); // Sync to URL
                 _debouncedSubmit();
               }}
+              disabled={currentPage <= 1}
             >
               Prev
             </Button>
@@ -461,7 +454,7 @@ export default function Products() {
               <div className="flex items-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
-                    Sort
+                    Show Product
                     <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
                   </DropdownMenuTrigger>
 
@@ -478,11 +471,21 @@ export default function Products() {
                           }
                         )}
                         onClick={() => {
-                          setFilter((prev) => ({
-                            ...prev,
+                          // Update the filter limit and sync with URL query
+                          const updatedFilter = {
+                            ...filter,
                             limit: option.value,
-                          }));
+                            page: 1, // Reset to first page when limit changes
+                          };
 
+                          setFilter(updatedFilter);
+
+                          // Sync the new limit with the URL
+                          updateUrlQuery({
+                            ...updatedFilter,
+                          });
+
+                          // Debounced submit to fetch new data
                           _debouncedSubmit();
                         }}
                       >
@@ -500,13 +503,13 @@ export default function Products() {
 
             <Button
               onClick={() => {
-                setFilter((prev) => ({
-                  ...prev,
-                  ...(filter?.page && { page: Number(filter?.page) + 1 }),
-                }));
-
+                const newPage = Math.min(totalPages, parseInt(filter.page) + 1); // Increase page but not above totalPages
+                const updatedFilter = { ...filter, page: String(newPage) };
+                setFilter(updatedFilter);
+                updateUrlQuery(updatedFilter); // Sync to URL
                 _debouncedSubmit();
               }}
+              disabled={currentPage >= totalPages}
             >
               Next
             </Button>

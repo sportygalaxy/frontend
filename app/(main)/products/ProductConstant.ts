@@ -1,8 +1,8 @@
 export const PAGINATE_VIEW_OPTIONS = [
-  { id: 1, name: "20", value: 20 },
-  { id: 2, name: "50", value: 50 },
-  { id: 3, name: "100", value: 100 },
-  { id: 4, name: "none", value: 500 },
+  { id: 1, name: "All", value: 500 },
+  { id: 2, name: "20", value: 20 },
+  { id: 3, name: "50", value: 50 },
+  { id: 4, name: "100", value: 100 },
 ] as const;
 
 export const SORT_OPTIONS = [
