@@ -36,3 +36,22 @@ export const deepReplace = (
     [key]: deepReplace(obj[key] ?? {}, remainingPath, value),
   };
 };
+
+/**
+ *
+ * @param existingObj
+ * @param newObj
+ * @returns overrides any existing property
+ */
+export function mergeObjects<T extends object, U extends object>(
+  existingObj: T,
+  newObj: U
+): T & U {
+  const result: T & Partial<U> = { ...existingObj };
+
+  Object.keys(newObj).forEach((key) => {
+    (result as any)[key] = newObj[key as keyof U]; // Override any existing keys with values from newObj
+  });
+
+  return result as T & U;
+}

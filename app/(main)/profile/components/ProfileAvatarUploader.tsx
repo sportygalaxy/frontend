@@ -158,81 +158,84 @@ const ProfileAvatarUploader: FC<ProfileAvatarUploaderProps> = ({
           Upload Files
         </label>
 
-        {/* Dropzone area */}
-        <div
-          className="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-gray-400 focus:outline-none cursor-pointer"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-        >
-          <div className="space-y-1 text-center">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
-              aria-hidden="true"
-            >
-              <path
-                d="M28 8H20V4a4 4 0 00-4-4H8a4 4 0 00-4 4v40a4 4 0 004 4h32a4 4 0 004-4V16a4 4 0 00-4-4h-8V8z"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <div className="flex text-sm text-gray-600">
-              <label
-                htmlFor="file-upload"
-                className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none"
+        <div className="flex flex-col md:flex-row gap-2 items-center justify-center">
+          {/* Dropzone area */}
+          <div
+            className="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-gray-400 focus:outline-none cursor-pointer"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
+            <div className="space-y-1 text-center">
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 48 48"
+                aria-hidden="true"
               >
-                <span>Drag and drop files, or click to upload</span>
-                <input
-                  id="file-upload"
-                  name="file-upload"
-                  type="file"
-                  accept={uploadConfig.allowedFileTypes.join(",")}
-                  className="sr-only"
-                  // multiple
-                  onChange={handleFileChange}
+                <path
+                  d="M28 8H20V4a4 4 0 00-4-4H8a4 4 0 00-4 4v40a4 4 0 004 4h32a4 4 0 004-4V16a4 4 0 00-4-4h-8V8z"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
-              </label>
+              </svg>
+              <div className="flex text-sm text-gray-600">
+                <label
+                  htmlFor="file-upload"
+                  className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none"
+                >
+                  <span>Drag and drop files, or click to upload</span>
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    accept={uploadConfig.allowedFileTypes.join(",")}
+                    className="sr-only"
+                    // multiple
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
+              <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
             </div>
-            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+
+            {/* Image preview section */}
+            {previews.length > 0 && (
+              <div className="mt-4 gap-4">
+                {previews.map((preview, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={preview}
+                      alt={`Preview ${index + 1}`}
+                      className="object-cover h-32 w-32 rounded-md flex items-center justify-center"
+                    />
+                    <button
+                      type="button"
+                      className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2 py-1"
+                      onClick={() => {
+                        const newFiles = files.filter((_, i) => i !== index);
+                        const newPreviews = previews.filter(
+                          (_, i) => i !== index
+                        );
+                        setFiles(newFiles);
+                        setPreviews(newPreviews);
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Image preview section */}
-          {previews.length > 0 && (
-            <div className="mt-4 gap-4">
-              {previews.map((preview, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={preview}
-                    alt={`Preview ${index + 1}`}
-                    className="object-cover h-32 w-32 rounded-md flex items-center justify-center"
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2 py-1"
-                    onClick={() => {
-                      const newFiles = files.filter((_, i) => i !== index);
-                      const newPreviews = previews.filter(
-                        (_, i) => i !== index
-                      );
-                      setFiles(newFiles);
-                      setPreviews(newPreviews);
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="mt-4">
-          <Button type="submit">
-            {isPending || isUploading ? "Uploading..." : "Upload"}
-          </Button>
+          {/* Button */}
+          <div className="">
+            <Button className="hover:bg-[#18dd81]" type="submit">
+              {isPending || isUploading ? "Uploading..." : "Upload"}
+            </Button>
+          </div>
         </div>
       </form>
     </>
