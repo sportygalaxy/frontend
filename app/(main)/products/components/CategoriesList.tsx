@@ -101,7 +101,7 @@ export default function CategoriesList({
         >
           <AccordionItem value={category?.id}>
             <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-              <p className="text-mobile-2xl md:text-md font-bold text-gray-900 capitalize text-left">
+              <p className="text-mobile-2xl md:text-xs font-bold text-gray-900 uppercase text-left">
                 {category?.name}
               </p>
             </AccordionTrigger>
@@ -117,11 +117,12 @@ export default function CategoriesList({
                     </div>
                   )}
 
-                  <ul>
+                  <ul className="space-y-2">
                     {categoryy?.data?.subcategories?.map(
                       (subcategory: Subcategory) => (
                         <li key={subcategory?.id}>
                           <button
+                            className="hover:underline hover:text-black focus:text-blue-700 focus:font-bold ring-offset-2 text-xs text-gray-600 capitalize"
                             onClick={(e) => {
                               e.stopPropagation(); // Prevent triggering category click event
                               handleSubcategoryClick(subcategory);

@@ -286,7 +286,7 @@ export default function Products() {
       </div>
 
       <div className="flex gap-4 mt-10">
-        <div className="block space-y-2">
+        <div className="block space-y-4">
           <CategoriesList
             filter={filter}
             setFilter={setFilter}
@@ -364,7 +364,7 @@ export default function Products() {
               {/* Color filter */}
               <AccordionItem value="color">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-xl font-bold text-gray-900">
+                  <span className="text-mobile-2xl md:text-md font-bold text-gray-900">
                     Color
                   </span>
                 </AccordionTrigger>
@@ -400,7 +400,7 @@ export default function Products() {
               {/* Size filter */}
               <AccordionItem value="size">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-xl font-bold  text-gray-900">
+                  <span className="text-mobile-2xl md:text-md font-bold  text-gray-900">
                     Size
                   </span>
                 </AccordionTrigger>
@@ -436,7 +436,7 @@ export default function Products() {
               {/* Type filter */}
               <AccordionItem value="type">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-xl font-bold  text-gray-900">
+                  <span className="text-mobile-2xl md:text-md font-bold  text-gray-900">
                     Type
                   </span>
                 </AccordionTrigger>
@@ -472,7 +472,7 @@ export default function Products() {
               {/* Price filter */}
               <AccordionItem value="price">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-xl font-bold text-gray-900">
+                  <span className="text-mobile-2xl md:text-md font-bold text-gray-900">
                     Price
                   </span>
                 </AccordionTrigger>
