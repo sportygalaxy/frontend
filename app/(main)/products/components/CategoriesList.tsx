@@ -56,7 +56,6 @@ export default function CategoriesList({
   if (categoriesError) return <div>Error: {categoriesError?.message}</div>;
 
   const handleCategoryClick = (category: Category) => {
-    // Handle category click to set the active accordion and selected category
     setCategoryId(category?.id);
     setActiveAccordionId(
       activeAccordionId === category?.id ? null : category?.id
@@ -64,7 +63,7 @@ export default function CategoriesList({
 
     const updatedFilter = {
       ...filter,
-      category: category?.name, // Update category filter
+      category: category?.id, // Update category filter
       subcategory: null, // Reset subcategory when a new category is selected
       page: 1, // Reset page to 1 when a category is selected
     };
@@ -75,10 +74,9 @@ export default function CategoriesList({
   };
 
   const handleSubcategoryClick = (subcategory: Subcategory) => {
-    // Handle subcategory click independently of the category click
     const updatedFilter = {
       ...filter,
-      subcategory: subcategory?.name, // Set the subcategory in the filter
+      subcategory: subcategory?.id, // Set the subcategory in the filter
       page: 1, // Reset page to 1 when subcategory is selected
     };
 
