@@ -38,6 +38,7 @@ import {
 } from "./ProductConstant";
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
+import CategoriesList from "./components/CategoriesList";
 
 export default function Products() {
   const router = useRouter();
@@ -285,6 +286,7 @@ export default function Products() {
 
       <div className="flex gap-4 mt-10">
         <div className="block space-y-2">
+          <CategoriesList />
           {/* CATEGORY */}
           <div className="space-y-3">
             <p className="uppercase font-normal text-sm">Categories</p>
