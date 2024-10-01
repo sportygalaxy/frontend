@@ -176,6 +176,7 @@ export default function Products() {
   // if (isLoading) return <p>Loading products...</p>;
   // if (error) return <p>Error fetching products.</p>;
 
+  console.log("general Filter :::::", filter)
   return (
     <div className="wrapper">
       <div className="flex items-baseline gap-5">
@@ -286,9 +287,14 @@ export default function Products() {
 
       <div className="flex gap-4 mt-10">
         <div className="block space-y-2">
-          <CategoriesList />
+          <CategoriesList
+            filter={filter}
+            setFilter={setFilter}
+            updateUrlQuery={updateUrlQuery}
+            _debouncedSubmit={_debouncedSubmit}
+          />
           {/* CATEGORY */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <p className="uppercase font-normal text-sm">Categories</p>
             <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
               {CATEGORIES.map((category) => (
@@ -317,10 +323,10 @@ export default function Products() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* SUB CATEGORY */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <p className="uppercase font-normal text-sm">Sub Categories</p>
             <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
               {SUBCATEGORIES.map((category) => (
@@ -349,7 +355,7 @@ export default function Products() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* ACCODIAN */}
           <div>

@@ -4,9 +4,30 @@ import { fetchCategoriesData, fetchCategoryData } from "@/lib/apiCategory";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Category, Subcategory } from "@/types/category"; // Import types for better typing
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-export default function CategoriesList() {
+interface CategoriesListProps {
+  filter: any;
+  setFilter: any;
+  updateUrlQuery: any;
+  _debouncedSubmit: any;
+}
+
+export default function CategoriesList({
+  filter,
+  setFilter,
+  updateUrlQuery,
+  _debouncedSubmit,
+}: CategoriesListProps) {
   const [categoryId, setCategoryId] = useState<string | null>(null); // Use `null` as initial value for better type safety
+  const [activeAccordionId, setActiveAccordionId] = useState<string | null>(
+    null
+  ); // For managing the active accordion
 
   // Fetch all categories
   const {
@@ -32,55 +53,94 @@ export default function CategoriesList() {
 
   // Loading and error states for categories
   if (categoriesIsLoading) return <div>Loading categories...</div>;
-  if (categoriesError) return <div>Error: {categoriesError.message}</div>;
+  if (categoriesError) return <div>Error: {categoriesError?.message}</div>;
+
+  const handleCategoryClick = (category: Category) => {
+    // Handle category click to set the active accordion and selected category
+    setCategoryId(category?.id);
+    setActiveAccordionId(
+      activeAccordionId === category?.id ? null : category?.id
+    );
+
+    const updatedFilter = {
+      ...filter,
+      category: category?.name, // Update category filter
+      subcategory: null, // Reset subcategory when a new category is selected
+      page: 1, // Reset page to 1 when a category is selected
+    };
+
+    setFilter(updatedFilter);
+    updateUrlQuery({ ...updatedFilter });
+    _debouncedSubmit();
+  };
+
+  const handleSubcategoryClick = (subcategory: Subcategory) => {
+    // Handle subcategory click independently of the category click
+    const updatedFilter = {
+      ...filter,
+      subcategory: subcategory?.name, // Set the subcategory in the filter
+      page: 1, // Reset page to 1 when subcategory is selected
+    };
+
+    setFilter(updatedFilter);
+    updateUrlQuery({ ...updatedFilter });
+    _debouncedSubmit();
+  };
 
   return (
-    <>
-      <ul className="accordion">
-        {categories?.data?.map((category: Category) => (
-          <li key={category.id}>
-            {/* Accordion item */}
-            <button
-              className="accordion-header"
-              onClick={() => setCategoryId(category.id)}
-            >
-              {category.name}
-            </button>
+    <div>
+      <p className="uppercase font-normal text-sm">Category</p>
 
-            {/* Only show subcategories if this category is selected */}
-            {categoryId === category.id && (
-              <div className="accordion-content">
-                {categoryIsLoading && <div>Loading subcategories...</div>}
-                {categoryError && (
-                  <div>
-                    Error loading subcategories: {categoryError.message}
-                  </div>
-                )}
+      {categories?.data?.map((category: Category) => (
+        <Accordion
+          key={category?.id}
+          onClick={() => handleCategoryClick(category)}
+          type="single" // Only one accordion open at a time
+          className="animate-none"
+          value={
+            activeAccordionId === category?.id ? category?.id : (null as any)
+          } // Control accordion's open state
+        >
+          <AccordionItem value={category?.id}>
+            <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+              <p className="text-mobile-2xl md:text-md font-bold text-gray-900 capitalize text-left">
+                {category?.name}
+              </p>
+            </AccordionTrigger>
 
-                <ul>
-                  {categoryy?.data?.subcategories?.map(
-                    (subcategory: Subcategory) => (
-                      <li key={subcategory.id}>{subcategory.name}</li>
-                    )
+            <AccordionContent className="pt-6 animate-none">
+              {/* Only show subcategories if this category is selected */}
+              {categoryId === category?.id && (
+                <div className="accordion-content">
+                  {categoryIsLoading && <div>Loading subcategories...</div>}
+                  {categoryError && (
+                    <div>
+                      Error loading subcategories: {categoryError?.message}
+                    </div>
                   )}
-                </ul>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
 
-      <style jsx>{`
-        .accordion-header {
-          cursor: pointer;
-          font-weight: bold;
-        }
-
-        .accordion-content {
-          margin-top: 10px;
-          padding-left: 20px;
-        }
-      `}</style>
-    </>
+                  <ul>
+                    {categoryy?.data?.subcategories?.map(
+                      (subcategory: Subcategory) => (
+                        <li key={subcategory?.id}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent triggering category click event
+                              handleSubcategoryClick(subcategory);
+                            }}
+                          >
+                            {subcategory?.name}
+                          </button>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      ))}
+    </div>
   );
 }
