@@ -8,6 +8,7 @@ import VideoPlayer from "../../../../common/VidepPlayer";
 import { videoPath, youTubeLink } from "@/constants/appConstants";
 import LogoMobileIcon from "@/assets/icons/pack/LogoMobile";
 import useBreakpoint from "@/hooks/useBreakpoint";
+import React from "react";
 
 interface ImageSliderProps {
   medias: any[];
@@ -74,7 +75,7 @@ const VerticalProductMediaSlider = ({
               {isVideo ? (
                 videoCount ? (
                   <VideoPlayer
-                    pauseTime={10}
+                    pauseTime={5}
                     src={media?.links?.introVideo || videoPath}
                     poster={media?.displayImage}
                     watermark={<LogoMobileIcon width={30} height={30} />}

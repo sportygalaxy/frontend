@@ -149,7 +149,7 @@ const ProfileAvatarUploader: FC<ProfileAvatarUploaderProps> = ({
     },
   });
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit} className="w-full mt-4 max-w-lg mx-auto">
         <label
           htmlFor="file-upload"
@@ -238,7 +238,7 @@ const ProfileAvatarUploader: FC<ProfileAvatarUploaderProps> = ({
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

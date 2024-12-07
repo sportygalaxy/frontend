@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
 import { Toaster } from "sonner";
+import LenisScroll from "@/common/LenisScroll";
 
 export const metadata: Metadata = {
   metadataBase: new URL(webBaseUrl),
@@ -73,6 +74,7 @@ export default function RootLayout({
               }),
             }}
           />
+          <LenisScroll />
           <TopLoader />
           <Suspense
             fallback={

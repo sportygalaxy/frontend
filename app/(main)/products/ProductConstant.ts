@@ -84,7 +84,7 @@ export const SUBCATEGORIES = [
   { id: "4", name: "Stationary Bikes", selected: false, href: "#" },
 ];
 
-export const DEFAULT_CUSTOM_PRICE = [0, 100] as [number, number];
+export const DEFAULT_CUSTOM_PRICE = [0, 10000000] as [number, number];
 
 export const isFilterEmpty = (filter: TProductQuery): boolean => {
   // Default state for comparison

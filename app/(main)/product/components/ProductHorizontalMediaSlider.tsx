@@ -75,7 +75,7 @@ const HorizontalProductMediaSlider = forwardRef(
                   videoCount ? (
                     <div className="relative bg-[#E8EAEC]">
                       <VideoPlayer
-                        pauseTime={10}
+                        pauseTime={5}
                         src={media?.links?.introVideo || videoPath}
                         poster={media?.displayImage}
                         watermark={<LogoMobileIcon />}

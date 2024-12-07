@@ -5,9 +5,32 @@
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap");
 /* @import url("@splidejs/splide/dist/css/splide.min.css"); */
 
-html {
+/* html {
   scroll-behavior: smooth;
   font-size: 13px;
+} */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+  scroll-behavior: smooth;
+  font-size: 13px;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 @layer base {

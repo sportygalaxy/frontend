@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
+import { Link2 } from "iconsax-react";
 import { Play } from "lucide-react";
+import React from "react";
 import { useState, useRef, useEffect } from "react";
 
 interface VideoPlayerProps {
@@ -78,7 +80,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           onPause={() => setIsPlaying(false)}
           onPlay={() => setIsPlaying(true)}
           controls={isPlaying} // Show controls when the video is playing
-          autoPlay
+          // autoPlay
           // muted
           // loop
         />
@@ -108,9 +110,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white underline text-pretty text-xs"
+            className="text-white underline text-pretty text-base bg-[#FFFFFF66] w-full flex items-center justify-center gap-2 p-6"
           >
-            Watch the full video on YouTube
+            Watch the full video on YouTube <Link2 size={16} />
           </a>
         </div>
       )}
