@@ -79,7 +79,7 @@ function CartProductCard({
                 <p className="font-medium text-mobile-2xl md:text-2xl text-primary">
                   {cart?.name}
                 </p>
-                <p className="font-light text-mobile-2xl sm:text-2xl text-primary opacity-50">
+                <p className="font-light text-mobile-2xl sm:text-xl text-primary opacity-50 line-clamp-2">
                   {cart?.description}
                 </p>
                 <p className="mt-1 font-medium text-mobile-3xl sm:text-3xl">

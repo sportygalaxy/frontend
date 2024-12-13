@@ -99,13 +99,14 @@ const ProductCard: FC<Props> = (props) => {
                   cardTextTruncate
                 )}
               >
-                ${item?.price || ""}
+                ₦{item?.price || ""}
               </p>
             </>
           </LinkComponent>
 
+{/* ADD BUTTON */}
           <div
-            className="mb-1 cursor-pointer"
+            className="hidden mb-1 cursor-pointer"
             onClick={() => toggleIndicateAddToCart()}
           >
             {isItemInCart(item?.id) ? (
@@ -113,7 +114,9 @@ const ProductCard: FC<Props> = (props) => {
                 <Minus />
               </div>
             ) : (
-              <div onClick={() => addToCart(item)}>
+              <div 
+              // onClick={() => addToCart(item)}
+              >
                 <Add />
               </div>
             )}

@@ -1,13 +1,16 @@
 export type TCart = {
   id: number;
   name: string;
+  sizes: string;
+  colors: string;
   description: string;
   price: string;
   displayImage: string | null;
   qty: number;
 };
 
-export type TCartWithoutQty = Omit<TCart, "qty">;
+export type TCartWithoutQty = TCart;
+// export type TCartWithoutQty = Omit<TCart, "qty">;
 
 export type TCartState = {
   cart: TCart[];

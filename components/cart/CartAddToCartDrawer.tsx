@@ -22,6 +22,9 @@ import {
 import CartProductCard from "./CartProductCard";
 import CartEmpty from "./CartEmpty";
 import CartClearAll from "./CartClearAll";
+import { useRouter } from "next/navigation";
+import { NotifySuccess } from "@/helpers/toasts";
+import { RoutesEnum } from "@/constants/routeEnums";
 
 type CartAddToCartDrawerProps<T> = {
   data: { color?: string };
@@ -35,8 +38,14 @@ function CartAddToCartDrawer<T>({
   component: Component,
   className,
 }: CartAddToCartDrawerProps<T>) {
+  const router = useRouter();
   const { cart } = useCartStore();
   const isDesktop = useMediaQuery("(min-width: 640px)");
+
+  const handleCheckout = () => {
+    NotifySuccess("Proceed to checkout");
+    window.location.href = RoutesEnum.CHECKOUT;
+  };
 
   return (
     <Drawer direction={isDesktop ? "right" : "bottom"}>
@@ -94,11 +103,11 @@ function CartAddToCartDrawer<T>({
               </div>
 
               <Button
-                // onClick={handleCheckout}
+                onClick={handleCheckout}
                 size={"lg"}
                 className="rounded-full font-bold min-h-[48px] flex-1 w-full mt-4"
               >
-                Check out now
+                Checkout now
               </Button>
             </DrawerFooter>
           </>

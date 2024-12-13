@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import AddIcon from "@/assets/icons/pack/Add";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import useCartStore from "@/store/cartStore";
+import { useRouter } from "next/navigation";
+import { RoutesEnum } from "@/constants/routeEnums";
+import { NotifySuccess } from "@/helpers/toasts";
 
 const DEFAULT_QUANTITY = 1;
 
@@ -22,6 +26,8 @@ const ProductSchema = Yup.object().shape({
 });
 
 const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
+  const router = useRouter();
+  const { addToCart, removeFromCart, cart } = useCartStore();
   const STOCK_COUNT = product?.stock || 0;
 
   const initialValues = {
@@ -32,13 +38,27 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
     price: product?.price, // Default to product price
   };
 
+  function isItemInCart(itemId: number): any {
+    return cart.some((item) => item.id === itemId);
+  }
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={ProductSchema}
       onSubmit={(values) => {
+        const payload = {
+          ...product,
+          colors: values.color,
+          sizes: values.size,
+          qty: values.qty,
+        };
+
         console.log("Form Submitted", values);
-        alert("Order placed!");
+
+        addToCart(payload);
+        NotifySuccess("Proceed to checkout");
+        router.push(RoutesEnum.CHECKOUT);
       }}
     >
       {({ values, setFieldValue, errors, touched }) => (
@@ -122,7 +142,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 
           <div className="mt-8">
             <p className="font-medium text-mobile-5xl md:text-4xl">
-              ${product?.price * values.qty}{" "}
+              ₦{product?.price * values.qty}{" "}
               <span className="text-destructive text-sm">
                 *{STOCK_COUNT} unit left
               </span>
@@ -172,8 +192,17 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                 variant="outline"
                 size="lg"
                 type="button"
+                onClick={() => {
+                  const payload = {
+                    ...product,
+                    colors: values.color,
+                    sizes: values.size,
+                    qty: values.qty,
+                  };
+                  addToCart(payload);
+                }}
               >
-                Add to Cart
+                {isItemInCart(product?.id) ? "Added to Cart!" : "Add to Cart"}
               </Button>
             </div>
           </div>

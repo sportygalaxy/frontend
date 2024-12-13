@@ -43,6 +43,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "utfs.io",
+        pathname: `/a/zxzyub6zq2/*`,
+      },
+      {
+        protocol: "https",
         hostname: "i.ibb.co",
         pathname: `/**`,
       },

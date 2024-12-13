@@ -13,14 +13,25 @@ const useCartStore = create<TCartState>()(
           );
 
           if (existingItem) {
+            console.log("existingItem ::", existingItem);
             return {
               cart: state.cart.map((item) =>
-                item.id === service.id ? { ...item, qty: item.qty + 1 } : item
+                item.id === service.id
+                  ? { ...item, color: item.colors, qty: item.qty + 1 }
+                  : item
               ),
             };
           } else {
             return {
-              cart: [...state.cart, { ...service, qty: 1 }],
+              cart: [
+                ...state.cart,
+                {
+                  ...service,
+                  colors: service.colors,
+                  sizes: service.sizes,
+                  qty: service.qty,
+                },
+              ],
             };
           }
         });

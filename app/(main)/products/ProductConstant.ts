@@ -25,11 +25,11 @@ export const COLOR_FILTERS = {
   id: "color",
   name: "Color",
   options: [
-    { value: "123e4567-e89b-12d3-a456-426614174007", label: "White" },
-    { value: "123e4567-e89b-12d3-a456-426614174008", label: "Beige" },
-    { value: "blue", label: "Blue" },
-    { value: "green", label: "Green" },
-    { value: "purple", label: "Purple" },
+    { value: "9934e59d-6a92-4dd4-b00e-a49b719bc2c1", label: "Black" },
+    { value: "3965c2b6-d7b0-4f50-82f3-6e9fc5cf9d56", label: "White" },
+    { value: "76c3472b-2a68-482f-8366-9e36da2aaefb", label: "Grey" },
+    { value: "123e4567-e89b-12d3-a456-426614174007", label: "Orange" },
+    { value: "c587c285-193d-4e09-94d9-b3c3c9444213", label: "Cream" },
   ] as const,
 };
 
@@ -37,9 +37,11 @@ export const SIZE_FILTERS = {
   id: "size",
   name: "Size",
   options: [
-    { value: "123e4567-e89b-12d3-a456-426614174006", label: "S" },
-    { value: "123e4567-e89b-12d3-a456-426614174005", label: "M" },
-    { value: "L", label: "L" },
+    { value: "33aae9f2-a25e-4be2-9781-6410bfee2c33", label: "S" },
+    { value: "099c4ae0-c293-462a-9e0c-c784a1368c81", label: "M" },
+    { value: "123e4567-e89b-12d3-a456-426614174005", label: "L" },
+    { value: "123e4567-e89b-12d3-a456-426614174006", label: "Xl" },
+    { value: "7e2fed6b-5d78-4a1d-b7f6-f6746ed46673", label: "2Xl" },
   ],
 } as const;
 
@@ -49,7 +51,6 @@ export const TYPE_FILTERS = {
   options: [
     { value: "123e4567-e89b-12d3-a456-426614174009", label: "Indoor" },
     { value: "123e4567-e89b-12d3-a456-426614174010", label: "Outdoor" },
-    { value: "L", label: "L" },
   ],
 } as const;
 

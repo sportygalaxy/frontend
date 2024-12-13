@@ -11,6 +11,10 @@ import CartProductCard from "./CartProductCard";
 import CartEmpty from "./CartEmpty";
 import CartClearAll from "./CartClearAll";
 import { Separator } from "../ui/separator";
+import { useRouter } from "next/navigation";
+import { NotifySuccess } from "@/helpers/toasts";
+import { RoutesEnum } from "@/constants/routeEnums";
+import Link from "next/link";
 
 type CartAddToCartDrawerMobileProps<T> = {
   onClose: () => void;
@@ -20,7 +24,13 @@ type CartAddToCartDrawerMobileProps<T> = {
 function CartAddToCartDrawerMobile<T>({
   onClose,
 }: CartAddToCartDrawerMobileProps<T>) {
+  const router = useRouter();
   const { cart } = useCartStore();
+
+  const handleCheckout = async () => {
+    NotifySuccess("Proceed to checkout");
+    window.location.href = RoutesEnum.CHECKOUT;
+  };
 
   return (
     <div className="flex flex-col justify-end h-full bg-background overflow-scroll">
@@ -66,12 +76,19 @@ function CartAddToCartDrawerMobile<T>({
               <p>${showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE)}</p>
             </div>
 
+            <Link
+              className="flex flex-col items-center justify-between h-12"
+              href={RoutesEnum.CHECKOUT}
+            >
+              Checkout
+            </Link>
+
             <Button
-              // onClick={handleCheckout}
+              onClick={handleCheckout}
               size={"lg"}
               className="rounded-full font-bold min-h-[48px] flex-1 w-full mt-4"
             >
-              Check out now
+              Checkout now
             </Button>
           </div>
         </div>

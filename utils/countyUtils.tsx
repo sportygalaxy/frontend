@@ -1,5 +1,6 @@
 import React from "react";
 import CountryFlag from "./CountryFlag";
+import countryList from "react-select-country-list";
 
 export const dialingCodes: { [key: string]: string } = {
   AF: "93",
@@ -244,4 +245,24 @@ export const getDialingCode = (country: any | null) => {
 // Function to map country value to dialing code
 export const getDialingCodeByValue = (value: string): string => {
   return dialingCodes[value] || "+";
+};
+
+
+// Function to format phone into country code and country label
+export const formatPhoneToCountry = (phone: string) => {
+  const countries = countryList().getData();
+  let countryCode = "";
+  let country = "";
+
+  // Iterate through all countries to find a match
+  for (const c of countries) {
+    const dialingCode = getDialingCodeByValue(c.value);
+    if (phone.startsWith(dialingCode)) {
+      countryCode = dialingCode;
+      country = c.label;
+      break;
+    }
+  }
+
+  return { countryCode, country };
 };
