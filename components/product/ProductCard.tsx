@@ -27,7 +27,7 @@ const ProductCard: FC<Props> = (props) => {
     "overflow-hidden text-ellipsis whitespace-nowrap truncate max-w-44 sm:max-w-72";
 
   const contentProps = {
-    href: `/product/${item?.id}`,
+    href: `/product/${item?.name}/${item?.id}`,
     className: "w-full cursor-pointer",
   };
 
@@ -71,7 +71,7 @@ const ProductCard: FC<Props> = (props) => {
             component={
               <p
                 className={cn(
-                  "font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold",
+                  "capitalize font-medium group-hover:font-bold text-mobile-3xl sm:text-3xl duration-1000 hover:font-semibold",
                   cardTextTruncate
                 )}
               >

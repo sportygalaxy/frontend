@@ -5,16 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProductData } from "@/lib/apiProduct";
 import Divider from "@/common/Divider";
 import ProductMediaSliders from "@/app/(main)/product/components/ProductMediaSliders";
-import ProductDetails from "../components/ProductDetails";
+import ProductDetails from "../../components/ProductDetails";
 
 import { DesktopTitle } from "@/common/Title";
-import ProductSpecifications from "../components/ProductSpecifications";
-import ProductKeyattributes from "../components/ProductKeyattributes";
-import ProductRatings from "../components/ProductRatings";
+import ProductSpecifications from "../../components/ProductSpecifications";
+import ProductKeyattributes from "../../components/ProductKeyattributes";
+import ProductRatings from "../../components/ProductRatings";
 import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
 import { PRODUCT_ID } from "@/constants/appConstants";
-import ProductList from "../components/ProductList";
+import ProductList from "../../components/ProductList";
 
 interface ProductProps {
   params: { productId: string };

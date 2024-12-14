@@ -64,7 +64,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
       {({ values, setFieldValue, errors, touched }) => (
         <Form className="flex flex-col flex-1">
           <div className="space-y-2">
-            <p className="font-jost text-black text-mobile-3xl md:text-3xl font-medium">
+            <p className="capitalize font-jost text-black text-mobile-3xl md:text-3xl font-medium">
               {product?.name}
             </p>
             <p className="font-jost text-secondary text-mobile-xl md:text-xl font-light leading-normal tracking-wide">

@@ -33,6 +33,8 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
       const ctx = canvas.getContext("2d");
       const img = new window.Image();
 
+      // Set crossOrigin to allow cross-origin image loading
+      img.crossOrigin = "anonymous";
       img.src = src; // Path to the original image
 
       img.onload = () => {
@@ -54,15 +56,18 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
           } else if (canvas && watermark) {
             // Convert React element (like an icon or image) to an image and draw it on the canvas
             const watermarkImage = new window.Image();
-            watermarkImage.src = watermarkImageSrc; // Update with the correct path
+
+            // Set crossOrigin for watermark image as well
+            watermarkImage.crossOrigin = "anonymous";
+            watermarkImage.src = watermarkImageSrc;
 
             watermarkImage.onload = () => {
               const watermarkWidth = 150; // Desired width for the watermark
               const watermarkHeight = 150; // Desired height for the watermark
 
               // Apply blur effect, increase size, and add opacity
-              ctx.filter = "blur(0.5px)"; // Apply 3px blur to the watermark
-              ctx.globalAlpha = 0.1; // Set opacity to 50%
+              ctx.filter = "blur(0.5px)"; // Apply 0.5px blur to the watermark
+              ctx.globalAlpha = 0.1; // Set opacity to 10%
               ctx.drawImage(
                 watermarkImage,
                 img.width - watermarkWidth - 20, // Position on the canvas
@@ -78,13 +83,19 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
           }
         }
       };
+
+      img.onerror = () => {
+        console.error(
+          "Failed to load image. Check CORS headers or source URL."
+        );
+      };
     }
-  }, [watermark]);
+  }, [watermark, src, watermarkImageSrc]);
 
   return (
     <div className="relative bg-[#E8EAEC]">
       <canvas ref={canvasRef} className="w-[97%] md:w-full h-auto"></canvas>
-      {/* Top water marker */}
+      {/* Top watermark */}
       {typeof watermark !== "string" && (
         <div className="absolute top-4 left-4 watermark">{watermark}</div>
       )}
