@@ -39,6 +39,7 @@ import {
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
 import CategoriesList from "./components/CategoriesList";
+import AppLoader from "@/common/Loaders/AppLoader";
 
 export default function Products() {
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function Products() {
     queryKey: ["products", filter],
     queryFn: () =>
       fetchProductsData({
-        filter,
+        ...filter,
       }),
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -176,7 +177,7 @@ export default function Products() {
   // if (isLoading) return <p>Loading products...</p>;
   // if (error) return <p>Error fetching products.</p>;
 
-  console.log("general Filter :::::", filter)
+  console.log("general Filter :::::", filter);
   return (
     <div className="wrapper">
       <div className="flex items-baseline gap-5">
@@ -610,7 +611,11 @@ export default function Products() {
         </div>
 
         <section className="flex flex-col w-full">
-          <ProductList isolated={false} productData={data?.data?.results} />
+          {isLoading ? (
+            <AppLoader />
+          ) : (
+            <ProductList isolated={false} productData={data?.data?.results} />
+          )}
 
           {/* PAGINATION */}
           <section className="flex items-center justify-between mt-10">

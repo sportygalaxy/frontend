@@ -10,6 +10,7 @@ import useCartStore from "@/store/cartStore";
 import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
 import { NotifySuccess } from "@/helpers/toasts";
+import { formatCurrency } from "@/utils/currencyUtils";
 
 const DEFAULT_QUANTITY = 1;
 
@@ -92,10 +93,10 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                           variant="tertiary"
                           style={{ backgroundColor: color?.color?.name }}
                           className={`w-10 h-10 rounded-full ${
-                            values.color === color.color.name
+                            values?.color === color?.color?.name
                               ? "border-1 border-green-400"
                               : ""
-                          } bg-[${color.color.name}]`}
+                          } bg-[${color?.color?.name}]`}
                           onClick={() =>
                             setFieldValue("color", color?.color?.name)
                           }
@@ -122,13 +123,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                         type="button"
                         variant="tertiary"
                         className={`rounded-none ${
-                          values.size === size.size.name
+                          values?.size === size?.size?.name
                             ? "border-1 border-green-400"
                             : ""
                         }`}
                         onClick={() => setFieldValue("size", size?.size?.name)}
                       >
-                        {size.size.name}
+                        {size?.size?.name}
                       </Button>
                     ))}
                   </div>
@@ -142,7 +143,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 
           <div className="mt-8">
             <p className="font-medium text-mobile-5xl md:text-4xl">
-              ₦{product?.price * values.qty}{" "}
+              {formatCurrency(product?.price * values.qty || 0)}
               <span className="text-destructive text-sm">
                 *{STOCK_COUNT} unit left
               </span>
@@ -153,8 +154,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
             <div className="flex items-center gap-2">
               <span
                 onClick={() => {
-                  if (values.qty <= 1) return DEFAULT_QUANTITY;
-                  setFieldValue("qty", values.qty - 1);
+                  if (values?.qty <= 1) return DEFAULT_QUANTITY;
+                  setFieldValue("qty", values?.qty - 1);
                 }}
                 className="cursor-pointer"
               >
@@ -167,8 +168,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 
               <span
                 onClick={() => {
-                  if (values.qty >= STOCK_COUNT) return STOCK_COUNT;
-                  setFieldValue("qty", values.qty + 1);
+                  if (values?.qty >= STOCK_COUNT) return STOCK_COUNT;
+                  setFieldValue("qty", values?.qty + 1);
                 }}
                 className="cursor-pointer"
               >

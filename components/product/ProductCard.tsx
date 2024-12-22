@@ -12,6 +12,7 @@ import Image from "next/image";
 import React, { FC } from "react";
 import Minus from "@/common/Minus";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
+import { formatCurrency } from "@/utils/currencyUtils";
 
 interface Props {
   item: TProduct;
@@ -99,12 +100,12 @@ const ProductCard: FC<Props> = (props) => {
                   cardTextTruncate
                 )}
               >
-                ₦{item?.price || ""}
+                {formatCurrency(item?.price || 0)}
               </p>
             </>
           </LinkComponent>
 
-{/* ADD BUTTON */}
+          {/* ADD BUTTON */}
           <div
             className="hidden mb-1 cursor-pointer"
             onClick={() => toggleIndicateAddToCart()}
@@ -114,7 +115,7 @@ const ProductCard: FC<Props> = (props) => {
                 <Minus />
               </div>
             ) : (
-              <div 
+              <div
               // onClick={() => addToCart(item)}
               >
                 <Add />

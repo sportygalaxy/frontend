@@ -25,6 +25,7 @@ import CartClearAll from "./CartClearAll";
 import { useRouter } from "next/navigation";
 import { NotifySuccess } from "@/helpers/toasts";
 import { RoutesEnum } from "@/constants/routeEnums";
+import { formatCurrency } from "@/utils/currencyUtils";
 
 type CartAddToCartDrawerProps<T> = {
   data: { color?: string };
@@ -89,16 +90,19 @@ function CartAddToCartDrawer<T>({
             <DrawerFooter className="text-[#222] bg-white shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] pb-6">
               <div className="flex items-center justify-between">
                 <p className="underline cursor-pointer">Item subtotal</p>
-                <p>${showTotalPriceInCart(cart)}</p>
+                <p>{formatCurrency(showTotalPriceInCart(cart) || 0)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <p>Shipping total</p>
-                <p>${SHIPPING_FEE}</p>
+                <p>{formatCurrency(SHIPPING_FEE || 0)}</p>
               </div>
               <div className="font-bold flex items-center justify-between">
                 <p>Subtotal</p>
                 <p>
-                  ${showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE)}
+                  {formatCurrency(
+                    showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE) ||
+                      0
+                  )}
                 </p>
               </div>
 

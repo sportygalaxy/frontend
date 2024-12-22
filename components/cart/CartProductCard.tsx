@@ -9,6 +9,7 @@ import DeleteIcon from "@/assets/icons/pack/Delete";
 import { TCart } from "@/types/cart";
 import useCartStore from "@/store/cartStore";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
+import { formatCurrency } from "@/utils/currencyUtils";
 
 function CartProductCard({
   item,
@@ -76,14 +77,14 @@ function CartProductCard({
 
             <div className="w-[60%] h-full flex flex-col justify-between">
               <div className="flex flex-col gap-2">
-                <p className="font-medium text-mobile-2xl md:text-2xl text-primary">
+                <p className="font-medium text-mobile-2xl md:text-2xl text-primary line-clamp-1">
                   {cart?.name}
                 </p>
                 <p className="font-light text-mobile-2xl sm:text-xl text-primary opacity-50 line-clamp-2">
                   {cart?.description}
                 </p>
                 <p className="mt-1 font-medium text-mobile-3xl sm:text-3xl">
-                  ${cart?.price}
+                  {formatCurrency(cart?.price || 0)}
                 </p>
               </div>
               <div className="flex mt-2 h-10 items-center justify-center space-x-4 text-sm border w-fit rounded-lg border-[#DEE2E6] px-2">
