@@ -4,7 +4,10 @@ const nextConfig = {
   swcMinify: true,
   transpilePackages: ["lucide-react"],
   images: {
-    domains: ["www.ecommerce-sport-app.vercel.app"],
+    domains: [
+      "www.ecommerce-sport-app.vercel.app",
+      "www.sporty-galaxy-frontend.vercel.app",
+    ],
     remotePatterns: [
       {
         protocol: "https",
