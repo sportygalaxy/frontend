@@ -7,6 +7,7 @@ export type TProduct = {
 };
 
 export type TProductQuery = {
+  instance?: any; // optional for reactQuery
   limit?: any;
   page?: any;
   q?: string;
@@ -27,6 +28,7 @@ export type TProductQuery = {
   createdAt?: string | null | undefined;
   updatedAt?: Date | null;
   filter?: {
+    instance?: any; // optional for reactQuery
     limit?: any;
     page?: any;
     category?: string;

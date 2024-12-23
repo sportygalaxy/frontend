@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import React, { FC } from "react";
 import Divider from "./Divider";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface Props {}
 
@@ -61,6 +64,7 @@ interface MobileTitleProps {
   path: string;
 }
 export const MobileTitle = ({ title, path }: MobileTitleProps) => {
+  const router = useRouter();
   return (
     <div className="mobile-view sm:hidden flex items-center justify-between">
       <p className="text-primary font-medium text-base">{title}</p>
@@ -68,6 +72,7 @@ export const MobileTitle = ({ title, path }: MobileTitleProps) => {
       <Button
         variant="link"
         className="text-secondary font-medium text-sm cursor-pointer"
+        onClick={() => router.push(path, { scroll: false })}
       >
         See all
       </Button>

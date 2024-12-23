@@ -5,12 +5,12 @@ import Hero from "./_components/Hero";
 import Introduction from "./_components/Introduction";
 import NewsLetter from "./_components/NewsLetter";
 
-
 import Featured from "@/components/featured/Featured";
 import Categories from "@/components/category/Categories";
 import SeeAll from "./_components/SeeAll";
 import VerifyBanner from "./_components/VerifyBanner";
 import ProductList from "../product/components/ProductList";
+import { RoutesEnum } from "@/constants/routeEnums";
 
 export default function LandingPage() {
   return (
@@ -30,11 +30,12 @@ export default function LandingPage() {
           <DesktopTitle title="NEW ARRIVAL." />
         </div>
         <div className="desktop-tablet-view wrapper mt-5 sm:mt-0">
-          <ProductList isolated />
+          <ProductList isolated query={{ limit: 12, instance: "newArrival" }} />
         </div>
+
         <SeeAll
           text="See All"
-          path="/"
+          path={RoutesEnum.PRODUCTS}
           className="desktop-tablet-view wrapper mt-20"
         />
         <div className="desktop-tablet-view wrapper mt-8 xl:mt-10">
@@ -64,7 +65,7 @@ export default function LandingPage() {
         </div>
         <SeeAll
           text="See All"
-          path="/"
+          path={RoutesEnum.PRODUCTS}
           className="desktop-tablet-view wrapper mt-28"
         />
         <div className="desktop-tablet-view mt-24 w-full">
@@ -75,17 +76,26 @@ export default function LandingPage() {
       {/* Mobile contents */}
       <>
         <div className="wrapper mt-9 sm:mt-0">
-          <MobileTitle title="Best selling" path="" />
+          <MobileTitle title="Best selling" path={RoutesEnum.PRODUCTS} />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-5 sm:mt-0">
-          <ProductList isolated isMobile />
+          <ProductList
+            isolated
+            isMobile
+            query={{ limit: 6, instance: "bestSelling" }}
+          />
         </div>
 
         <div className="wrapper mt-10 sm:mt-0">
-          <MobileTitle title="Recently viewed" path="" />
+          <MobileTitle title="Recently viewed" path={RoutesEnum.PRODUCTS} />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-0 sm:mt-0">
-          <ProductList isolated isMobile isHorizontalScroll />
+          <ProductList
+            isolated
+            isMobile
+            isHorizontalScroll
+            query={{ limit: 4, instance: "recentlyViewed" }}
+          />
         </div>
       </>
     </>
