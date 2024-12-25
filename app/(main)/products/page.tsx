@@ -174,10 +174,7 @@ export default function Products() {
   const currentPage = data?.data?.currentPage || 0;
   const totalPages = data?.data?.pageCount || 0;
 
-  // if (isLoading) return <p>Loading products...</p>;
-  // if (error) return <p>Error fetching products.</p>;
-
-  console.log("general Filter :::::", filter);
+  // console.log("general Filter :::::", filter);
   return (
     <div className="wrapper">
       <div className="flex items-baseline gap-5">

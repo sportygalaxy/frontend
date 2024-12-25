@@ -15,6 +15,7 @@ import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
 import { PRODUCT_ID } from "@/constants/appConstants";
 import ProductList from "../../components/ProductList";
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 
 interface ProductProps {
   params: { productId: string };
@@ -34,19 +35,17 @@ const ProductPage: FC<ProductProps> = (props) => {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error instanceof Error)
-    return <div>Error: {JSON.stringify(error, null, 2)}</div>;
-
   const productData = data?.data || {};
-  // products?.[0] || {};
 
   return (
     <div className="wrapper my-12">
-      {isLoading ? (
-        <span>loading.......</span>
-      ) : (
-        <>
+      <ComponentStateWrapper
+        isLoading={isLoading}
+        error={error}
+        data={[productData]}
+        emptyMessage="No product found."
+      >
+        <div>
           <section
             className={cn("flex flex-col gap-8", isLg ? "flex-row" : "")}
           >
@@ -69,8 +68,8 @@ const ProductPage: FC<ProductProps> = (props) => {
           <ProductSpecifications specifications={productData?.specification} />
 
           <ProductRatings />
-        </>
-      )}
+        </div>
+      </ComponentStateWrapper>
     </div>
   );
 };

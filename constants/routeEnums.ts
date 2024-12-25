@@ -14,6 +14,7 @@ export enum RoutesEnum {
   // App
   CART = "/cart",
   CHECKOUT = "/checkout",
+  ORDER = "/order",
   NOTIFICATION = "/notification",
   PROFILE = "/profile",
   PRODUCTS = "/products",

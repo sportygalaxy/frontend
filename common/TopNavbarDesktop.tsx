@@ -26,9 +26,7 @@ import { getCookie } from "cookies-next";
 import useUserStore from "@/store/userStore";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import { useLogout } from "@/hooks/useLogout";
-import {
-  LogoutCurve,
-} from "iconsax-react";
+import { LogoutCurve } from "iconsax-react";
 import {
   Popover,
   PopoverContent,
@@ -246,6 +244,11 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
                             <Link href={RoutesEnum.PROFILE}>
                               <li className="flex items-center gap-3 cursor-pointer hover:bg-secondary-foreground py-3 px-4">
                                 <UserIcon /> My Profile
+                              </li>
+                            </Link>
+                            <Link href={RoutesEnum.ORDER}>
+                              <li className="flex items-center gap-3 cursor-pointer hover:bg-secondary-foreground py-3 px-4">
+                                <UserIcon /> My Orders
                               </li>
                             </Link>
                             <li

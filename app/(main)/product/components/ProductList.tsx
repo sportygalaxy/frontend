@@ -1,16 +1,15 @@
 "use client";
 import CardGrid from "@/common/CardGrid";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { TProduct, TProductQuery } from "@/types/product";
-import { PRODUCTS } from "@/data";
 
 import ProductCard from "@/components/product/ProductCard";
 import { ScrollAreaHorizontal } from "@/components/scroll";
 import { fetchProductsData } from "@/lib/apiProduct";
 import { useQuery } from "@tanstack/react-query";
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
-import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 
 interface Props {
   isMobile?: boolean;
@@ -40,26 +39,27 @@ const ProductList: FC<Props> = ({
 
   const productList: TProduct[] = isMobile ? products?.slice(0, 4) : products;
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-4 w-full">
-        <SportygalaxyLoadingIndicator />
-      </div>
-    );
-  }
-
   return (
-    <div className="w-full">
-      {isHorizontalScroll ? (
-        <ScrollAreaHorizontal data={productList} component={ProductCard} />
-      ) : (
-        <CardGrid oneLineScroll>
-          {productList.map((product: TProduct) => (
-            <ProductCard key={product.id} item={product} />
-          ))}
-        </CardGrid>
-      )}
-    </div>
+    <>
+      <ComponentStateWrapper
+        isLoading={isLoading}
+        error={error}
+        data={productList}
+        emptyMessage="No products found."
+      >
+        <div className="w-full">
+          {isHorizontalScroll ? (
+            <ScrollAreaHorizontal data={productList} component={ProductCard} />
+          ) : (
+            <CardGrid oneLineScroll>
+              {productList.map((product: TProduct) => (
+                <ProductCard key={product.id} item={product} />
+              ))}
+            </CardGrid>
+          )}
+        </div>
+      </ComponentStateWrapper>
+    </>
   );
 };
 

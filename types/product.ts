@@ -48,3 +48,35 @@ export type TProductQuery = {
     updatedAt?: Date | null;
   };
 };
+
+export interface ProductMedia {
+  images?: string[];
+  type: "image" | "video";
+  displayImage: string;
+  links?: {
+    introVideo?: string;
+    completeVideo?: string;
+  };
+}
+
+export interface ProductSpecification {
+  Key: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  categoryId: string;
+  subcategoryId: string;
+  specification: ProductSpecification[];
+  keyattribute: ProductSpecification[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isDeleted: boolean;
+  displayImage: string;
+  medias: ProductMedia[];
+}

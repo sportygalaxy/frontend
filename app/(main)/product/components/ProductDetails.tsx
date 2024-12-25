@@ -55,7 +55,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
           qty: values.qty,
         };
 
-        console.log("Form Submitted", values);
+        // console.log("Form Submitted", values);
 
         addToCart(payload);
         NotifySuccess("Proceed to checkout");

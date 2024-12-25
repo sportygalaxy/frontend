@@ -94,7 +94,7 @@ const Checkout = () => {
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     const payloadToSubmit = transformCartArray(String(user?.id), cart);
-    orderProduct(payloadToSubmit);
+    orderProduct(payloadToSubmit as any);
     setSubmitting(false);
   };
 

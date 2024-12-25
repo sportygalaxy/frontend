@@ -12,7 +12,6 @@ export const generateMetadata = ({ params }: Props): Metadata => {
   const decodedSlug = decodeURIComponent(params.slug);
   const slug = decodedSlug.replace(/-/g, " ");
 
-  console.log("title", slug);
   return {
     title: `${slug} | ${appDescription}`,
   };
