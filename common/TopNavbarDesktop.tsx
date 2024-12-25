@@ -32,6 +32,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import GlobalSearch from "./GlobalSearch";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
@@ -212,13 +213,14 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
           </Select>
         ) : (
           <>
-            <Search
+            {/* <Search
               placeholder="Search.."
               onSearchClick={handleSearchClick}
               onClearClick={handleCameraClick}
               value={inputValue}
               onChange={handleChange}
-            />
+            /> */}
+            <GlobalSearch onClearClick={handleCameraClick} />
 
             {!!user || authenticated ? (
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">

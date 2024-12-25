@@ -97,6 +97,7 @@ export const isFilterEmpty = (filter: TProductQuery): boolean => {
       isCustom: false,
       range: DEFAULT_CUSTOM_PRICE,
     },
+    q: undefined,
     subcategory: undefined,
     category: undefined,
     sort: undefined,
@@ -112,6 +113,7 @@ export const isFilterEmpty = (filter: TProductQuery): boolean => {
     filter?.price?.isCustom === defaultFilter?.price?.isCustom &&
     filter?.price?.range[0] === defaultFilter?.price?.range[0] &&
     filter?.price?.range[1] === defaultFilter?.price?.range[1] &&
+    filter?.q === defaultFilter?.q &&
     filter?.subcategory === defaultFilter?.subcategory &&
     filter?.category === defaultFilter?.category &&
     filter?.sort === defaultFilter?.sort &&

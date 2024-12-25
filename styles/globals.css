@@ -107,6 +107,20 @@ html.lenis body {
   }
 }
 
+@layer utilities {
+  ::-webkit-scrollbar {
+    @apply w-2 cursor-pointer; /* Tailwind utilities for width and cursor */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 hover:bg-gray-500 rounded; /* Customize appearance */
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100; /* Customize track */
+  }
+}
+
 .success {
   color: var(--success);
 }
@@ -160,6 +174,7 @@ html.lenis body {
 
 ::-webkit-scrollbar {
   width: 4px;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar-track {

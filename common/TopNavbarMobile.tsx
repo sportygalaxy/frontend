@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import useToggle from "@/hooks/useToggle";
 import useUserStore from "@/store/userStore";
 import { getCookie } from "cookies-next";
+import GlobalSearch from "./GlobalSearch";
 
 interface TopNavbarMobileProps {
   isAuth: boolean;
@@ -45,7 +46,9 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
 
         {/* not logged in */}
         {!!user || authenticated ? (
-          <p className="text-xl font-medium capitalize">Hello {user?.firstName},</p>
+          <p className="text-xl font-medium capitalize">
+            Hello {user?.firstName},
+          </p>
         ) : null}
 
         <p className="text-sm font-light opacity-50 text-primary">
@@ -55,14 +58,15 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
 
       {isAuth ? null : (
         <div className="mt-7">
-          <Search
+          {/* <Search
             placeholder="Search.."
             onSearchClick={handleSearchClick}
             onClearClick={handleCameraClick}
             value={inputValue}
             onChange={handleChange}
             onClose={toggleUploadModal}
-          />
+          /> */}
+          <GlobalSearch onClearClick={handleCameraClick} />
         </div>
       )}
 

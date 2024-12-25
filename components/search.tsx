@@ -28,15 +28,14 @@ export const Search: React.FC<SearchProps> = ({
 }) => {
   return (
     <div className="flex items-center border border-none rounded-2xl px-4 md:px-7 py-2 md:py-3 bg-secondary-foreground">
-      <div className="md:block md:flex-2 mr-5">
+      <div className="md:block md:flex-2 mr-5 min-w-[120px]">
         <Select>
           <SelectTrigger className="text-mobile-xl md:text-xl font-bold flex flex-1 px-4 rounded-3xl">
             <SelectValue placeholder="Products" />
           </SelectTrigger>
           <SelectContent className="bg-white border border-dark">
-            <SelectItem value="All">All</SelectItem>
-            <SelectItem value="light">Out-door</SelectItem>
-            <SelectItem value="dark">In-door</SelectItem>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="products">Products</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -48,10 +47,16 @@ export const Search: React.FC<SearchProps> = ({
         onChange={onChange}
       />
       <div className="flex items-center gap-6">
-        <div onClick={onSearchClick} className="cursor-pointer text-gray-500">
+        <div
+          onClick={onSearchClick}
+          className="cursor-pointer text-gray-500 transition-[transform] duration-1000 hover:scale-110"
+        >
           <SearchIcon />
         </div>
-        <div onClick={onClearClick} className="cursor-pointer text-gray-500">
+        <div
+          onClick={onClearClick}
+          className="cursor-pointer text-gray-500 transition-[transform] duration-1000 hover:scale-110"
+        >
           <Camera />
         </div>
       </div>

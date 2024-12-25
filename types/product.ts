@@ -78,5 +78,7 @@ export interface Product {
   deletedAt: string | null;
   isDeleted: boolean;
   displayImage: string;
+  sizes: any[];
+  colors: any[];
   medias: ProductMedia[];
 }

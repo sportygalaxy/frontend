@@ -45,8 +45,7 @@ export default function Products() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Initialize filter state from URL query params
-  const [filter, setFilter] = useState<TProductQuery>({
+  const defaultFilter = {
     color: searchParams.get("color")?.split(",") || [],
     size: searchParams.get("size")?.split(",") || [],
     type: searchParams.get("type")?.split(",") || [],
@@ -58,6 +57,8 @@ export default function Products() {
         : DEFAULT_CUSTOM_PRICE,
     } as any,
 
+    q: searchParams.get("q") || (undefined as any),
+
     subcategory: searchParams.get("subcategory") || (undefined as any),
     category: searchParams.get("category") || (undefined as any),
 
@@ -66,7 +67,10 @@ export default function Products() {
 
     page: searchParams.get("page") || PAGINATION_DEFAULT.page,
     limit: searchParams.get("limit") || PAGINATION_DEFAULT.limit,
-  });
+  };
+
+  // Initialize filter state from URL query params
+  const [filter, setFilter] = useState<TProductQuery>(defaultFilter);
 
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["products", filter],
@@ -92,6 +96,8 @@ export default function Products() {
       query.set("price", updatedFilter?.price?.range.join(","));
 
     if (updatedFilter?.price?.isCustom) query.set("customPrice", "true");
+
+    if (updatedFilter?.q) query.set("q", updatedFilter?.q);
 
     if (updatedFilter?.subcategory)
       query.set("subcategory", updatedFilter?.subcategory);
@@ -149,6 +155,8 @@ export default function Products() {
           : DEFAULT_CUSTOM_PRICE,
       },
 
+      q: searchParams.get("q") || undefined,
+
       subcategory: searchParams.get("subcategory") || undefined,
       category: searchParams.get("category") || undefined,
 
@@ -177,7 +185,7 @@ export default function Products() {
   // console.log("general Filter :::::", filter);
   return (
     <div className="wrapper">
-      <div className="flex items-baseline gap-5">
+      <div className="flex items-baseline gap-6">
         <DesktopTitle title="All products" />
 
         {/* SORT */}
@@ -218,8 +226,8 @@ export default function Products() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
-            <Filter color="#000" className="h-5 w-5" />
+          <button className="-m-2 ml-2 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+            <Filter color="#000" className="h-4 w-4" />
           </button>
         </div>
 
@@ -261,8 +269,8 @@ export default function Products() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
-            <Filter color="#000" className="h-5 w-5" />
+          <button className="-m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+            <Filter color="#000" className="h-4 w-4" />
           </button>
         </div>
 
@@ -631,7 +639,7 @@ export default function Products() {
 
             <section className="flex items-center justify-center gap-4">
               <span>{`Page ${currentPage} of ${totalPages}`}</span>
-              <div className="flex items-center">
+              <div className="hidden sm:flex items-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
                     Show Product
