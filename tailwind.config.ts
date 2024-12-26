@@ -116,7 +116,7 @@ const config = {
       },
       backgroundImage: {
         "dark-gradient":
-          "linear-gradient(264.39deg, rgba(0, 0, 0, 0) 35.33%, #000000 90.47%), url('https://s3-alpha-sig.figma.com/img/2761/03b9/636f37b60127439bafce63d7fbcf674d?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=SXI~Dsv~8XZOGkuO5K3h7vbuacDKxtN7QKmbP7AzKkq7W5lPMAHkfP0NDE3VgRhtLUg2UajijsW2lWOZPlRDg5gUkteLtj5XbfS7U8n~M4HInRT-UqwCSgBGlgkD-Pl8FUQauAjhzRuig7nbubb9v7k~t-TbJRp5eAF8LDUbBC8WkOdPwBP5msCxnaKUK9sAFohjsvkgRVvvnRqukceO0REyLuKXCrJxMv2gWixRa~gEriErTccR47XnfF0pX5HT~XCh79Haap5bC4A3WuGYqR~xWvz0sDQzcU-raQEzZXtXidSgOnJnj1D94YTXVYI1aRILz5A98Jh4FAXTV49SfQ__')",
+          "linear-gradient(264.39deg, rgba(0, 0, 0, 0) 35.33%, #000000 90.47%), url('https://utfs.io/f/OX5ramIp6AH4gE5EqnYBSPKmriXRwY5xo4tNbk3E0HzJD89y')",
         "grey-gradient":
           "linear-gradient(180.77deg, rgba(0, 0, 0, 0) 64.59%, rgba(0, 0, 0, 0.7) 97.05%)",
       },

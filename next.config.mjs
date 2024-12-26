@@ -7,6 +7,7 @@ const nextConfig = {
     domains: [
       "www.ecommerce-sport-app.vercel.app",
       "www.sporty-galaxy-frontend.vercel.app",
+      "utfs.io",
     ],
     remotePatterns: [
       {

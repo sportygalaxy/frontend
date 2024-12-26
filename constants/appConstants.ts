@@ -5,7 +5,8 @@ const COUNTRY_CODE = "+234";
 export const EMAIL = "support@sportygalaxy.com";
 const ADDRESS = "";
 const ADDRESS_LINK = "";
-export const logoUrl = "https://i.ibb.co/Fmm8v5h/Frame-2610515.png"; // "/images/logo/sg_logo.svg"; // https://www.sportygalaxy.com/logo.png
+export const logoUrl =
+  "https://utfs.io/f/OX5ramIp6AH4YSDqoO7pjsfC6oQDNzYrxLmUHTlPghA7i2KF"; // "/images/logo/sg_logo.svg"; // https://www.sportygalaxy.com/logo.png
 
 export const NAV_CONSTANT = {
   PHONE_NUMBER,
