@@ -36,6 +36,7 @@ const Order = () => {
         isLoading={isLoading}
         error={error}
         data={orders}
+        refetch={refetch}
         emptyMessage="No orders found."
       >
         <div className="space-y-4">

@@ -28,7 +28,7 @@ const ProductPage: FC<ProductProps> = (props) => {
 
   const productId = params?.productId || PRODUCT_ID;
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["product", productId],
     queryFn: () => fetchProductData(productId),
     retry: 2,
@@ -43,6 +43,7 @@ const ProductPage: FC<ProductProps> = (props) => {
         isLoading={isLoading}
         error={error}
         data={[productData]}
+        refetch={refetch}
         emptyMessage="No product found."
       >
         <div>

@@ -2,7 +2,7 @@ import { TProductQuery } from "@/types/product";
 import { GET, POST } from "./apiFacade";
 
 export const fetchProductsData = async (params: TProductQuery) => {
-  return await GET(`/products`, params);
+  return await GET(`/products`, { isDeleted: false, ...params });
 };
 
 export const fetchProductData = async (productId: string) => {

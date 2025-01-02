@@ -26,7 +26,7 @@ const ProductList: FC<Props> = ({
   isolated = true,
   query,
 }) => {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["products", query],
     queryFn: () => fetchProductsData(query ? query : { limit: 3 }),
     retry: 2,
@@ -45,6 +45,7 @@ const ProductList: FC<Props> = ({
         isLoading={isLoading}
         error={error}
         data={productList}
+        refetch={refetch}
         emptyMessage="No products found."
       >
         <div className="w-full">

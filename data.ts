@@ -103,32 +103,32 @@ export const CATEGORIES = [
 
 export const FEATURES = [
   {
-    id: 1,
+    id: "123e4567-e89b-12d3-a456-426614174020",
     name: "Athletic Apparel",
     image: "https://utfs.io/f/OX5ramIp6AH4T2xGmECUH5eZIum130dpqWAMLJrjb27osEtv",
   },
   {
-    id: 2,
+    id: "123e4567-e89b-12d3-a456-426614174029",
     name: "Fitness Equipment",
     image: "https://utfs.io/f/OX5ramIp6AH4I9uGYAJaYK7so4ZDkJtpmr2qcdwAMixUOz5S",
   },
   {
-    id: 3,
+    id: "123e4567-e89b-12d3-a456-426614174038",
     name: "Outdoor Gear",
     image: "https://utfs.io/f/OX5ramIp6AH4nGNt10Qb36E7hXHVflizvCKsY1UPBIDeWy04",
   },
   {
-    id: 4,
+    id: "123e4567-e89b-12d3-a456-426614174042",
     name: "Team Sport",
     image: "https://utfs.io/f/OX5ramIp6AH4qqKl4ztkZgWV0ucH5X9nJ8jmoYDyCiRl3q4p",
   },
   {
-    id: 5,
+    id: "123e4567-e89b-12d3-a456-426614174046",
     name: "Individual Sport",
     image: "https://utfs.io/f/OX5ramIp6AH4b7CXiAEBC20fSs5cRoLFev8TMmYlNgQIjaOU",
   },
   {
-    id: 6,
+    id: "123e4567-e89b-12d3-a456-426614174014",
     name: "Accessories",
     image: "https://utfs.io/f/OX5ramIp6AH43cKDMwPNlJRCKEIUdmB2WviFtjpV8bqh65ke",
   },

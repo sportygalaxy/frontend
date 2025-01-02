@@ -40,6 +40,7 @@ import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { Button } from "@/components/ui/button";
 import CategoriesList from "./components/CategoriesList";
 import AppLoader from "@/common/Loaders/AppLoader";
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 
 export default function Products() {
   const router = useRouter();
@@ -183,6 +184,11 @@ export default function Products() {
   const totalPages = data?.data?.pageCount || 0;
 
   // console.log("general Filter :::::", filter);
+
+  const CustomLoading = () => <AppLoader />;
+  const CustomError = () => <div>An Error Occured...</div>;
+  const CustomEmpty = () => <div>No result found...</div>;
+
   return (
     <div className="wrapper">
       <div className="flex items-baseline gap-6">
@@ -616,11 +622,18 @@ export default function Products() {
         </div>
 
         <section className="flex flex-col w-full">
-          {isLoading ? (
-            <AppLoader />
-          ) : (
+          <ComponentStateWrapper
+            isLoading={isLoading}
+            error={error}
+            data={data}
+            refetch={refetch}
+            emptyMessage="No items found!"
+            CustomLoadingComponentProps={<CustomLoading />}
+            CustomErrorComponentProps={<CustomError />}
+            CustomEmptyComponentProps={<CustomEmpty />}
+          >
             <ProductList isolated={false} productData={data?.data?.results} />
-          )}
+          </ComponentStateWrapper>
 
           {/* PAGINATION */}
           <section className="flex items-center justify-between mt-10">

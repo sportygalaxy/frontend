@@ -14,7 +14,7 @@ export const showCartQtyValue = (cart: TCart[]) => {
   return notification;
 };
 
-export const SHIPPING_FEE = 1000;
+export const SHIPPING_FEE = 0;
 export const showTotalPriceInCart = (cart: TCart[]) => {
   const totalPrice = cart.reduce((accumulator: number, currentItem: any) => {
     return accumulator + currentItem.price * currentItem.qty;
@@ -23,7 +23,9 @@ export const showTotalPriceInCart = (cart: TCart[]) => {
   return totalPrice;
 };
 
-
-export const showTotalPrice = (showTotalPriceInCart: number, shippingFee: number) => {
-  return showTotalPriceInCart + shippingFee;
+export const showTotalPrice = (
+  showTotalPriceInCart: number,
+  shippingFee: number
+) => {
+  return Number(showTotalPriceInCart || 0) + Number(shippingFee || 0);
 };

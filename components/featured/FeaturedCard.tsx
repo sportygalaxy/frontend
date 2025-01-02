@@ -1,13 +1,24 @@
+"use client";
+import { RoutesEnum } from "@/constants/routeEnums";
 import { TFeatured } from "@/types/featured";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 
 interface Props {
   feat: TFeatured;
 }
-const FeaturedCard: FC<Props> = ({feat}) => {
+const FeaturedCard: FC<Props> = ({ feat }) => {
+  const router = useRouter();
   return (
-    <div className="relative group h-[200px] md:h-[300px] lg:h-[450px] xl:h-[556px] max-h-[400px] flex items-center justify-center bg-grey-gradient border-light rounded-lg overflow-hidden cursor-pointer">
+    <div
+      onClick={() =>
+        router.push(`${RoutesEnum.PRODUCTS}?category=${feat?.id}`, {
+          scroll: false,
+        })
+      }
+      className="relative group h-[200px] md:h-[300px] lg:h-[450px] xl:h-[556px] max-h-[400px] flex items-center justify-center bg-grey-gradient border-light rounded-lg overflow-hidden cursor-pointer"
+    >
       <Image
         fill
         sizes="100%"

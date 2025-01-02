@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { NotifySuccess } from "@/helpers/toasts";
 import { RoutesEnum } from "@/constants/routeEnums";
 import Link from "next/link";
+import CartSummaryPrice from "./CartSummaryPrice";
 
 type CartAddToCartDrawerMobileProps<T> = {
   onClose: () => void;
@@ -63,18 +64,7 @@ function CartAddToCartDrawerMobile<T>({
 
           <div className="overflow-auto text-[#222] shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] pb-6 px-6">
             <CartClearAll />
-            <div className="flex items-center justify-between">
-              <p className="underline cursor-pointer">Item subtotal</p>
-              <p>${showTotalPriceInCart(cart)}</p>
-            </div>
-            {/* <div className="flex items-center justify-between">
-              <p>Shipping total</p>
-              <p>${SHIPPING_FEE}</p>
-            </div> */}
-            <div className="flex items-center justify-between font-bold">
-              <p>Subtotal</p>
-              <p>${showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE)}</p>
-            </div>
+            <CartSummaryPrice />
 
             <Link
               className="flex flex-col items-center justify-between h-12"

@@ -32,7 +32,7 @@ const GlobalSearch: FC<GlobalSearchProps> = ({ onClearClick }) => {
     debouncedSearch(event.target.value);
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["products", debouncedQuery],
     queryFn: () =>
       fetchProductsData(
@@ -74,6 +74,7 @@ const GlobalSearch: FC<GlobalSearchProps> = ({ onClearClick }) => {
             isLoading={isLoading}
             error={error}
             data={products}
+            refetch={refetch}
             emptyMessage="No results found."
           >
             {products?.map((product) => (
