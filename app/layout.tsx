@@ -88,6 +88,8 @@ export default function RootLayout({
           </Suspense>
         </ReactQueryProvider>
       </body>
+
+      <script src="https://js.paystack.co/v2/inline.js" async></script>
     </html>
   );
 }

@@ -3,17 +3,13 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import Select, { SingleValue } from "react-select";
 import countryList from "react-select-country-list";
-import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import {
   formatPhoneToCountry,
-  getCountryFlag,
   getDialingCodeByValue,
 } from "@/utils/countyUtils";
 import { useMutation } from "@tanstack/react-query";
-import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import { NotifyError, NotifySuccess } from "@/helpers/toasts";
 import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
@@ -25,7 +21,6 @@ import {
   OrderItem,
 } from "@/types/order";
 import { createOrderData } from "@/lib/apiOrder";
-import { selectFieldStyles } from "@/app/(auth)/register/components/RegisterationCountrySelectInputStyle";
 import useCartStore from "@/store/cartStore";
 import { transformCartArray } from "@/utils/productUtils";
 import { Lock } from "iconsax-react";
@@ -40,7 +35,11 @@ import {
 } from "@/helpers/cart";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { parsePhoneNumberFromString } from "libphonenumber-js/min";
-import { v4 as uuidv4 } from "uuid";
+import PaystackPaymentUi from "@/components/PaystackPaymentUi";
+import { PaystackVerifyTransactionRes } from "@/types/paystack";
+import { finalizePayment } from "@/services/paymentService";
+import AppLoader from "@/common/Loaders/AppLoader";
+import { InitializePayment } from "@/types/payment";
 
 type FormValues = {
   userId: string;
@@ -152,18 +151,13 @@ const Checkout = () => {
     };
 
     const userId = {
-      // userId: uuidv4(),
       userId: user?.id,
     };
 
-    // return console.log("PAYLOAD", {
-    //   ...(!isLoggedInUser && { offlineUser }),
-    //   ...payloadToSubmit,
-    //   ...(!isLoggedInUser && userId),
-    // });
     orderProduct({
       ...payloadToSubmit,
-      ...(!isLoggedInUser && { offlineUser }),
+      // ...(!isLoggedInUser && { offlineUser }),
+      ...{ offlineUser },
       ...(!isLoggedInUser && userId),
     } as any);
     setSubmitting(false);
@@ -197,6 +191,57 @@ const Checkout = () => {
     phoneNumber: phoneDetails.phoneNumber || "",
   };
 
+  const verifyTransaction = async (reference: string): Promise<boolean> => {
+    try {
+      const response = await fetch(
+        `https://api.paystack.co/transaction/verify/${reference}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY}`,
+          },
+        }
+      );
+
+      const data: PaystackVerifyTransactionRes = await response.json();
+
+      if (data?.status) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Verification error", error);
+      return false;
+    }
+  };
+
+  const verifyTransactionBackend = async (
+    initializePaymentPayload: InitializePayment
+  ): Promise<any> => {
+    try {
+      const isVerified = await finalizePayment(initializePaymentPayload);
+
+      if (isVerified) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("BE Verification error", error);
+      return false;
+    }
+  };
+
+  const handlePaymentCancel = () => {
+    NotifyError("Payment cancelled.");
+  };
+
+  if (isPending) {
+    return <AppLoader />;
+  }
+
   return (
     <section className="wrapper mt-10 bg-white">
       <Formik
@@ -205,7 +250,7 @@ const Checkout = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue, values, errors, touched }) => {
+        {({ setFieldValue, values, errors, touched, handleSubmit }) => {
           const disableBtn = !(
             !values.firstName ||
             !values.lastName ||
@@ -216,12 +261,66 @@ const Checkout = () => {
             isPending
           );
 
-          console.log("formik values ::", values);
+          // console.log("formik values ::", values);
 
           const focusClassName =
             "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
           const placeholderClassName =
             "placeholder-[#808080] placeholder:font-light focus:placeholder-opacity-50 disabled:placeholder-opacity-70";
+
+          const offlineUser = {
+            id: null,
+            email: values.email,
+            address: values.address,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            countryCode: values.countryCode,
+            phoneNumber: values.phoneNumber,
+            phone: `+${values.countryCode}${values.phoneNumber}`,
+          };
+
+          const payload = !!user ? user : offlineUser;
+
+          const paystackPaymentProps = {
+            isDisabled: !disableBtn,
+            isPending: isPending,
+            email: payload?.email || "",
+            userId: payload?.id || payload?.email,
+            amount:
+              showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE) || 0,
+            currency: "NGN",
+            handleSubmit: handleSubmit,
+            buttonText: "Make Payment",
+            onSuccess: async (
+              response: any,
+              reference: any,
+              handleSubmit: () => void
+            ) => {
+              const initializePaymentPayload: InitializePayment = {
+                reference: response?.reference,
+                backendReference: reference,
+                transactionLog: response,
+              };
+              const isVerified = await verifyTransaction(
+                initializePaymentPayload?.reference
+              );
+              const isBackendVerified = await verifyTransactionBackend(
+                initializePaymentPayload
+              );
+
+              if (isVerified && isBackendVerified) {
+                NotifySuccess("Creating order.");
+                handleSubmit();
+              } else {
+                NotifyError("Transaction verification failed.");
+                console.error("Transaction verification failed.", {
+                  isVerified,
+                  isBackendVerified,
+                });
+              }
+            },
+            onCancel: handlePaymentCancel,
+          };
 
           return (
             <Form className="flex flex-col items-center justify-start w-full h-screen my-20 bg-background">
@@ -274,8 +373,7 @@ const Checkout = () => {
                                   focusClassName
                                 )}
                                 name="countryCode"
-                                type="text"
-                                disabled
+                                type="number"
                                 placeholder={
                                   isLoggedInUser
                                     ? values.countryCode
@@ -288,7 +386,6 @@ const Checkout = () => {
                                     ? values.countryCode
                                     : getDialingCodeByValue(values.countryCode)
                                 }
-                                readOnly
                               />
                               {errors.countryCode && touched.countryCode ? (
                                 <div className="absolute text-sm bottoretext-destructive text-sm0 xs:right-0 -right-9 xs:top-16">
@@ -319,22 +416,7 @@ const Checkout = () => {
 
                       {/* Submit */}
                       <div className="w-full mt-8">
-                        <button
-                          className="w-full flex items-center justify-center text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
-                          type="submit"
-                          disabled={!disableBtn}
-                        >
-                          {isPending ? (
-                            <div className="mr-3">
-                              <SpinnerIcon
-                                width="15"
-                                height="15"
-                                color="white"
-                              />
-                            </div>
-                          ) : null}{" "}
-                          Make payment
-                        </button>
+                        <PaystackPaymentUi {...paystackPaymentProps} />
                       </div>
 
                       <div className="flex items-center justify-center w-full">
@@ -464,7 +546,7 @@ const Checkout = () => {
                                   focusClassName
                                 )}
                                 name="countryCode"
-                                type="text"
+                                type="number"
                                 placeholder={values.countryCode}
                                 value={values.countryCode}
                               />
@@ -497,22 +579,7 @@ const Checkout = () => {
 
                       {/* Submit */}
                       <div className="w-full mt-8">
-                        <button
-                          className="w-full flex items-center justify-center text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
-                          type="submit"
-                          disabled={!disableBtn}
-                        >
-                          {isPending ? (
-                            <div className="mr-3">
-                              <SpinnerIcon
-                                width="15"
-                                height="15"
-                                color="white"
-                              />
-                            </div>
-                          ) : null}{" "}
-                          Make payment
-                        </button>
+                        <PaystackPaymentUi {...paystackPaymentProps} />
                       </div>
 
                       <div className="flex items-center justify-center w-full">
@@ -573,8 +640,13 @@ const Checkout = () => {
                         </div>
                       ))}
 
-                      <div className="mt-12 text-[#828282]">
+                      <div className="mt-12 text-[#828282] space-y-8">
                         <CartSummaryPrice />
+
+                        <PaystackPaymentUi
+                          {...paystackPaymentProps}
+                          buttonText="Pay Now"
+                        />
                       </div>
                     </div>
                   </div>
