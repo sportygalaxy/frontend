@@ -14,18 +14,12 @@ import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { FC } from "react";
 import useCartStore from "@/store/cartStore";
-import {
-  SHIPPING_FEE,
-  showTotalPrice,
-  showTotalPriceInCart,
-} from "@/helpers/cart";
 import CartProductCard from "./CartProductCard";
 import CartEmpty from "./CartEmpty";
 import CartClearAll from "./CartClearAll";
 import { useRouter } from "next/navigation";
 import { NotifySuccess } from "@/helpers/toasts";
 import { RoutesEnum } from "@/constants/routeEnums";
-import { formatCurrency } from "@/utils/currencyUtils";
 import CartSummaryPrice from "./CartSummaryPrice";
 
 type CartAddToCartDrawerProps<T> = {

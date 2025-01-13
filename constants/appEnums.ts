@@ -10,3 +10,9 @@ export enum UPLOAD_FORMATS {
   PDF = "pdfUploader",
   VIDEO = "videoUploader",
 }
+
+export enum PAYMENT_OPTION {
+  PARTIAL = "PARTIAL",
+  FULL = "FULL",
+}
+

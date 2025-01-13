@@ -29,7 +29,6 @@ import CartCheckoutItem from "@/components/cart/CartCheckoutItem";
 import { TCart } from "@/types/cart";
 import CartSummaryPrice from "@/components/cart/CartSummaryPrice";
 import {
-  SHIPPING_FEE,
   showTotalPrice,
   showTotalPriceInCart,
 } from "@/helpers/cart";
@@ -40,6 +39,8 @@ import { PaystackVerifyTransactionRes } from "@/types/paystack";
 import { finalizePayment } from "@/services/paymentService";
 import AppLoader from "@/common/Loaders/AppLoader";
 import { InitializePayment } from "@/types/payment";
+import { PAYMENT_OPTION } from "@/constants/appEnums";
+import { MINIMUM_CHECKOUT_AMOUNT, PARTIAL_PAYMENT_DISCOUNT, SHIPPING_FEE } from "../products/ProductConstant";
 
 type FormValues = {
   userId: string;
@@ -94,19 +95,46 @@ const Checkout = () => {
   } = useCartStore();
   const { user } = useUserStore();
   const [countryOptions] = useState<[]>(countryList().getData());
+  const [paymentOption, setPaymentOption] = useState<"FULL" | "PARTIAL">(
+    "FULL"
+  );
+  const [isGlobalLoading, setIsGlobalLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const isLoggedInUser = !!user;
   const validationSchema = getValidationSchema(isLoggedInUser);
 
+  const checkoutAmount =
+    showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE) || 0;
+  const isAllowedToCheckoutOut = checkoutAmount < MINIMUM_CHECKOUT_AMOUNT;
+
+  const handleTabChange = (option: "FULL" | "PARTIAL") => {
+    setPaymentOption(option);
+  };
+
+  const calculatePaymentAmount = () => {
+    if (paymentOption === PAYMENT_OPTION.PARTIAL) {
+      return (checkoutAmount / 100) * PARTIAL_PAYMENT_DISCOUNT; // 30% of the total fee
+    }
+    return checkoutAmount; // Full payment
+  };
+
   const {
     mutate: orderProduct,
-    isPending,
-    error,
-    data,
+    isPending: isOrderPending,
+    error: orderError,
+    data: orderData,
   } = useMutation<ICreateOrderResponse, Error, ICreateOrderPayload>({
-    mutationFn: (registerData: ICreateOrderPayload) =>
-      createOrderData(registerData),
+    mutationFn: async (registerData: ICreateOrderPayload) => {
+      const result = await createOrderData(registerData);
+
+      if (!result?.success || result?.statusCode === 400) {
+        NotifyError(result?.error as string);
+        return {};
+      }
+      NotifySuccess("Order created.");
+      return result;
+    },
     onMutate: async () => {},
     onSuccess: (data) => {
       if (data?.data) {
@@ -114,15 +142,15 @@ const Checkout = () => {
         clearCart();
         router.push(RoutesEnum.LANDING_PAGE);
       }
+      setIsGlobalLoading(false);
     },
-    onError: (error, variables, context) => {
-      NotifyError(error?.message || "An error occured");
+    onError: (error) => {
+      setIsGlobalLoading(false);
+      NotifyError(error?.message || "An error occurred during order creation.");
     },
   });
 
-  const isProductInCart = (cartQty: number) => {
-    return cartQty > 1;
-  };
+  const isProductInCart = (cartQty: number) => cartQty > 1;
 
   const handleIncrement = (event: React.MouseEvent, id: number) => {
     event.stopPropagation();
@@ -138,29 +166,37 @@ const Checkout = () => {
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
-    const payloadToSubmit = transformCartArray(String(user?.id), cart);
-    const offlineUser = {
-      email: values.email,
-      address: values.address,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      country: values.country,
-      countryCode: values.countryCode,
-      phoneNumber: values.phoneNumber,
-      phone: `+${values.countryCode}${values.phoneNumber}`,
-    };
+    try {
+      const payloadToSubmit = transformCartArray(String(user?.id), cart);
+      const offlineUser = {
+        email: values.email,
+        address: values.address,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        country: values.country,
+        countryCode: values.countryCode,
+        phoneNumber: values.phoneNumber,
+        phone: `+${values.countryCode}${values.phoneNumber}`,
+      };
 
-    const userId = {
-      userId: user?.id,
-    };
-
-    orderProduct({
-      ...payloadToSubmit,
-      // ...(!isLoggedInUser && { offlineUser }),
-      ...{ offlineUser },
-      ...(!isLoggedInUser && userId),
-    } as any);
-    setSubmitting(false);
+      const userId = {
+        userId: user?.id,
+      };
+      setIsGlobalLoading(true);
+      orderProduct({
+        ...payloadToSubmit,
+        offlineUser,
+        paymentOption,
+        amountToPay: calculatePaymentAmount(),
+        ...(!isLoggedInUser && userId),
+      } as any);
+      setSubmitting(false);
+    } catch (error: any) {
+      NotifyError("Order submission error:", error?.error);
+      console.error("Order submission error:", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const extractPhoneDetails = (phone: string) => {
@@ -193,6 +229,7 @@ const Checkout = () => {
 
   const verifyTransaction = async (reference: string): Promise<boolean> => {
     try {
+      setIsGlobalLoading(true);
       const response = await fetch(
         `https://api.paystack.co/transaction/verify/${reference}`,
         {
@@ -205,43 +242,51 @@ const Checkout = () => {
       );
 
       const data: PaystackVerifyTransactionRes = await response.json();
-
-      if (data?.status) {
-        return true;
-      } else {
-        return false;
-      }
+      setIsGlobalLoading(false);
+      return data?.status || false;
     } catch (error) {
-      console.error("Verification error", error);
+      console.error("Transaction verification error:", error);
+      NotifyError("Failed to verify transaction.");
       return false;
+    } finally {
+      setIsGlobalLoading(false);
     }
   };
 
   const verifyTransactionBackend = async (
     initializePaymentPayload: InitializePayment
-  ): Promise<any> => {
+  ): Promise<boolean> => {
     try {
-      const isVerified = await finalizePayment(initializePaymentPayload);
-
-      if (isVerified) {
-        return true;
-      } else {
-        return false;
-      }
+      setIsGlobalLoading(true);
+      const data = await finalizePayment(initializePaymentPayload);
+      setIsGlobalLoading(false);
+      return data;
     } catch (error) {
-      console.error("BE Verification error", error);
+      console.error("Backend transaction verification error:", error);
+      NotifyError("Failed to verify transaction on the backend.");
       return false;
+    } finally {
+      setIsGlobalLoading(false);
     }
   };
 
   const handlePaymentCancel = () => {
-    NotifyError("Payment cancelled.");
+    setIsGlobalLoading(false);
+    NotifyError("Payment was cancelled by the user.");
   };
 
-  if (isPending) {
+  // Render loader during pending states
+  if (isOrderPending || isGlobalLoading) {
     return <AppLoader />;
   }
 
+  // Handle errors globally
+  if (orderError) {
+    console.error("Order error:", orderError);
+    NotifyError(
+      orderError?.message || "An error occurred during order creation."
+    );
+  }
   return (
     <section className="wrapper mt-10 bg-white">
       <Formik
@@ -258,8 +303,12 @@ const Checkout = () => {
             !values.address ||
             !values.phoneNumber ||
             !values.countryCode ||
-            isPending
+            isAllowedToCheckoutOut ||
+            isOrderPending ||
+            isGlobalLoading
           );
+
+          const paymentAmount = calculatePaymentAmount();
 
           // console.log("formik values ::", values);
 
@@ -283,11 +332,11 @@ const Checkout = () => {
 
           const paystackPaymentProps = {
             isDisabled: !disableBtn,
-            isPending: isPending,
+            isPending: isOrderPending || isGlobalLoading,
+            isAllowedToCheckoutOut,
             email: payload?.email || "",
             userId: payload?.id || payload?.email,
-            amount:
-              showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE) || 0,
+            amount: paymentAmount,
             currency: "NGN",
             handleSubmit: handleSubmit,
             buttonText: "Make Payment",
@@ -312,6 +361,7 @@ const Checkout = () => {
                 NotifySuccess("Creating order.");
                 handleSubmit();
               } else {
+                setIsGlobalLoading(false);
                 NotifyError("Transaction verification failed.");
                 console.error("Transaction verification failed.", {
                   isVerified,
@@ -320,6 +370,43 @@ const Checkout = () => {
               }
             },
             onCancel: handlePaymentCancel,
+          };
+
+          const paymentMood = (): JSX.Element => {
+            return (
+              <div className="flex flex-col items-center justify-center gap-5 xs:flex-row">
+                <label
+                  className="flex justify-start flex-1 xs:justify-end w-full"
+                  htmlFor="phoneNumber"
+                >
+                  * Payment options
+                </label>
+                <div className="flex flex-[3] items-center justify-start tabs w-full  gap-0">
+                  <button
+                    type="button"
+                    className={`tab ${
+                      paymentOption === "FULL"
+                        ? "bg-black text-white p-5 font-semibold"
+                        : "border-2 border-black p-5 font-semibold"
+                    }`}
+                    onClick={() => handleTabChange("FULL")}
+                  >
+                    100% Payment
+                  </button>
+                  <button
+                    type="button"
+                    className={`tab ${
+                      paymentOption === "PARTIAL"
+                        ? "bg-black text-white p-5 font-semibold"
+                        : "border-2 border-black p-5 font-semibold"
+                    }`}
+                    onClick={() => handleTabChange("PARTIAL")}
+                  >
+                    30% Down Payment
+                  </button>
+                </div>
+              </div>
+            );
           };
 
           return (
@@ -413,6 +500,8 @@ const Checkout = () => {
                           </div>
                         </div>
                       </div>
+
+                      {paymentMood()}
 
                       {/* Submit */}
                       <div className="w-full mt-8">
@@ -577,6 +666,8 @@ const Checkout = () => {
                         </div>
                       </div>
 
+                      {paymentMood()}
+
                       {/* Submit */}
                       <div className="w-full mt-8">
                         <PaystackPaymentUi {...paystackPaymentProps} />
@@ -598,12 +689,7 @@ const Checkout = () => {
                         Total amount
                       </p>
                       <p className="text-[#000] font-bold text-mobile-4xl md:text-7xl">
-                        {formatCurrency(
-                          showTotalPrice(
-                            showTotalPriceInCart(cart),
-                            SHIPPING_FEE
-                          ) || 0
-                        )}
+                        {formatCurrency(paymentAmount)}
                       </p>
 
                       <div className="flex items-center gap-2">
@@ -641,7 +727,7 @@ const Checkout = () => {
                       ))}
 
                       <div className="mt-12 text-[#828282] space-y-8">
-                        <CartSummaryPrice />
+                        <CartSummaryPrice paymentAmount={paymentAmount} />
 
                         <PaystackPaymentUi
                           {...paystackPaymentProps}

@@ -18,7 +18,7 @@ import ProductList from "../../components/ProductList";
 import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 
 interface ProductProps {
-  params: { productId: string };
+  params: { productId: string; slug?: string };
   searchParams: {};
 }
 
@@ -62,7 +62,18 @@ const ProductPage: FC<ProductProps> = (props) => {
 
           <section className="desktop-tablet-view flex-col lg:mt-5">
             <DesktopTitle noLine title="Other recommended products" />
-            <ProductList isolated isMobile isHorizontalScroll />
+            <ProductList
+              isolated
+              isMobile
+              isHorizontalScroll
+              query={{
+                limit: 12,
+                // q: slug,
+                // category: productData?.categoryId,
+                subcategory: productData?.subcategoryId,
+                instance: "recommendedProducts",
+              }}
+            />
           </section>
 
           <ProductKeyattributes keyattributes={productData?.keyattribute} />

@@ -2,6 +2,10 @@ import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { TProductQuery } from "@/types/product";
 import { substractDaysFromTodaysDate } from "@/utils/dateUtils";
 
+export const SHIPPING_FEE = 0;
+export const MINIMUM_CHECKOUT_AMOUNT = 30000;
+export const PARTIAL_PAYMENT_DISCOUNT = 30;
+
 export const PAGINATE_VIEW_OPTIONS = [
   { id: 1, name: "All", value: 500 },
   { id: 2, name: "20", value: 20 },

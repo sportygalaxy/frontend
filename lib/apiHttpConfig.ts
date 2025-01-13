@@ -6,6 +6,7 @@ type AxiosBaseQuerySuccess = {
   message: string;
   success: boolean;
   error?: string; // optional
+  statusCode?: number;
 };
 
 type AxiosBaseQueryError = {

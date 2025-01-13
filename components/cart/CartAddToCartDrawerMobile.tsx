@@ -2,11 +2,6 @@
 import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import useCartStore from "@/store/cartStore";
-import {
-  SHIPPING_FEE,
-  showTotalPrice,
-  showTotalPriceInCart,
-} from "@/helpers/cart";
 import CartProductCard from "./CartProductCard";
 import CartEmpty from "./CartEmpty";
 import CartClearAll from "./CartClearAll";

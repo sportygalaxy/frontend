@@ -1,11 +1,13 @@
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import { initiatePayment } from "@/services/paymentService";
 import { PaystackTransaction } from "@/types/paystack";
+import { formatCurrency } from "@/utils/currencyUtils";
 import { useState } from "react";
 
 interface PaystackPaymentUiProps {
   isDisabled: boolean;
   isPending: boolean;
+  isAllowedToCheckoutOut: boolean;
   userId: string | any; // User ID initiating the payment
   amount: number; // Payment amount in NGN
   currency: string; // Payment currency, e.g., "NGN"
@@ -23,6 +25,7 @@ interface PaystackPaymentUiProps {
 const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
   isDisabled,
   isPending,
+  isAllowedToCheckoutOut,
   userId,
   amount,
   currency,
@@ -91,22 +94,30 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
     }
   };
 
-  const disabled = isDisabled || loading;
+  const disabled = isDisabled || loading || isAllowedToCheckoutOut;
 
   return (
-    <button
-      className="w-full flex items-center justify-center text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
-      type="button"
-      disabled={disabled}
-      onClick={handlePayment}
-    >
-      {isPending ? (
-        <div className="mr-3">
-          <SpinnerIcon width="15" height="15" color="white" />
-        </div>
-      ) : null}{" "}
-      {loading ? "Processing..." : buttonText ? buttonText : "Pay Now"}
-    </button>
+    <>
+      {isAllowedToCheckoutOut && (
+        <p className="text-red-600">
+          A minimum of {formatCurrency(30000) || 0} worth of item should be in your cart
+          to proceed
+        </p>
+      )}
+      <button
+        className="w-full flex items-center justify-center text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
+        type="button"
+        disabled={disabled}
+        onClick={handlePayment}
+      >
+        {isPending ? (
+          <div className="mr-3">
+            <SpinnerIcon width="15" height="15" color="white" />
+          </div>
+        ) : null}{" "}
+        {loading ? "Processing..." : buttonText ? buttonText : "Pay Now"}
+      </button>
+    </>
   );
 };
 
