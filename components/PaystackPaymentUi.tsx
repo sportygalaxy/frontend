@@ -71,7 +71,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
           email,
           // TODO: revert back to the price
-          amount: 100, // Paystack processes amounts in kobo
+          amount: 10000, // Paystack processes amounts in kobo
           // amount: amount * 100, // Paystack processes amounts in kobo
           currency,
           reference: data?.reference, // Backend-generated transaction reference

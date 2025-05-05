@@ -28,10 +28,7 @@ import CartItem from "@/components/cart/CartItem";
 import CartCheckoutItem from "@/components/cart/CartCheckoutItem";
 import { TCart } from "@/types/cart";
 import CartSummaryPrice from "@/components/cart/CartSummaryPrice";
-import {
-  showTotalPrice,
-  showTotalPriceInCart,
-} from "@/helpers/cart";
+import { showTotalPrice, showTotalPriceInCart } from "@/helpers/cart";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { parsePhoneNumberFromString } from "libphonenumber-js/min";
 import PaystackPaymentUi from "@/components/PaystackPaymentUi";
@@ -40,7 +37,11 @@ import { finalizePayment } from "@/services/paymentService";
 import AppLoader from "@/common/Loaders/AppLoader";
 import { InitializePayment } from "@/types/payment";
 import { PAYMENT_OPTION } from "@/constants/appEnums";
-import { MINIMUM_CHECKOUT_AMOUNT, PARTIAL_PAYMENT_DISCOUNT, SHIPPING_FEE } from "../products/ProductConstant";
+import {
+  MINIMUM_CHECKOUT_AMOUNT,
+  PARTIAL_PAYMENT_DISCOUNT,
+  SHIPPING_FEE,
+} from "../products/ProductConstant";
 
 type FormValues = {
   userId: string;
@@ -228,6 +229,8 @@ const Checkout = () => {
   };
 
   const verifyTransaction = async (reference: string): Promise<boolean> => {
+    const secretKey = process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY?.trim();
+
     try {
       setIsGlobalLoading(true);
       const response = await fetch(
@@ -236,7 +239,7 @@ const Checkout = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY}`,
+            Authorization: `Bearer ${secretKey}`,
           },
         }
       );
