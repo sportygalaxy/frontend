@@ -70,7 +70,9 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
         const handler = (window as any).PaystackPop?.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
           email,
-          amount: amount * 100, // Paystack processes amounts in kobo
+          // TODO: revert back to the price
+          amount: 100, // Paystack processes amounts in kobo
+          // amount: amount * 100, // Paystack processes amounts in kobo
           currency,
           reference: data?.reference, // Backend-generated transaction reference
           callback: (response: PaystackTransaction) => {
@@ -100,8 +102,8 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
     <>
       {isAllowedToCheckoutOut && (
         <p className="text-red-600">
-          A minimum of {formatCurrency(30000) || 0} worth of item should be in your cart
-          to proceed
+          A minimum of {formatCurrency(30000) || 0} worth of item should be in
+          your cart to proceed
         </p>
       )}
       <button

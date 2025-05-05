@@ -223,7 +223,7 @@ const Checkout = () => {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     country: formatPhoneToCountry(user?.phone ?? "")?.country || "",
-    countryCode: phoneDetails.countryCode || "",
+    countryCode: phoneDetails.countryCode || "234",
     phoneNumber: phoneDetails.phoneNumber || "",
   };
 
@@ -627,7 +627,7 @@ const Checkout = () => {
                         </label>
                         <div className="flex flex-[3] justify-start w-full">
                           <div className="grid w-full grid-cols-4 gap-2 xs:gap-5 xs:grid-cols-8">
-                            <div className="relative col-span-2 xs:col-span-2">
+                            <div className="relative col-span-2 xs:col-span-3">
                               <Field
                                 className={cn(
                                   "px-4 py-3 m-0 w-fit xs:w-full border-1 lightDarkGrey rounded-xl xs:py-4 xs:px-8",
@@ -645,7 +645,7 @@ const Checkout = () => {
                                 </div>
                               ) : null}
                             </div>
-                            <div className="relative col-span-4 xs:col-span-6">
+                            <div className="relative col-span-4 xs:col-span-5">
                               <Field
                                 className={cn(
                                   "w-full px-4 py-3 m-0 xs:w-full border-1 lightDarkGrey rounded-xl xs:py-4 xs:px-8",

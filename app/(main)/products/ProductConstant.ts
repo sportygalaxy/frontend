@@ -62,14 +62,14 @@ export const PRICE_FILTERS = {
   id: "price",
   name: "Price",
   options: [
-    { value: [0, 100], label: "Any price" },
+    { value: [0, 0], label: "Any price" },
     {
-      value: [0, 20],
-      label: "Under 20€",
+      value: [0, 30000],
+      label: "Under ₦30k",
     },
     {
-      value: [0, 40],
-      label: "Under 40€",
+      value: [0, 100000],
+      label: "Under ₦100k",
     },
     // custom option defined in JSX
   ],
