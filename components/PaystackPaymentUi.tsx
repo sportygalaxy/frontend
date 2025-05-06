@@ -70,7 +70,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
         const handler = (window as any).PaystackPop?.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
           email,
-          // TODO: revert back to the price
+          // TODO: revert back to the price.
           amount: 10000, // Paystack processes amounts in kobo
           // amount: amount * 100, // Paystack processes amounts in kobo
           currency,

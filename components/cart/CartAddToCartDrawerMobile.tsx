@@ -61,12 +61,12 @@ function CartAddToCartDrawerMobile<T>({
             <CartClearAll />
             <CartSummaryPrice />
 
-            <Link
+            {/* <Link
               className="flex flex-col items-center justify-between h-12"
               href={RoutesEnum.CHECKOUT}
             >
               Checkout
-            </Link>
+            </Link> */}
 
             <Button
               onClick={handleCheckout}
