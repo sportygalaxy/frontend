@@ -682,11 +682,6 @@ const Checkout = () => {
 
                       {paymentMood()}
 
-                      {/* TODO:  */}
-                      <div className="w-full mt-8">
-                        <Button onClick={() => handleSubmit()}>Ok</Button>
-                      </div>
-
                       {/* Submit */}
                       <div className="w-full mt-8">
                         <PaystackPaymentUi {...paystackPaymentProps} />

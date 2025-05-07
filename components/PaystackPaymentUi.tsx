@@ -20,6 +20,7 @@ interface PaystackPaymentUiProps {
   onCancel?: () => void; // Optional callback for cancelled payment
   handleSubmit: any;
   buttonText?: string;
+  metadata?: any;
 }
 
 const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
@@ -34,6 +35,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
   onCancel,
   handleSubmit,
   buttonText,
+  metadata,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -60,6 +62,9 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
         amount,
         currency,
         gatewayName: "PAYSTACK",
+        metadata: {
+          ...metadata,
+        },
       };
 
       // Step 1: Initiate payment on the backend
@@ -70,9 +75,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
         const handler = (window as any).PaystackPop?.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
           email,
-          // TODO: revert back to the price.
-          amount: 10000, // Paystack processes amounts in kobo
-          // amount: amount * 100, // Paystack processes amounts in kobo
+          amount: amount * 100, // Paystack processes amounts in kobo
           currency,
           reference: data?.reference, // Backend-generated transaction reference
           callback: (response: PaystackTransaction) => {
