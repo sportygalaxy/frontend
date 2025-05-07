@@ -42,6 +42,7 @@ import {
   PARTIAL_PAYMENT_DISCOUNT,
   SHIPPING_FEE,
 } from "../products/ProductConstant";
+import { Button } from "@/components/ui/button";
 
 type FormValues = {
   userId: string;
@@ -332,6 +333,9 @@ const Checkout = () => {
           };
 
           const payload = !!user ? user : offlineUser;
+          const userId = {
+            userId: user?.id,
+          };
 
           const paystackPaymentProps = {
             isDisabled: !disableBtn,
@@ -343,6 +347,13 @@ const Checkout = () => {
             currency: "NGN",
             handleSubmit: handleSubmit,
             buttonText: "Make Payment",
+            metadata: {
+              items: transformCartArray(String(user?.id), cart),
+              offlineUser,
+              paymentOption,
+              amountToPay: calculatePaymentAmount(),
+              ...(!isLoggedInUser && userId),
+            },
             onSuccess: async (
               response: any,
               reference: any,
@@ -670,6 +681,11 @@ const Checkout = () => {
                       </div>
 
                       {paymentMood()}
+
+                      {/* TODO:  */}
+                      <div className="w-full mt-8">
+                        <Button onClick={() => handleSubmit()}>Ok</Button>
+                      </div>
 
                       {/* Submit */}
                       <div className="w-full mt-8">
