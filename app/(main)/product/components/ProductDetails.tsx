@@ -30,6 +30,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
   const router = useRouter();
   const { addToCart, removeFromCart, cart } = useCartStore();
   const STOCK_COUNT = product?.stock || 0;
+  const modelNumber = product?.modelNumber || "";
 
   const initialValues = {
     id: product?.id || "",
@@ -65,9 +66,14 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
       {({ values, setFieldValue, errors, touched }) => (
         <Form className="flex flex-col flex-1">
           <div className="space-y-2">
-            <p className="capitalize font-jost text-black text-mobile-3xl md:text-3xl font-medium">
-              {product?.name}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="capitalize font-jost text-black text-mobile-3xl md:text-3xl font-medium">
+                {product?.name} -
+              </p>
+              <span className="font-jost text-secondary text-mobile-xl md:text-lg font-light leading-normal tracking-wide">
+                ({modelNumber})
+              </span>
+            </div>
             <p className="font-jost text-secondary text-mobile-xl md:text-xl font-light leading-normal tracking-wide">
               {product?.description}
             </p>

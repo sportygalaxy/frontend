@@ -77,7 +77,11 @@ const ProductPage: FC<ProductProps> = (props) => {
           </section>
 
           <ProductKeyattributes keyattributes={productData?.keyattribute} />
-          <ProductSpecifications specifications={productData?.specification} />
+          
+          <ProductSpecifications
+            modelNumber={productData?.modelNumber}
+            specifications={productData?.specification}
+          />
 
           <ProductRatings />
         </div>
