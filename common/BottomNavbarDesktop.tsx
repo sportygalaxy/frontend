@@ -48,12 +48,12 @@ const BottomNavbarDesktop = () => {
     {
       name: "Facebook",
       url: "https://www.facebook.com/share/16xpwMdDTL/",
-      icon: <FacebookIcon />,
+      icon: <FacebookIcon color="white" />,
     },
     {
       name: "Instagram",
       url: "https://www.instagram.com/sporty_galaxy?igsh=MXNzY2ZpazluNGhmaA==",
-      icon: <InstagramIcon />,
+      icon: <InstagramIcon color="white" />,
     },
     {
       name: "X",
