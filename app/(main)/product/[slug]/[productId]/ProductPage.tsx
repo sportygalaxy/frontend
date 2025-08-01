@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { PRODUCT_ID } from "@/constants/appConstants";
 import ProductList from "../../components/ProductList";
 import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
+import BackButton from "@/common/BackButton";
 
 interface ProductProps {
   params: { productId: string; slug?: string };
@@ -38,7 +39,8 @@ const ProductPage: FC<ProductProps> = (props) => {
   const productData = data?.data || {};
 
   return (
-    <div className="wrapper my-12">
+    <div className="wrapper my-2 md:my-12">
+      <BackButton />
       <ComponentStateWrapper
         isLoading={isLoading}
         error={error}
@@ -77,7 +79,7 @@ const ProductPage: FC<ProductProps> = (props) => {
           </section>
 
           <ProductKeyattributes keyattributes={productData?.keyattribute} />
-          
+
           <ProductSpecifications
             modelNumber={productData?.modelNumber}
             specifications={productData?.specification}

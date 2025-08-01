@@ -41,6 +41,7 @@ import { Button } from "@/components/ui/button";
 import CategoriesList from "./components/CategoriesList";
 import AppLoader from "@/common/Loaders/AppLoader";
 import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
+import BackButton from "@/common/BackButton";
 
 export default function Products() {
   const router = useRouter();
@@ -191,110 +192,115 @@ export default function Products() {
 
   return (
     <div className="wrapper">
-      <div className="flex items-baseline gap-6">
-        <DesktopTitle title="All products" />
+      <div className="relative">
+        <BackButton className="absolute bottom-10" />
 
-        {/* SORT */}
-        <div className="flex items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
-              Sort
-              <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
-            </DropdownMenuTrigger>
+        <div className="flex items-center md:items-baseline gap-6">
+          <DesktopTitle title="All products" />
 
-            <DropdownMenuContent align="end">
-              {SORT_OPTIONS.map((option) => (
-                <button
-                  key={option.name}
-                  className={cn("text-left w-full block px-4 py-2 text-sm", {
-                    "text-gray-900 bg-gray-100": option.value === filter.sort,
-                    "text-gray-500": option.value !== filter.sort,
-                  })}
-                  onClick={() => {
-                    const updatedFilter = {
-                      ...filter,
-                      sort: option.value,
-                      page: 1, // Reset to first page when limit changes
-                    };
+          <BackButton className="m-0 p-0 sm:hidden" />
+          {/* SORT */}
+          <div className="flex items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
+                Sort
+                <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
+              </DropdownMenuTrigger>
 
-                    setFilter(updatedFilter);
+              <DropdownMenuContent align="end">
+                {SORT_OPTIONS.map((option) => (
+                  <button
+                    key={option.name}
+                    className={cn("text-left w-full block px-4 py-2 text-sm", {
+                      "text-gray-900 bg-gray-100": option.value === filter.sort,
+                      "text-gray-500": option.value !== filter.sort,
+                    })}
+                    onClick={() => {
+                      const updatedFilter = {
+                        ...filter,
+                        sort: option.value,
+                        page: 1, // Reset to first page when limit changes
+                      };
 
-                    updateUrlQuery({
-                      ...updatedFilter,
-                    });
+                      setFilter(updatedFilter);
 
-                    _debouncedSubmit();
-                  }}
-                >
-                  {option.name}
-                </button>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                      updateUrlQuery({
+                        ...updatedFilter,
+                      });
 
-          <button className="-m-2 ml-2 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
-            <Filter color="#000" className="h-4 w-4" />
-          </button>
+                      _debouncedSubmit();
+                    }}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <button className="-m-2 ml-2 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+              <Filter color="#000" className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="flex items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
+                Recent
+                <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end">
+                {DATE_OPTIONS.map((option) => (
+                  <button
+                    key={option.name}
+                    className={cn("text-left w-full block px-4 py-2 text-sm", {
+                      "text-gray-900 bg-gray-100":
+                        option.value === filter.createdAt,
+                      "text-gray-500": option.value !== filter.createdAt,
+                    })}
+                    onClick={() => {
+                      const updatedFilter = {
+                        ...filter,
+                        createdAt: option.value,
+                        page: 1, // Reset to first page when limit changes
+                      };
+
+                      setFilter(updatedFilter);
+
+                      updateUrlQuery({
+                        ...updatedFilter,
+                      });
+
+                      _debouncedSubmit();
+                    }}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <button className="-m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+              <Filter color="#000" className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* CLEAR */}
+          {isFilterEmpty(filter) ? null : (
+            <Button
+              variant="destructive"
+              onClick={() => {
+                const defaultFilter = {};
+                setFilter(defaultFilter);
+                updateUrlQuery(defaultFilter);
+                _debouncedSubmit();
+              }}
+              className="mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+            >
+              Clear Filters
+            </Button>
+          )}
         </div>
-
-        <div className="flex items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="group inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
-              Recent
-              <ChevronDown className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end">
-              {DATE_OPTIONS.map((option) => (
-                <button
-                  key={option.name}
-                  className={cn("text-left w-full block px-4 py-2 text-sm", {
-                    "text-gray-900 bg-gray-100":
-                      option.value === filter.createdAt,
-                    "text-gray-500": option.value !== filter.createdAt,
-                  })}
-                  onClick={() => {
-                    const updatedFilter = {
-                      ...filter,
-                      createdAt: option.value,
-                      page: 1, // Reset to first page when limit changes
-                    };
-
-                    setFilter(updatedFilter);
-
-                    updateUrlQuery({
-                      ...updatedFilter,
-                    });
-
-                    _debouncedSubmit();
-                  }}
-                >
-                  {option.name}
-                </button>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <button className="-m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
-            <Filter color="#000" className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* CLEAR */}
-        {isFilterEmpty(filter) ? null : (
-          <Button
-            variant="destructive"
-            onClick={() => {
-              const defaultFilter = {};
-              setFilter(defaultFilter);
-              updateUrlQuery(defaultFilter);
-              _debouncedSubmit();
-            }}
-            className="mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
-          >
-            Clear Filters
-          </Button>
-        )}
       </div>
 
       <div className="flex gap-4 mt-10">

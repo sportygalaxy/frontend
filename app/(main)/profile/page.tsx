@@ -27,6 +27,7 @@ import { mergeObjects } from "@/utils/objectUtils";
 import { NotifyError, NotifySuccess } from "@/helpers/toasts";
 import { UserData } from "@/types/auth";
 import { updateUser } from "@/lib/apiUser";
+import Link from "next/link";
 
 // Validation schema for Formik
 const validationSchema = Yup.object({
@@ -72,27 +73,35 @@ export default function Profile() {
     { id: 6, icon: <></>, path: "", name: "" },
   ];
 
+  // const profileInfoCtas = [
+  //   {
+  //     id: 1,
+  //     icon: <InfoCircle size="20" color="#292D32" />,
+  //     path: "help",
+  //     name: "Help",
+  //   },
+  //   {
+  //     id: 2,
+  //     icon: <MessageQuestion size="20" color="#828282" />,
+  //     path: "faq",
+  //     name: "FAQ",
+  //   },
+  //   {
+  //     id: 3,
+  //     icon: <ShoppingCart size="20" color="#828282" />,
+  //     path: "support",
+  //     name: "Support",
+  //   },
+  // ];
+
   const profileInfoCtas = [
     {
       id: 1,
-      icon: <InfoCircle size="20" color="#292D32" />,
-      path: "help",
-      name: "Help",
-    },
-    {
-      id: 2,
       icon: <MessageQuestion size="20" color="#828282" />,
-      path: "faq",
-      name: "FAQ",
-    },
-    {
-      id: 3,
-      icon: <ShoppingCart size="20" color="#828282" />,
-      path: "support",
-      name: "Support",
+      path: "contact-us",
+      name: "Contact Us",
     },
   ];
-
   const {
     mutate: update,
     isPending,
@@ -323,10 +332,14 @@ export default function Profile() {
       {/* Profile Info CTAs */}
       <div className="space-y-7 py-4">
         {profileInfoCtas.map((info) => (
-          <div className="flex items-center justify-start gap-2" key={info.id}>
+          <Link
+            href={info.path}
+            className="flex items-center justify-start gap-2"
+            key={info.id}
+          >
             <span>{info.icon}</span>
             <p className="text-secondary">{info.name}</p>
-          </div>
+          </Link>
         ))}
 
         <div className="flex items-center justify-start gap-2 cursor-pointer">

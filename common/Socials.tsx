@@ -1,13 +1,12 @@
 "use client";
 import FacebookIcon from "@/assets/icons/pack/Facebook";
-import Logo from "./Logo";
 import InstagramIcon from "@/assets/icons/pack/Instagram";
 import XIcon from "@/assets/icons/pack/X";
 import TiktokIcon from "@/assets/icons/pack/Tiktok";
 import WhatsappIcon from "@/assets/icons/pack/Whatsapp";
 import Link from "next/link";
 
-const BottomNavbarDesktop = () => {
+const Socials = () => {
   const navLinks = {
     Categories: [
       { name: "All products", href: "/products" },
@@ -48,51 +47,49 @@ const BottomNavbarDesktop = () => {
     {
       name: "Facebook",
       url: "https://www.facebook.com/share/16xpwMdDTL/",
-      icon: <FacebookIcon />,
+      icon: <FacebookIcon color="black" />,
     },
     {
       name: "Instagram",
       url: "https://www.instagram.com/sporty_galaxy?igsh=MXNzY2ZpazluNGhmaA==",
-      icon: <InstagramIcon />,
+      icon: <InstagramIcon color="black" />,
     },
     {
       name: "X",
       url: "https://x.com/sportygalaxy?t=UXNdx7UaqL4WmjgAbTztWg&s=09",
-      icon: <XIcon color="white" />,
+      icon: <XIcon color="black" />,
     },
     {
       name: "Tiktok",
       url: "https://www.tiktok.com/@sportygalaxy1?_t=ZM-8y1S0TY1Qbm&_r=1",
-      icon: <TiktokIcon color="white" />,
+      icon: <TiktokIcon color="black" />,
     },
     {
       name: "Whatsapp",
       url: "https://wa.me/2347072215324",
-      icon: <WhatsappIcon color="white" />,
+      icon: <WhatsappIcon color="black" />,
     },
   ];
   return (
-    <div className="wrapper bg-primary pt-16 pb-24 flex flex-col w-full gap-32">
-      <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-between w-full h-full gap-32 lg:gap-0">
-        <div>
-          <Logo color="white" isFooter />
-        </div>
+    <div className="bg-primary-foreground pt-16 pb-24 flex flex-col w-full gap-10">
+      <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-between w-full h-full gap-10 lg:gap-0">
+        <h1 className="text-xl">Contact Us</h1>
 
-        <div className="grid grid-cols-2 gap-6 md:gap-12 md:flex md:space-x-12">
+        <div className="grid grid-cols-2 gap-6 md:gap-12 md:flex md:space-x-12 px-4">
           {Object.entries(navLinks).map(([section, links]) => (
             <div
               key={section}
               className="space-y-5 flex flex-col items-center justify-start"
             >
-              <p className="font-semibold text-center text-primary-foreground text-mobile-2xl sm:text-2xl">
+              <p className="font-semibold text-center text-primary text-mobile-2xl sm:text-2xl">
                 {section}
               </p>
               <ul className="space-y-3 flex flex-col items-center justify-start">
                 {links.map((link, index) => (
-                  <li key={index} className="cursor-pointer">
+                  <li key={index} className="text-center cursor-pointer">
                     <Link
                       href={link.href}
-                      className="text-primary-foreground font-normal text-xl hover:underline"
+                      className="text-primary text-center font-normal text-xl hover:underline"
                     >
                       {link.name}
                     </Link>
@@ -118,7 +115,7 @@ const BottomNavbarDesktop = () => {
       </div>
 
       <div className="flex items-center justify-center w-full">
-        <p className="font-normal text-2xl text-primary-foreground">
+        <p className="font-normal text-xl text-primary">
           Sporty Galaxy, all rights reserved
         </p>
       </div>
@@ -126,4 +123,4 @@ const BottomNavbarDesktop = () => {
   );
 };
 
-export default BottomNavbarDesktop;
+export default Socials;
