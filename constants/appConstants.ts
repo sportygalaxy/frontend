@@ -1,10 +1,14 @@
-const PHONE_NUMBER = "7072215324";
-const PHONE_NUMBER_2 = "8116370946";
-const PHONE_NUMBER_3 = "9027338732";
-const COUNTRY_CODE = "+234";
+export const PHONE_NUMBER = "7072215324";
+export const PHONE_NUMBER_2 = "8116370946";
+export const PHONE_NUMBER_3 = "9027338732";
+export const COUNTRY_CODE = "+234";
 export const EMAIL = "support@sportygalaxy.com";
-const ADDRESS = "";
-const ADDRESS_LINK = "";
+export const ADDRESS = "";
+export const ADDRESS_LINK = "";
+export const WEBSITE = "https://www.sportygalaxy.com";
+export const BRAND_NAME = "SPORTY GALAXY LIMITED";
+export const BUSINESS_ADDRESS =
+  "Alaba International Market, No 25 olojo drive ojo town Lagos";
 export const logoUrl =
   "https://utfs.io/f/OX5ramIp6AH4YSDqoO7pjsfC6oQDNzYrxLmUHTlPghA7i2KF"; // "/images/logo/sg_logo.svg"; // https://www.sportygalaxy.com/logo.png
 
@@ -13,10 +17,11 @@ export const NAV_CONSTANT = {
   FORMATTED_NUMBER: `(${COUNTRY_CODE}) ${PHONE_NUMBER}`,
   EMAIL,
   ADDRESS,
-  FACEBOOK_URL: "",
-  X_URL: "",
-  TIKTOK_URL: "",
-  INSTAGRAM_URL: "",
+  FACEBOOK_URL: "https://www.facebook.com/share/16xpwMdDTL/",
+  X_URL: "https://x.com/sportygalaxy?t=UXNdx7UaqL4WmjgAbTztWg&s=09",
+  TIKTOK_URL: "https://www.tiktok.com/@sportygalaxy1?_t=ZM-8y1S0TY1Qbm&_r=1",
+  INSTAGRAM_URL:
+    "https://www.instagram.com/sporty_galaxy?igsh=MXNzY2ZpazluNGhmaA==",
   LINKEDIN_URL: "",
   WHATSAPP_LINK: `https://api.whatsapp.com/send?phone=${COUNTRY_CODE}${PHONE_NUMBER}&text=Hello%Sporty%20galaxy,%20I%20am%20interested%20in%20buying%sport%20equipments`,
   CALL_LINK: `tel:+${COUNTRY_CODE}${PHONE_NUMBER}`,

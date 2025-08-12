@@ -1,4 +1,5 @@
 import BackButton from "@/common/BackButton";
+import { BUSINESS_ADDRESS, COUNTRY_CODE, EMAIL, PHONE_NUMBER, WEBSITE } from "@/constants/appConstants";
 
 interface SectionHeadingProps {
   children: React.ReactNode;
@@ -262,10 +263,10 @@ export default function CustomerProtectionAndCustomerRightPolicy() {
             </PolicyParagraph>
             <ContactInfo
               name="" // No specific name provided for this contact section
-              address="Physical Office: [No 25 Olojo Drive Ojo Lagos]"
-              email="sportygalaxy@gmail.com"
-              phone="+2347072215324"
-              onlinePortal="[Insert if applicable]" // Placeholder for online portal
+              address={BUSINESS_ADDRESS}
+              email={EMAIL}
+              phone={`${COUNTRY_CODE}${PHONE_NUMBER}`}
+              onlinePortal={WEBSITE} // Placeholder for online portal
             />
             <PolicyParagraph className="font-semibold">
               Complaint Handling Timeline:

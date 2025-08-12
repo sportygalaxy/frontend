@@ -6,6 +6,7 @@ import XIcon from "@/assets/icons/pack/X";
 import TiktokIcon from "@/assets/icons/pack/Tiktok";
 import WhatsappIcon from "@/assets/icons/pack/Whatsapp";
 import Link from "next/link";
+import { NAV_CONSTANT } from "@/constants/appConstants";
 
 const BottomNavbarDesktop = () => {
   const navLinks = {
@@ -21,9 +22,9 @@ const BottomNavbarDesktop = () => {
       },
     ],
     "Customer Care": [
+      { name: "+2347072215324", href: "https://wa.me/2347072215324" },
       { name: "+2349027338732", href: "tel:+2349027338732" },
       { name: "+2348116370946", href: "tel:+2348116370946" },
-      { name: "+2347072215324", href: "https://wa.me/2347072215324" },
     ],
     Company: [
       {
@@ -47,27 +48,27 @@ const BottomNavbarDesktop = () => {
   const socialMediaLinks = [
     {
       name: "Facebook",
-      url: "https://www.facebook.com/share/16xpwMdDTL/",
+      url: NAV_CONSTANT.FACEBOOK_URL,
       icon: <FacebookIcon color="white" />,
     },
     {
       name: "Instagram",
-      url: "https://www.instagram.com/sporty_galaxy?igsh=MXNzY2ZpazluNGhmaA==",
+      url: NAV_CONSTANT.INSTAGRAM_URL,
       icon: <InstagramIcon color="white" />,
     },
     {
       name: "X",
-      url: "https://x.com/sportygalaxy?t=UXNdx7UaqL4WmjgAbTztWg&s=09",
+      url: NAV_CONSTANT.X_URL,
       icon: <XIcon color="white" />,
     },
     {
       name: "Tiktok",
-      url: "https://www.tiktok.com/@sportygalaxy1?_t=ZM-8y1S0TY1Qbm&_r=1",
+      url: NAV_CONSTANT.TIKTOK_URL,
       icon: <TiktokIcon color="white" />,
     },
     {
       name: "Whatsapp",
-      url: "https://wa.me/2347072215324",
+      url: NAV_CONSTANT.WHATSAPP_LINK,
       icon: <WhatsappIcon color="white" />,
     },
   ];

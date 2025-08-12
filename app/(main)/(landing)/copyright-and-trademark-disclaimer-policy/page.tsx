@@ -1,4 +1,13 @@
 import BackButton from "@/common/BackButton";
+import {
+  BRAND_NAME,
+  BUSINESS_ADDRESS,
+  COUNTRY_CODE,
+  EMAIL,
+  PHONE_NUMBER,
+  PHONE_NUMBER_3,
+  WEBSITE,
+} from "@/constants/appConstants";
 
 export default function CopyrightAndTrademarkDisclaimerPolicy() {
   // Reusable Heading Component
@@ -225,10 +234,10 @@ export default function CopyrightAndTrademarkDisclaimerPolicy() {
             </PolicyParagraph>
             <ContactInfo
               name="Legal Compliance Team"
-              address="SportyGalaxy Limited, [NO 25 OLOJO DRIVE OJO LAGOS]"
-              email="sportygalaxy@gmail.coml"
-              phone="+2347072215324, +2349027338732"
-              website="" // Website not provided for Legal Compliance Team
+              address={BUSINESS_ADDRESS}
+              email={EMAIL}
+              phone={`${COUNTRY_CODE}${PHONE_NUMBER}, ${COUNTRY_CODE}${PHONE_NUMBER_3}`}
+              website={WEBSITE}
             />
             <PolicyParagraph>
               Upon receipt of a valid infringement notice, we will investigate
@@ -274,11 +283,11 @@ export default function CopyrightAndTrademarkDisclaimerPolicy() {
               Policy or our intellectual property rights, please contact:
             </PolicyParagraph>
             <ContactInfo
-              name="SPORTY GALAXY LIMITED"
-              address="Alaba International Market, No 25 olojo drive ojo town Lagos"
-              email="sportygalaxy@gmail.com"
-              phone="+2347072215324, +2349027338732"
-              website="www.sportygalaxy.com"
+              name={BRAND_NAME}
+              address={BUSINESS_ADDRESS}
+              email={EMAIL}
+              phone={`${COUNTRY_CODE}${PHONE_NUMBER}, ${COUNTRY_CODE}${PHONE_NUMBER_3}`}
+              website={WEBSITE}
             />
             <PolicyParagraph className="text-sm text-gray-500 mt-4">
               2025 SportyGalaxy Limited. All Rights Reserved. Unauthorised use
