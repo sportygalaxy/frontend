@@ -1,4 +1,10 @@
 import BackButton from "@/common/BackButton";
+import {
+  BRAND_NAME,
+  COUNTRY_CODE,
+  EMAIL,
+  PHONE_NUMBER,
+} from "@/constants/appConstants";
 
 // Define Prop Types for Reusable Components
 interface SectionHeadingProps {
@@ -333,9 +339,9 @@ export default function WarrantyAndReturnPolicy() {
             </PolicyParagraph>
             <ContactInfo
               name="CUSTOMER SERVICE DEPARTMENT"
-              address="SPORTYGALAXY LIMITED"
-              email="[Customer Service Email - please specify]" // Placeholder for email
-              phone="[Customer Service Phone - please specify]" // Placeholder for phone
+              address={BRAND_NAME}
+              email={EMAIL} // Placeholder for email
+              phone={`${COUNTRY_CODE}${PHONE_NUMBER}`} // Placeholder for phone
             />
             <PolicyParagraph className="text-sm text-gray-500 mt-4">
               SPORTYGALAXY LIMITED - Quality You Can Trust, Service You Can Rely
