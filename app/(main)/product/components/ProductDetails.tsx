@@ -11,6 +11,11 @@ import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
 import { NotifySuccess } from "@/helpers/toasts";
 import { formatCurrency } from "@/utils/currencyUtils";
+import {
+  calculatePercentageDecrease,
+  getEffectivePrice,
+} from "@/helpers/product-discount";
+import clsx from "clsx";
 
 const DEFAULT_QUANTITY = 1;
 
@@ -37,12 +42,17 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
     color: product?.colors?.[0]?.color?.name || "", // Default to the first color
     size: product?.sizes?.[0]?.size?.name || "", // Default to the first size
     qty: 1, // Default to 1
-    price: product?.price, // Default to product price
+    price: product?.salesPrice ? product?.salesPrice : product?.price, // Default to product price
   };
 
   function isItemInCart(itemId: number): any {
     return cart.some((item) => item.id === itemId);
   }
+
+  const discountCap = calculatePercentageDecrease({
+    price: Number(product?.price),
+    salesPrice: Number(product?.salesPrice),
+  });
 
   return (
     <Formik
@@ -54,6 +64,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
           colors: values.color,
           sizes: values.size,
           qty: values.qty,
+          price: getEffectivePrice(product?.price, product?.salesPrice),
         };
 
         // console.log("Form Submitted", values);
@@ -147,14 +158,40 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
             </div>
           </div>
 
-          <div className="mt-8">
-            <p className="font-medium text-mobile-5xl md:text-4xl">
-              {formatCurrency(product?.price * values.qty || 0)}
-              <span className="text-destructive text-sm">
-                *{STOCK_COUNT} unit left
-              </span>
-            </p>
-          </div>
+          {discountCap ? (
+            <>
+              <div className="mt-8">
+                <div className="flex items-center gap-2">
+                  <p className="!text-gray-500 font-light text-mobile-xl md:text-xl line-through">
+                    {formatCurrency(product?.price * values.qty || 0)}
+                  </p>
+                  <p
+                    className={clsx(
+                      !discountCap && "hidden",
+                      "bg-orange-400 rounded-md p-2 z-[2] text-sm"
+                    )}
+                  >
+                    {discountCap}
+                  </p>
+                </div>
+                <p className="font-medium text-mobile-5xl md:text-4xl">
+                  {formatCurrency(product?.salesPrice * values.qty || 0)}
+                  <span className="text-destructive text-sm">
+                    *{STOCK_COUNT} unit left
+                  </span>
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className="mt-8">
+              <p className="font-medium text-mobile-5xl md:text-4xl">
+                {formatCurrency(product?.price * values.qty || 0)}
+                <span className="text-destructive text-sm">
+                  *{STOCK_COUNT} unit left
+                </span>
+              </p>
+            </div>
+          )}
 
           <div className="mt-4">
             <div className="flex items-center gap-2">
@@ -205,6 +242,10 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                     colors: values.color,
                     sizes: values.size,
                     qty: values.qty,
+                    price: getEffectivePrice(
+                      product?.price,
+                      product?.salesPrice
+                    ),
                   };
                   addToCart(payload);
                 }}

@@ -13,6 +13,8 @@ import React, { FC } from "react";
 import Minus from "@/common/Minus";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
 import { formatCurrency } from "@/utils/currencyUtils";
+import { calculatePercentageDecrease } from "@/helpers/product-discount";
+import clsx from "clsx";
 
 interface Props {
   item: TProduct;
@@ -40,11 +42,24 @@ const ProductCard: FC<Props> = (props) => {
     return cart.some((item) => item.id === itemId);
   }
 
+  const discountCap = calculatePercentageDecrease({
+    price: Number(item?.price),
+    salesPrice: Number(item?.salesPrice),
+  });
+
   return (
     <Card
       key={item.id}
-      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none group`}
+      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none group relative`}
     >
+      <p
+        className={clsx(
+          !discountCap && "hidden",
+          "bg-orange-400 rounded-md p-3 absolute z-[2]"
+        )}
+      >
+        {discountCap}
+      </p>
       <LinkComponent {...contentProps}>
         <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7] overflow-hidden">
           <Image
@@ -94,14 +109,36 @@ const ProductCard: FC<Props> = (props) => {
               >
                 {item?.description || ""}
               </p>
-              <p
-                className={cn(
-                  "mt-2 font-medium text-mobile-3xl sm:text-3xl",
-                  cardTextTruncate
-                )}
-              >
-                {formatCurrency(item?.price || 0)}
-              </p>
+
+              {discountCap ? (
+                <div className="space-y-0.5">
+                  <p
+                    className={cn(
+                      "!text-gray-500 mt-2 font-light text-mobile-xl sm:text-xl line-through",
+                      cardTextTruncate
+                    )}
+                  >
+                    {formatCurrency(item?.price || 0)}
+                  </p>
+                  <p
+                    className={cn(
+                      "mt-2 font-medium text-mobile-3xl sm:text-3xl",
+                      cardTextTruncate
+                    )}
+                  >
+                    {formatCurrency(item?.salesPrice || 0)}
+                  </p>
+                </div>
+              ) : (
+                <p
+                  className={cn(
+                    "mt-2 font-medium text-mobile-3xl sm:text-3xl",
+                    cardTextTruncate
+                  )}
+                >
+                  {formatCurrency(item?.price || 0)}
+                </p>
+              )}
             </>
           </LinkComponent>
 

@@ -3,6 +3,7 @@ export type TProduct = {
   name: string;
   description: string;
   price: string;
+  salesPrice?: string;
   displayImage: string | null;
 };
 
@@ -68,6 +69,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  salesPrice?: number;
   stock: number;
   categoryId: string;
   subcategoryId: string;
