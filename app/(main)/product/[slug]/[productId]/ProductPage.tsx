@@ -85,7 +85,7 @@ const ProductPage: FC<ProductProps> = (props) => {
             specifications={productData?.specification}
           />
 
-          <ProductRatings />
+          <ProductRatings productId={productId} />
         </div>
       </ComponentStateWrapper>
     </div>
