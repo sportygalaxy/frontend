@@ -1,7 +1,9 @@
 import RightArrowIcon from "@/assets/icons/pack/RightArrow";
 import UserIcon from "@/assets/icons/pack/User";
+import AppLoader from "@/common/Loaders/AppLoader";
 import StarRating from "@/common/StarRating";
 import { DesktopTitle } from "@/common/Title";
+import { usePagination } from "@/hooks/usePagination";
 import { fetchReviewsData, fetchReviewsSummaryData } from "@/lib/apiReview";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/dateUtils";
@@ -20,15 +22,16 @@ const ProductRatings: FC<ProductRatingsProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const {
     data: reviews,
-    error: reviewsError,
-    isLoading: reviewsIsLoading,
-  } = useQuery({
-    queryKey: ["reviews", productId, currentPage],
+    isLoading,
+    totalPages,
+    goToPage,
+  } = usePagination({
+    queryKey: [`reviews-${productId}`, currentPage],
     queryFn: () =>
       fetchReviewsData({ productId, page: currentPage, limit: pageSize }),
     enabled: !!productId, // Only enable fetching when `productId` is set
-    keepPreviousData: true, // Smooth pagination without flickering
     staleTime: 5 * 60 * 1000, // Cache data for 5 minutes to prevent unnecessary refetches
+    setCurrentPage,
   });
 
   const {
@@ -45,20 +48,15 @@ const ProductRatings: FC<ProductRatingsProps> = ({
   const reviewsList = reviews?.data?.results || [];
   const reviewsSummaryResponse = reviewsSummary?.data;
 
-  const totalPages = reviews?.data?.pageCount || 1;
-
   const handleRatingChange = (value: number) => {
     console.log("Rated:", value);
-  };
-
-  const goToPage = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
   };
 
   return (
     <section>
       <DesktopTitle general noLine title="Ratings & Reviews" />
+
+      {isLoading && <AppLoader />}
 
       <div className="flex items-center space-x-2">
         <div className="flex items-baseline mt-3">

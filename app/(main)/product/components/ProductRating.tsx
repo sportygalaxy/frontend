@@ -83,8 +83,9 @@ const ProductRatings: FC<ProductRatingsProps> = ({
               </span>
 
               <div>
-                <p className="font-jost text-mobile-xl md:text-xl font-semibold text-primary">
-                  {review.user.firstName[0]}***
+                <p className="font-jost text-mobile-xl md:text-xl font-semibold text-primary capitalize">
+                  {`${review.user.firstName} ${review.user.lastName}`}
+                  {/* {review.user.firstName[0]}*** */}
                 </p>
                 <p className="font-jost text-base font-normal text-primary">
                   {formatDate(review?.createdAt)}
