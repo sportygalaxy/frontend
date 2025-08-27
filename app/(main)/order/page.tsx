@@ -146,7 +146,7 @@ const Order: FC<OrderProps> = () => {
   );
 };
 
-const OrderReviewComponent = memo(({ order }: { order: any }) => {
+const OrderReviewComponent = ({ order }: { order: any }) => {
   if (order?.productCompleted && !order?.reviewed) {
     return (
       <ReviewModal
@@ -165,6 +165,6 @@ const OrderReviewComponent = memo(({ order }: { order: any }) => {
       )}
     </>
   );
-});
+};
 
 export default Order;
