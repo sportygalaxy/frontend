@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import useUserStore from "@/store/userStore";
 import { OrderItem } from "@/types/order";
 import { transformMatchDate } from "@/utils/dateUtils";
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import ReviewModal from "./components/ReviewModal";
 import AppLoader from "@/common/Loaders/AppLoader";
 
@@ -63,7 +63,7 @@ const Order: FC<OrderProps> = () => {
             orderResponse?.items?.map((order: OrderItem) => (
               <div
                 key={order?.orderId}
-                className="flex items-center justify-between p-4 border rounded-lg shadow-sm"
+                className="relative flex items-center justify-between p-4 border rounded-lg shadow-sm"
               >
                 <div className="flex items-center space-x-4">
                   <img
@@ -92,19 +92,12 @@ const Order: FC<OrderProps> = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  {order?.productCompleted && !order?.reviewed ? (
-                    <ReviewModal
-                      productId={order?.productId}
-                      triggerButton={
-                        <Button variant="default">Add a Review</Button>
-                      }
-                    />
-                  ) : null}
+                <div className="flex items-center gap-8">
+                  <OrderReviewComponent order={order} />
 
                   <a
                     href={`/product/${order?.product?.name}/${order?.product?.id}`}
-                    className="text-lg text-green-500 font-semibold hover:underline"
+                    className="text-lg text-green-500 border border-green-100 py-2 px-4 font-semibold hover:underline min-w-[120px]"
                   >
                     See product
                   </a>
@@ -152,5 +145,26 @@ const Order: FC<OrderProps> = () => {
     </section>
   );
 };
+
+const OrderReviewComponent = memo(({ order }: { order: any }) => {
+  if (order?.productCompleted && !order?.reviewed) {
+    return (
+      <ReviewModal
+        productId={order?.productId}
+        triggerButton={<Button variant="default">Add a Review</Button>}
+      />
+    );
+  }
+
+  return (
+    <>
+      {order?.reviewed && (
+        <span className="absolute top-0 right-0 bg-green-100 border border-green-300 px-4 py-2">
+          Reviewed
+        </span>
+      )}
+    </>
+  );
+});
 
 export default Order;
