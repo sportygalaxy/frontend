@@ -1,33 +1,52 @@
 "use client";
 
+import RightArrowIcon from "@/assets/icons/pack/RightArrow";
 import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 import OrderStatus from "@/common/OrderStatus";
+import { Button } from "@/components/ui/button";
+import { usePagination } from "@/hooks/usePagination";
 import { fetchOrdersData } from "@/lib/apiOrder";
+import { cn } from "@/lib/utils";
 import useUserStore from "@/store/userStore";
 import { OrderItem } from "@/types/order";
 import { transformMatchDate } from "@/utils/dateUtils";
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { FC } from "react";
+import ReviewModal from "./components/ReviewModal";
+import AppLoader from "@/common/Loaders/AppLoader";
 
-const Order = () => {
+interface OrderProps {}
+const Order: FC<OrderProps> = () => {
   const { user } = useUserStore();
-  const { data, error, isLoading, refetch } = useQuery({
+  const userId = user?.id as string;
+
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+    currentPage,
+    totalPages,
+    goToPage,
+    nextPage,
+    prevPage,
+  } = usePagination({
     queryKey: [
       "orders",
       {
-        userId: user?.id as string,
+        userId,
       },
     ],
-    queryFn: () =>
-      fetchOrdersData({
-        userId: user?.id as string,
-      }),
-    retry: 2,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    queryFn: ({ page, limit }) => fetchOrdersData({ userId, page, limit }),
+    pageSize: 2,
+    enabled: !!userId,
   });
 
   // Extract all orders and items
   const orders = data?.data?.results || [];
+
+  if (isLoading) {
+    return <AppLoader />;
+  }
 
   return (
     <section className="wrapper mt-10 bg-white p-4">
@@ -36,7 +55,7 @@ const Order = () => {
         isLoading={isLoading}
         error={error}
         data={orders}
-        refetch={refetch}
+        refetch={() => refetch()}
         emptyMessage="No orders found."
       >
         <div className="space-y-4">
@@ -53,7 +72,7 @@ const Order = () => {
                     className="w-16 h-16 rounded object-cover"
                   />
                   <div>
-                    <h2 className="font-medium text-lg">
+                    <h2 className="font-medium text-lg text-wrap max-w-[600px]">
                       {order?.product?.name || ""}
                     </h2>
                     <p className="text-sm text-gray-600">
@@ -72,17 +91,64 @@ const Order = () => {
                     </p>
                   </div>
                 </div>
-                <a
-                  href={`/product/${order?.product?.name}/${order?.product?.id}`}
-                  className="text-orange-500 font-semibold hover:underline"
-                >
-                  See product
-                </a>
+
+                <div className="flex items-center gap-4">
+                  {order?.productCompleted && !order?.reviewed ? (
+                    <ReviewModal
+                      productId={order?.productId}
+                      triggerButton={
+                        <Button variant="default">Add a Review</Button>
+                      }
+                    />
+                  ) : null}
+
+                  <a
+                    href={`/product/${order?.product?.name}/${order?.product?.id}`}
+                    className="text-lg text-green-500 font-semibold hover:underline"
+                  >
+                    See product
+                  </a>
+                </div>
               </div>
             ))
           )}
         </div>
       </ComponentStateWrapper>
+
+      {totalPages > 1 && (
+        <div className="mt-16 flex items-center space-x-4">
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 1}
+            className="rotate-180 flex items-center w-fit p-2 md:p-4 border-none border-secondary rounded-full disabled:opacity-50"
+          >
+            <RightArrowIcon />
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => goToPage(page)}
+              className={cn(
+                "flex items-center w-fit p-2 md:p-4 rounded-full cursor-pointer hover:bg-secondary hover:text-primary",
+                page === currentPage ? "border border-secondary" : "border-none"
+              )}
+            >
+              <p className="flex items-center justify-center font-jost text-base font-normal text-primary w-8 h-8">
+                {page}
+              </p>
+            </button>
+          ))}
+
+          <button
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+            className="flex items-center w-fit p-2 md:p-4 border-none border-secondary rounded-full disabled:opacity-50"
+          >
+            <RightArrowIcon />
+          </button>
+        </div>
+      )}
     </section>
   );
 };

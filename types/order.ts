@@ -32,6 +32,9 @@ export type OrderItem = {
   deletedAt: string | null;
   isDeleted: boolean;
   product: Product;
+
+  productCompleted: boolean;
+  reviewed: boolean;
 };
 
 export type Order = {
@@ -41,6 +44,8 @@ export type Order = {
 
 export type TOrderQuery = {
   userId: string;
+  page?: number;
+  limit?: number;
 };
 
 export type ICreateOrderPayload = Order;

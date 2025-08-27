@@ -8,60 +8,54 @@ import { fetchReviewsData, fetchReviewsSummaryData } from "@/lib/apiReview";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/dateUtils";
 import { useQuery } from "@tanstack/react-query";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 interface ProductRatingsProps {
   productId: string;
-  pageSize?: number; // optional: default page size
+  pageSize?: number;
 }
 
 const ProductRatings: FC<ProductRatingsProps> = ({
   productId,
   pageSize = 2,
 }) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const {
     data: reviews,
     isLoading,
+    currentPage,
     totalPages,
     goToPage,
+    nextPage,
+    prevPage,
   } = usePagination({
-    queryKey: [`reviews-${productId}`, currentPage],
-    queryFn: () =>
-      fetchReviewsData({ productId, page: currentPage, limit: pageSize }),
-    enabled: !!productId, // Only enable fetching when `productId` is set
-    staleTime: 5 * 60 * 1000, // Cache data for 5 minutes to prevent unnecessary refetches
-    setCurrentPage,
+    queryKey: ["reviews", productId],
+    queryFn: ({ page, limit }) => fetchReviewsData({ productId, page, limit }),
+    pageSize,
+    enabled: !!productId,
   });
 
-  const {
-    data: reviewsSummary,
-    error: reviewsSummaryError,
-    isLoading: reviewsSummaryIsLoading,
-  } = useQuery({
-    queryKey: ["reviewsSummary", productId, currentPage],
-    queryFn: () => fetchReviewsSummaryData(productId as string),
-    enabled: !!productId, // Only enable fetching when `productId` is set
-    staleTime: 5 * 60 * 1000, // Cache data for 5 minutes to prevent unnecessary refetches
+  const { data: reviewsSummary, isLoading: summaryLoading } = useQuery({
+    queryKey: ["reviewsSummary", productId],
+    queryFn: () => fetchReviewsSummaryData(productId),
+    enabled: !!productId,
+    staleTime: 5 * 60 * 1000,
   });
 
   const reviewsList = reviews?.data?.results || [];
   const reviewsSummaryResponse = reviewsSummary?.data;
 
-  const handleRatingChange = (value: number) => {
-    console.log("Rated:", value);
-  };
+  const handleRatingChange = (value: number) => console.log("Rated:", value);
 
   return (
     <section>
       <DesktopTitle general noLine title="Ratings & Reviews" />
 
-      {isLoading && <AppLoader />}
+      {(isLoading || summaryLoading) && <AppLoader />}
 
       <div className="flex items-center space-x-2">
         <div className="flex items-baseline mt-3">
           <p className="font-jost text-mobile-3xl md:text-3xl font-bold text-primary">
-            {reviewsSummaryResponse?.averageRating.toFixed(1) || 0}
+            {reviewsSummaryResponse?.averageRating?.toFixed(1) || 0}
           </p>
           <p className="font-jost text-mobile-xl md:text-xl font-normal text-primary">
             /{reviewsSummaryResponse?.totalReviews || 0}
@@ -72,47 +66,40 @@ const ProductRatings: FC<ProductRatingsProps> = ({
         </p>
       </div>
 
-      {reviewsList?.map((review: any, idx: number) => {
-        return (
-          <div key={idx} className="">
-            <div className="flex items-center gap-4 mt-8">
-              <span className="flex w-fit p-2 md:p-4 border border-secondary rounded-full">
-                <UserIcon color="grey" />
-              </span>
-
-              <div>
-                <p className="font-jost text-mobile-xl md:text-xl font-semibold text-primary capitalize">
-                  {`${review.user.firstName} ${review.user.lastName}`}
-                  {/* {review.user.firstName[0]}*** */}
-                </p>
-                <p className="font-jost text-base font-normal text-primary">
-                  {formatDate(review?.createdAt)}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-7 space-y-4">
-              <div>
-                <StarRating
-                  totalStars={5}
-                  defaultValue={review?.rating || 0}
-                  onChange={handleRatingChange}
-                  readonly={true}
-                />
-              </div>
+      {reviewsList.map((review: any, idx: number) => (
+        <div key={idx}>
+          <div className="flex items-center gap-4 mt-8">
+            <span className="flex w-fit p-2 md:p-4 border border-secondary rounded-full">
+              <UserIcon color="grey" />
+            </span>
+            <div>
+              <p className="font-jost text-mobile-xl md:text-xl font-semibold text-primary capitalize">
+                {`${review.user.firstName} ${review.user.lastName}`}
+              </p>
               <p className="font-jost text-base font-normal text-primary">
-                &quot;{review?.comment}&quot;
+                {formatDate(review.createdAt)}
               </p>
             </div>
           </div>
-        );
-      })}
 
-      {/* PAGINATION */}
+          <div className="mt-7 space-y-4">
+            <StarRating
+              totalStars={5}
+              defaultValue={review.rating || 0}
+              onChange={handleRatingChange}
+              readonly
+            />
+            <p className="font-jost text-base font-normal text-primary">
+              &quot;{review.comment}&quot;
+            </p>
+          </div>
+        </div>
+      ))}
+
       {totalPages > 1 && (
         <div className="mt-16 flex items-center space-x-4">
           <button
-            onClick={() => goToPage(currentPage - 1)}
+            onClick={prevPage}
             disabled={currentPage === 1}
             className="rotate-180 flex items-center w-fit p-2 md:p-4 border-none border-secondary rounded-full disabled:opacity-50"
           >
@@ -124,10 +111,8 @@ const ProductRatings: FC<ProductRatingsProps> = ({
               key={page}
               onClick={() => goToPage(page)}
               className={cn(
-                "flex items-center w-fit p-2 md:p-4 rounded-full curse-pointer hover:bg-secondary hover:text-primary",
-                page === currentPage
-                  ? "border border-secondary "
-                  : "border-none"
+                "flex items-center w-fit p-2 md:p-4 rounded-full cursor-pointer hover:bg-secondary hover:text-primary",
+                page === currentPage ? "border border-secondary" : "border-none"
               )}
             >
               <p className="flex items-center justify-center font-jost text-base font-normal text-primary w-8 h-8">
@@ -137,7 +122,7 @@ const ProductRatings: FC<ProductRatingsProps> = ({
           ))}
 
           <button
-            onClick={() => goToPage(currentPage + 1)}
+            onClick={nextPage}
             disabled={currentPage === totalPages}
             className="flex items-center w-fit p-2 md:p-4 border-none border-secondary rounded-full disabled:opacity-50"
           >
