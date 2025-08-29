@@ -14,7 +14,7 @@ import { createReview } from "@/lib/apiReview";
 interface FormValues {
   userId: string;
   productId: string;
-  rating: number; // 1..5
+  rating: number; // 1...5
   comment: string; // optional
 }
 /** --- Types --- */
