@@ -71,11 +71,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
   const variantWeights = buildVariantArray(product?.variants, "weight");
   const variantDimensions = buildVariantArray(product?.variants, "dimension");
 
-  console.log("vvv - color", { v: variantColors, p: product?.colors });
-  console.log("vvv - size", { v: variantSizes, p: product?.sizes });
-  console.log("vvv - weight", variantWeights);
-  console.log("vvv - dimension", variantDimensions);
-
   return (
     <Formik
       initialValues={initialValues}
@@ -116,18 +111,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
       }}
     >
       {({ values, setFieldValue, errors, touched }) => {
-        console.log("ccc values", values);
-        console.log(
-          "ccc - acc",
-          accumulateAmounts([
-            product?.price,
-            values.colorPrice,
-            values.dimensionPrice,
-            values.sizePrice,
-            values.weightPrice,
-          ])
-        );
-        console.log("ccc cart", cart);
         return (
           <Form className="flex flex-col flex-1">
             <div className="space-y-2">

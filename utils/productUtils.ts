@@ -21,7 +21,6 @@ export function transformCartArray(
   userId: string,
   cart: any[]
 ): TransformedCart {
-  console.log("ccc check cart", cart);
   return {
     userId,
     items: cart?.map((item) => ({

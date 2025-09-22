@@ -125,7 +125,6 @@ const Checkout = () => {
         PARTIAL_PAYMENT_DISCOUNT;
     }
 
-    console.log("ccc cal", { total, checkoutAmount, checkoutAmountToPay });
     return total || 0; // In case total is undefined or null, return 0 as fallback
   };
 
@@ -178,7 +177,7 @@ const Checkout = () => {
   ) => {
     try {
       const payloadToSubmit = transformCartArray(String(user?.id), cart);
-      // console.log("ccc payloadToSubmit", payloadToSubmit);
+
       const offlineUser = {
         email: values.email,
         address: values.address,
@@ -193,28 +192,8 @@ const Checkout = () => {
       const userId = {
         userId: user?.id,
       };
-      setIsGlobalLoading(true);
+      setIsGlobalLoading(true)
 
-      console.log("ccc payload", {
-        ...payloadToSubmit,
-        ...(paymentOption === PAYMENT_OPTION.PARTIAL && {
-          variant: {
-            ...payloadToSubmit?.variant,
-            paymentSplitValue: PARTIAL_PAYMENT_DISCOUNT,
-            amountToPay: calculatePaymentAmount(
-              payloadToSubmit?.variant?.prices || 0
-            ),
-          },
-        }),
-        offlineUser,
-        paymentOption,
-        amountToPay: calculatePaymentAmount(
-          payloadToSubmit?.variant?.prices || 0
-        ),
-        ...(!isLoggedInUser && userId),
-      });
-
-      // return;
       orderProduct({
         ...payloadToSubmit,
         ...(paymentOption === PAYMENT_OPTION.PARTIAL && {
