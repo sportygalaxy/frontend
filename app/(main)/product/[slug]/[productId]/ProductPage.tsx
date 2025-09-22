@@ -17,6 +17,7 @@ import { PRODUCT_ID } from "@/constants/appConstants";
 import ProductList from "../../components/ProductList";
 import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 import BackButton from "@/common/BackButton";
+import { buildVariantArray } from "@/helpers/build-variant-array";
 
 interface ProductProps {
   params: { productId: string; slug?: string };

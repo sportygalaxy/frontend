@@ -22,11 +22,7 @@ export function calculatePercentageDecrease(product: Product): string | null {
 const product = { price: 30000, salesPrice: 27000 };
 console.log(calculatePercentageDecrease(product)); // "10%"
 
-
-export function getEffectivePrice(
-  price?: number,
-  salesPrice?: number
-): number | undefined {
+export function getEffectivePrice(price?: number, salesPrice?: number): number {
   if (typeof salesPrice === "number") return salesPrice;
-  return price;
+  return price || 0;
 }
