@@ -3,33 +3,33 @@ import { useRef, useState, FC } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { NotifyError, NotifySuccess } from "@/helpers/toasts";
-import { createSpinner } from "@/lib/apiSpinner";
+import {
+  createOrUpdatePrizeGiftSpinner,
+  createSpinner,
+} from "@/lib/apiSpinner";
 import { CreateSpinnerPayload } from "./SpinnerForm";
+import {
+  CreateOrUpdatePrizeGiftSpinnerPayload,
+  PrizeType,
+} from "@/types/spinner";
+import SpinnerFreeGiftModal from "./SpinnerFreeGiftModal";
+import { validPrizes } from "@/constants/appConstants";
+import useUserStore from "@/store/userStore";
 
-type PrizeType =
-  | "TRY_AGAIN"
-  | "FREE_GIFT"
-  | "FREE_DELIVERY"
-  | "CASH_GIFT"
-  | "SPIN_AGAIN"
-  | "DISCOUNT_10"
-  | "DISCOUNT_20"
-  | "DISCOUNT_50";
-
-// Spinner degree outcome for corresponding prizes
-export const SPINNER_DEGREE_OUTCOME = {
-  TRY_AGAIN: { slice: 0, angleDeg: 22.5 },
-  FREE_GIFT: { slice: 1, angleDeg: 67.5 },
-  FREE_DELIVERY: { slice: 2, angleDeg: 112.5 },
-  CASH_GIFT: { slice: 3, angleDeg: 157.5 },
-  SPIN_AGAIN: { slice: 4, angleDeg: 202.5 },
-  DISCOUNT_10: { slice: 5, angleDeg: 247.5 },
-  DISCOUNT_20: { slice: 6, angleDeg: 292.5 },
-  DISCOUNT_50: { slice: 7, angleDeg: 337.5 },
-};
+interface SpinnerProps {
+  uiSlices: PrizeType[]; // slices to show on the wheel
+  userId?: string; // optional userId for tracking
+  onClose?: () => void; // optional callback when spinner closes
+  submitLabel?: string; // optional label for the spin button
+  hasSpunToday?: boolean;
+}
 
 // Spinner component to show wheel animation
-export function Spinner({ uiSlices }: { uiSlices: PrizeType[] }) {
+export function Spinner({ uiSlices, onClose, hasSpunToday }: SpinnerProps) {
+  const { user } = useUserStore();
+  const userId = user?.id as string;
+
+  const [showGiftModal, setShowGiftModal] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState<{
@@ -37,6 +37,29 @@ export function Spinner({ uiSlices }: { uiSlices: PrizeType[] }) {
     msg: string;
     angleDeg: number;
   } | null>(null);
+
+  const {
+    mutate: createOrUpdatePrizeGiftSpinnerMutate,
+    isPending: isGiftPending,
+    isSuccess: isGiftSuccess,
+    error: isGiftError,
+    data: giftData,
+  } = useMutation<any, Error, CreateOrUpdatePrizeGiftSpinnerPayload>({
+    mutationFn: async (gifPrizeData: CreateOrUpdatePrizeGiftSpinnerPayload) =>
+      await createOrUpdatePrizeGiftSpinner(gifPrizeData, userId as string),
+    onSuccess: (data) => {
+      NotifySuccess(data?.message as string);
+
+      // After spin is complete, show result
+      setTimeout(() => {
+        onClose && onClose();
+      }, 15100); // Wait for animation to end
+    },
+    onError: (error) => {
+      console.error("Error - Spinner Mutation: ", error);
+      NotifyError(error?.message || "An error occurred");
+    },
+  });
 
   const {
     mutate: createSpinnerMutate,
@@ -73,6 +96,20 @@ export function Spinner({ uiSlices }: { uiSlices: PrizeType[] }) {
           angleDeg: data?.data?.angleDeg,
         });
       }, 4100); // Wait for animation to end
+
+      // Check if the prize is "FREE_GIFT" and show the modal
+      if (data?.data?.prize === "FREE_GIFT") {
+        setShowGiftModal(true); // Trigger modal after animation
+      }
+
+      const isPrizeAutoSaveToUser =
+        validPrizes.includes(data?.data?.prize) &&
+        !["TRY_AGAIN", "SPIN_AGAIN", "FREE_GIFT"].includes(data?.data?.prize);
+
+      if (isPrizeAutoSaveToUser) {
+        submitSaveGiftToUserAccount(data?.data);
+      }
+
       NotifySuccess(data?.message as string);
     },
     onError: (error) => {
@@ -80,6 +117,17 @@ export function Spinner({ uiSlices }: { uiSlices: PrizeType[] }) {
       NotifyError(error?.message || "An error occurred");
     },
   });
+
+  const isPrizeTryOrSpinAgain =
+    validPrizes.includes(data?.data?.prize) &&
+    !["TRY_AGAIN", "SPIN_AGAIN"].includes(data?.data?.prize);
+
+  // console.log("CKK", {
+  //   isPrizeTryOrSpinAgain,
+  //   isPrizeAutoSaveToUser,
+  //   data: data?.data,
+  //   result,
+  // });
 
   // This function will be triggered when user clicks Spin Now
   async function spin() {
@@ -92,33 +140,28 @@ export function Spinner({ uiSlices }: { uiSlices: PrizeType[] }) {
 
     try {
       // Trigger the backend API to get the prize and angleDeg
-      await createSpinnerMutate({}); // Wait for the mutation to complete
-
-      // Proceed with the spinner wheel rotation once the mutation is complete
-      const target = data?.data?.angleDeg; // Ensure data is available after mutation
-      const extraTurns = 360 * 6; // 6 full rotations for drama
-      const finalDeg = extraTurns + (360 - target); // pointer at top (0deg); invert if needed
-
-      const wheel = wheelRef.current!;
-      wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.32,1.33)";
-      requestAnimationFrame(() => {
-        wheel.style.transform = `rotate(${finalDeg}deg)`;
-      });
-
-      setTimeout(() => {
-        setSpinning(false);
-        setResult({
-          prize: data?.data?.prize,
-          msg: data?.data?.message,
-          angleDeg: data?.data?.angleDeg,
-        });
-      }, 4100); // Wait for animation to end
+      createSpinnerMutate({}); // Wait for the mutation to complete
     } catch (err) {
       console.error("Spin failed:", err);
       setSpinning(false);
       NotifyError("An error occurred while spinning");
     }
   }
+
+  const submitSaveGiftToUserAccount = async (arg: any) => {
+    try {
+      createOrUpdatePrizeGiftSpinnerMutate({
+        userId: userId as string,
+        giftName: arg?.prize,
+        giftValue: arg?.prize,
+        prizeType: arg?.prize,
+      });
+    } catch (error) {
+      console.error("Error submitting gift:", error);
+      NotifyError("Failed to submit the gift. Please try again.");
+      return;
+    }
+  };
 
   return (
     <div className="flex flex-col items-center gap-6">
@@ -147,19 +190,32 @@ export function Spinner({ uiSlices }: { uiSlices: PrizeType[] }) {
         </div>
       </div>
 
-      <button
-        onClick={spin}
-        disabled={spinning || isPending} // disable button while spinning or pending
-        className="px-6 py-3 rounded-2xl shadow text-white bg-black disabled:opacity-50"
-      >
-        {spinning || isPending ? "Spinning..." : "Spin Now"}
-      </button>
+      {isPrizeTryOrSpinAgain ? (
+        <></>
+      ) : (
+        <Button
+          onClick={spin}
+          disabled={spinning || isPending || hasSpunToday} // disable button while spinning or pending
+          className="px-6 py-3 rounded-2xl shadow text-white bg-black disabled:opacity-50"
+        >
+          {spinning || isPending ? "Spinning..." : "Spin the wheel"}
+        </Button>
+      )}
 
       {result && (
         <div className="text-center">
           <div className="text-xl font-semibold">{pretty(result.prize)}</div>
           <div className="text-sm text-gray-600">{result.msg}</div>
         </div>
+      )}
+
+      {/* Conditionally render SpinnerFreeGiftModal after spin if prize is "FREE_GIFT" */}
+      {showGiftModal && (
+        <SpinnerFreeGiftModal
+          // triggerButton={<Button>Show Free Gift</Button>}
+          userId="user_id" // Pass the user ID if necessary
+          onClose={onClose}
+        />
       )}
     </div>
   );

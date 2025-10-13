@@ -1,3 +1,5 @@
+import { PrizeType } from "@/types/spinner";
+
 export const PHONE_NUMBER = "7072215324";
 export const PHONE_NUMBER_2 = "8116370946";
 export const PHONE_NUMBER_3 = "9027338732";
@@ -76,3 +78,36 @@ export const PAGINATION_DEFAULT = {
   page: 1,
   limit: 20,
 };
+
+export const UI_SLICES = [
+  "TRY_AGAIN",
+  "FREE_GIFT",
+  "FREE_DELIVERY",
+  "CASH_GIFT",
+  "SPIN_AGAIN",
+  "DISCOUNT_10",
+  "DISCOUNT_20",
+  "DISCOUNT_50",
+];
+
+// Spinner degree outcome for corresponding prizes
+export const SPINNER_DEGREE_OUTCOME = {
+  TRY_AGAIN: { slice: 0, angleDeg: 22.5 },
+  FREE_GIFT: { slice: 1, angleDeg: 67.5 },
+  FREE_DELIVERY: { slice: 2, angleDeg: 112.5 },
+  CASH_GIFT: { slice: 3, angleDeg: 157.5 },
+  SPIN_AGAIN: { slice: 4, angleDeg: 202.5 },
+  DISCOUNT_10: { slice: 5, angleDeg: 247.5 },
+  DISCOUNT_20: { slice: 6, angleDeg: 292.5 },
+  DISCOUNT_50: { slice: 7, angleDeg: 337.5 },
+};
+
+// List of valid prizes excluding "TRY_AGAIN" and "SPIN_AGAIN"
+export const validPrizes: PrizeType[] = [
+  "FREE_GIFT",
+  "FREE_DELIVERY",
+  "CASH_GIFT",
+  "DISCOUNT_10",
+  "DISCOUNT_20",
+  "DISCOUNT_50",
+];

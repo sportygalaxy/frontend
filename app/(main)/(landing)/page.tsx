@@ -11,6 +11,8 @@ import SeeAll from "./_components/SeeAll";
 import VerifyBanner from "./_components/VerifyBanner";
 import ProductList from "../product/components/ProductList";
 import { RoutesEnum } from "@/constants/routeEnums";
+import SpinnerModal from "../spinner/components/SpinnerModal";
+import SpinnerFreeGiftModal from "../spinner/components/SpinnerFreeGiftModal";
 
 export default function LandingPage() {
   return (
@@ -98,6 +100,9 @@ export default function LandingPage() {
           />
         </div>
       </>
+
+      <SpinnerModal />
+      {/* <SpinnerFreeGiftModal /> */}
     </>
   );
 }
