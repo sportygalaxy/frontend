@@ -43,6 +43,7 @@ import {
   SHIPPING_FEE,
 } from "../products/ProductConstant";
 import { Button } from "@/components/ui/button";
+import { accumulateAmounts } from "@/helpers/accumulate-amounts";
 
 type FormValues = {
   userId: string;
@@ -114,11 +115,17 @@ const Checkout = () => {
     setPaymentOption(option);
   };
 
-  const calculatePaymentAmount = () => {
+  const calculatePaymentAmount = (checkoutAmountToPay?: any) => {
+    let total = checkoutAmount;
+
     if (paymentOption === PAYMENT_OPTION.PARTIAL) {
-      return (checkoutAmount / 100) * PARTIAL_PAYMENT_DISCOUNT; // 30% of the total fee
+      // If checkoutAmountToPay is provided, use it. Otherwise, fallback to checkoutAmount
+      total =
+        ((checkoutAmountToPay || checkoutAmount) / 100) *
+        PARTIAL_PAYMENT_DISCOUNT;
     }
-    return checkoutAmount; // Full payment
+
+    return total || 0; // In case total is undefined or null, return 0 as fallback
   };
 
   const {
@@ -170,6 +177,7 @@ const Checkout = () => {
   ) => {
     try {
       const payloadToSubmit = transformCartArray(String(user?.id), cart);
+
       const offlineUser = {
         email: values.email,
         address: values.address,
@@ -184,9 +192,19 @@ const Checkout = () => {
       const userId = {
         userId: user?.id,
       };
-      setIsGlobalLoading(true);
+      setIsGlobalLoading(true)
+
       orderProduct({
         ...payloadToSubmit,
+        ...(paymentOption === PAYMENT_OPTION.PARTIAL && {
+          variant: {
+            ...payloadToSubmit?.variant,
+            paymentSplitValue: PARTIAL_PAYMENT_DISCOUNT,
+            amountToPay: calculatePaymentAmount(
+              payloadToSubmit?.variant?.prices || 0
+            ),
+          },
+        }),
         offlineUser,
         paymentOption,
         amountToPay: calculatePaymentAmount(),
@@ -314,7 +332,7 @@ const Checkout = () => {
 
           const paymentAmount = calculatePaymentAmount();
 
-          // console.log("formik values ::", values);
+          console.log("formik values ::", values);
 
           const focusClassName =
             "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
@@ -703,7 +721,17 @@ const Checkout = () => {
                         Total amount
                       </p>
                       <p className="text-[#000] font-bold text-mobile-4xl md:text-7xl">
-                        {formatCurrency(paymentAmount)}
+                        {/* {formatCurrency(paymentAmount)} */}
+                        {/* {formatCurrency(
+                          transformCartArray(String(user?.id), cart)?.variant
+                            ?.prices || 0
+                        )} */}
+                        {formatCurrency(
+                          showTotalPrice(
+                            showTotalPriceInCart(cart),
+                            SHIPPING_FEE
+                          )
+                        ) || 0}
                       </p>
 
                       <div className="flex items-center gap-2">

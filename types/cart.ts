@@ -7,6 +7,9 @@ export type TCart = {
   price: string;
   displayImage: string | null;
   qty: number;
+  variant: any;
+  paymentSplitValue: number;
+  amountToPay: number;
 };
 
 export type TCartWithoutQty = TCart;

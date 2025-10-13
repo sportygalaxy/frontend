@@ -17,6 +17,5 @@ export const fetchOrdersData = async ({
 };
 
 export const createOrderData = async (orderData: any) => {
-  console.log("orderData ::", orderData);
   return await POST("/orders", orderData);
 };

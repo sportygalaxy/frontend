@@ -43,7 +43,16 @@ const useCartStore = create<TCartState>()(
       incrementQty: (id) => {
         set((state) => ({
           cart: state.cart.map((item) =>
-            item.id === id ? { ...item, qty: item.qty + 1 } : item
+            item.id === id
+              ? {
+                  ...item,
+                  qty: item.qty + 1,
+                  variant: {
+                    ...item.variant, // preserve other variant properties
+                    qty: item.qty + 1, // update variant qty to match cart qty
+                  },
+                }
+              : item
           ),
         }));
       },
@@ -51,7 +60,14 @@ const useCartStore = create<TCartState>()(
         set((state) => ({
           cart: state.cart.map((item) =>
             item.id === id && item.qty > 1
-              ? { ...item, qty: item.qty - 1 }
+              ? {
+                  ...item,
+                  qty: item.qty - 1,
+                  variant: {
+                    ...item.variant, // preserve other variant properties
+                    qty: item.qty - 1, // update variant qty to match cart qty
+                  },
+                }
               : item
           ),
         }));

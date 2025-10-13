@@ -10,16 +10,26 @@ import useCartStore from "@/store/cartStore";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { useRouter } from "next/navigation";
+import { transformCartArray } from "@/utils/productUtils";
+import useUserStore from "@/store/userStore";
+import {
+  showSinglePriceInCart,
+  showTotalPrice,
+  showTotalPriceInCart,
+} from "@/helpers/cart";
+import { SHIPPING_FEE } from "@/app/(main)/products/ProductConstant";
 
 interface CartItemProps {
-  cart: {
-    id: string;
-    displayImage?: string;
-    name: string;
-    description: string;
-    price: number;
-    qty: number;
-  } | any;
+  cart:
+    | {
+        id: string;
+        displayImage?: string;
+        name: string;
+        description: string;
+        price: number;
+        qty: number;
+      }
+    | any;
   isProductInCart: (qty: number) => boolean;
   handleDecrement: (event: React.MouseEvent, id: string) => void;
   handleIncrement: (event: React.MouseEvent, id: string) => void;
@@ -33,6 +43,7 @@ const CartItem: React.FC<CartItemProps> = ({
   handleIncrement,
   className,
 }) => {
+  const { user } = useUserStore();
   return (
     <div className={cn("flex gap-10 md:gap-16 h-[154px]", className)}>
       <div className="relative w-[40%] h-[100%] bg-[#E8EAEC] px-6 py-2">
@@ -60,7 +71,11 @@ const CartItem: React.FC<CartItemProps> = ({
             {cart?.description}
           </p>
           <p className="mt-1 font-medium text-mobile-3xl sm:text-3xl">
-            {formatCurrency(cart?.price || 0)}
+            {/* {formatCurrency(cart?.price || 0)} */}
+            {/* {formatCurrency(cart?.variant?.prices)} */}
+            {formatCurrency(
+              showTotalPrice(showSinglePriceInCart(cart), SHIPPING_FEE)
+            ) || 0}
           </p>
         </div>
         <div className="flex mt-2 h-10 items-center justify-center space-x-4 text-sm border w-fit rounded-lg border-[#DEE2E6] px-2">

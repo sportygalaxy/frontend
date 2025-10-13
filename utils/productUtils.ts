@@ -14,17 +14,22 @@ interface TransformedCart {
     size?: string;
     color?: string;
   }[];
+  variant: any;
 }
 
-export function transformCartArray(userId: string, cart: any[]): TransformedCart {
+export function transformCartArray(
+  userId: string,
+  cart: any[]
+): TransformedCart {
   return {
     userId,
-    items: cart.map((item) => ({
+    items: cart?.map((item) => ({
       productId: item.id,
       quantity: item.qty,
       ...(item.sizes && { size: item.sizes }),
       ...(item.colors && { color: item.colors }),
     })),
+    variant: cart?.[0]?.variant,
   };
 }
 
