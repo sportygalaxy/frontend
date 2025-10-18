@@ -2,7 +2,7 @@ import { PAGINATION_DEFAULT } from "@/constants/appConstants";
 import { TProductQuery } from "@/types/product";
 import { substractDaysFromTodaysDate } from "@/utils/dateUtils";
 
-export const SHIPPING_FEE = 0;
+export const SHIPPING_FEE = 5;
 export const MINIMUM_CHECKOUT_AMOUNT = 30000;
 export const PARTIAL_PAYMENT_DISCOUNT = 30;
 

@@ -11,6 +11,10 @@ import SeeAll from "./_components/SeeAll";
 import VerifyBanner from "./_components/VerifyBanner";
 import ProductList from "../product/components/ProductList";
 import { RoutesEnum } from "@/constants/routeEnums";
+import SpinnerModal from "../spinner/components/SpinnerModal";
+import SpinnerFreeGiftModal from "../spinner/components/SpinnerFreeGiftModal";
+import SpinnerCashGiftModal from "../spinner/components/SpinnerCashGiftModal";
+import FreeGiftBanner from "./_components/FreeGiftBanner";
 
 export default function LandingPage() {
   return (
@@ -23,6 +27,9 @@ export default function LandingPage() {
       {/* Desktop contents */}
       <>
         <VerifyBanner />
+        <div className="relative">
+          <FreeGiftBanner />
+        </div>
         <div className="relative">
           <Hero />
         </div>
@@ -98,6 +105,10 @@ export default function LandingPage() {
           />
         </div>
       </>
+
+      <SpinnerModal />
+      {/* <SpinnerFreeGiftModal /> */}
+      {/* <SpinnerCashGiftModal /> */}
     </>
   );
 }

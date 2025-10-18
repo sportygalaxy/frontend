@@ -1,6 +1,10 @@
 import useCartStore from "@/store/cartStore";
 import CartSummaryRow from "./CartSummaryRow";
-import { showTotalPrice, showTotalPriceInCart } from "@/helpers/cart";
+import {
+  showShippingFeePrice,
+  showTotalPrice,
+  showTotalPriceInCart,
+} from "@/helpers/cart";
 import { SHIPPING_FEE } from "@/app/(main)/products/ProductConstant";
 
 interface CartSummaryPriceProps {
@@ -11,13 +15,23 @@ const CartSummaryPrice: React.FC<CartSummaryPriceProps> = ({
 }) => {
   const { cart } = useCartStore();
 
-  const total = showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE) || 0;
+  const shippingFee = showShippingFeePrice(
+    showTotalPriceInCart(cart),
+    SHIPPING_FEE
+  );
 
   const totalPaymentPrice = () => {
-    if (paymentAmount) return paymentAmount + SHIPPING_FEE;
+    let totalAmountToPay =
+      showTotalPrice(showTotalPriceInCart(cart), shippingFee) || 0;
 
-    return total;
+    if (paymentAmount)
+    return paymentAmount
+      ? paymentAmount || 0
+      : totalAmountToPay;
+
+    return totalAmountToPay;
   };
+
   return (
     <div>
       <CartSummaryRow
@@ -26,7 +40,7 @@ const CartSummaryPrice: React.FC<CartSummaryPriceProps> = ({
         underline
         onLabelClick={() => console.log("Label clicked")}
       />
-      <CartSummaryRow label="Shipping total" value={SHIPPING_FEE || 0} />
+      <CartSummaryRow label="Shipping total" value={shippingFee || 0} />
       <CartSummaryRow
         label="Amount to Pay"
         value={totalPaymentPrice() || 0}
