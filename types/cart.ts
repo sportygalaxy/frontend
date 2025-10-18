@@ -3,6 +3,8 @@ export type TCart = {
   name: string;
   sizes: string;
   colors: string;
+  weights: string;
+  dimensions: string;
   description: string;
   price: string;
   displayImage: string | null;

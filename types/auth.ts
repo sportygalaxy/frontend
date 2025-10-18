@@ -34,6 +34,7 @@ export type UserData = Partial<{
   googleId: string | null;
   avatar: string | null;
   bio: string | null;
+  freeGift: any[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

@@ -1,5 +1,5 @@
 import { IUserPayload, IUserQueryParam, IUserResponse } from "@/types/user";
-import { PUT } from "./apiFacade";
+import { GET, PUT } from "./apiFacade";
 
 export const updateUser = async (payload: {
   userData: IUserPayload;
@@ -10,6 +10,28 @@ export const updateUser = async (payload: {
       `/users/${payload.params?.id}`,
       payload.userData
     );
+
+    if (response?.success) {
+      if (!response?.data?.isVerified) {
+        throw new Error(response?.error || "Verify your Account");
+      }
+
+      return response;
+    } else {
+      throw new Error(response?.error);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+// export const fetchMee = async () => {
+//   return await GET(`/users/me`, {});
+// };
+
+export const fetchMe = async (): Promise<IUserResponse> => {
+  try {
+    const response = await GET(`/users/me`);
 
     if (response?.success) {
       if (!response?.data?.isVerified) {

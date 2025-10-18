@@ -28,7 +28,11 @@ import CartItem from "@/components/cart/CartItem";
 import CartCheckoutItem from "@/components/cart/CartCheckoutItem";
 import { TCart } from "@/types/cart";
 import CartSummaryPrice from "@/components/cart/CartSummaryPrice";
-import { showTotalPrice, showTotalPriceInCart } from "@/helpers/cart";
+import {
+  showShippingFeePrice,
+  showTotalPrice,
+  showTotalPriceInCart,
+} from "@/helpers/cart";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { parsePhoneNumberFromString } from "libphonenumber-js/min";
 import PaystackPaymentUi from "@/components/PaystackPaymentUi";
@@ -107,8 +111,12 @@ const Checkout = () => {
   const isLoggedInUser = !!user;
   const validationSchema = getValidationSchema(isLoggedInUser);
 
+  const shippingFee = showShippingFeePrice(
+    showTotalPriceInCart(cart),
+    SHIPPING_FEE
+  );
   const checkoutAmount =
-    showTotalPrice(showTotalPriceInCart(cart), SHIPPING_FEE) || 0;
+    showTotalPrice(showTotalPriceInCart(cart), shippingFee) || 0;
   const isAllowedToCheckoutOut = checkoutAmount < MINIMUM_CHECKOUT_AMOUNT;
 
   const handleTabChange = (option: "FULL" | "PARTIAL") => {
@@ -192,7 +200,7 @@ const Checkout = () => {
       const userId = {
         userId: user?.id,
       };
-      setIsGlobalLoading(true)
+      setIsGlobalLoading(true);
 
       orderProduct({
         ...payloadToSubmit,
@@ -332,7 +340,7 @@ const Checkout = () => {
 
           const paymentAmount = calculatePaymentAmount();
 
-          console.log("formik values ::", values);
+          // console.log("formik values ::", values);
 
           const focusClassName =
             "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
@@ -440,6 +448,15 @@ const Checkout = () => {
               </div>
             );
           };
+
+          const shippingFee = showShippingFeePrice(
+            showTotalPriceInCart(cart),
+            SHIPPING_FEE
+          );
+          const amount =
+            formatCurrency(
+              showTotalPrice(showTotalPriceInCart(cart), shippingFee)
+            ) || 0;
 
           return (
             <Form className="flex flex-col items-center justify-start w-full h-screen my-20 bg-background">
@@ -726,12 +743,7 @@ const Checkout = () => {
                           transformCartArray(String(user?.id), cart)?.variant
                             ?.prices || 0
                         )} */}
-                        {formatCurrency(
-                          showTotalPrice(
-                            showTotalPriceInCart(cart),
-                            SHIPPING_FEE
-                          )
-                        ) || 0}
+                        {amount}
                       </p>
 
                       <div className="flex items-center gap-2">
@@ -765,6 +777,28 @@ const Checkout = () => {
                             }
                             className=""
                           />
+
+                          <div className="mt-4 text-sm">
+                            {/* Display Colors */}
+                            <p className="font-medium text-[#828282]">
+                              Color: {cart?.colors || "N/A"}
+                            </p>
+
+                            {/* Display Sizes */}
+                            <p className="font-medium text-[#828282]">
+                              Size: {cart?.sizes || "N/A"}
+                            </p>
+
+                            {/* Display Weight */}
+                            <p className="font-medium text-[#828282]">
+                              Weight: {cart?.weights || "N/A"}
+                            </p>
+
+                            {/* Display Dimensions */}
+                            <p className="font-medium text-[#828282]">
+                              Dimensions: {cart?.dimensions || "N/A"}
+                            </p>
+                          </div>
                         </div>
                       ))}
 

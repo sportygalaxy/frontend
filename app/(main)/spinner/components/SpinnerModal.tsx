@@ -28,9 +28,6 @@ const SpinnerModal: React.FC<SpinnerModalProps> = ({ triggerButton }) => {
     staleTime: 5 * 60 * 1000,
   });
 
-
-  console.log("spinnersSummary", spinnersSummary?.data?.length);
-
   const hasSpunToday = spinnersSummary?.data?.some((spinner: any) => {
     const spinnerDate = new Date(spinner.createdAt);
     const today = new Date();
@@ -43,20 +40,12 @@ const SpinnerModal: React.FC<SpinnerModalProps> = ({ triggerButton }) => {
 
     const isValidPrize = validPrizes.includes(spinner.prize);
 
-    // return false;
     return isToday && isValidPrize; // Only consider valid prize spins for "hasSpunToday"
   });
 
   useEffect(() => {
     setOpen(!hasSpunToday);
   }, [hasSpunToday]);
-
-  console.log("CCC", {
-    hasSpunToday,
-    open,
-    length: spinnersSummary?.data?.length,
-    history: spinnersSummary?.data,
-  });
 
   if (!open) return;
 

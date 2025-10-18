@@ -62,6 +62,29 @@ export const showSinglePriceInCart = (cart: TCart) => {
   return itemTotalPrice;
 };
 
+export const shippingFeeCalulation = (total: number, percentage: number) => {
+  const result = (total / 100) * percentage;
+  return result;
+};
+
+// export const showTotalPrice = (
+//   showTotalPriceInCart: number,
+//   shippingFee: number
+// ) => {
+//   const total = Number(showTotalPriceInCart || 0);
+//   const shippingFeeResult = shippingFeeCalulation(total, shippingFee);
+//   return Number(showTotalPriceInCart || 0) + Number(shippingFeeResult || 0);
+// };
+
+export const showShippingFeePrice = (
+  showTotalPriceInCart: number,
+  shippingFee: number
+) => {
+  const total = Number(showTotalPriceInCart || 0);
+  const shippingFeeResult = shippingFeeCalulation(total, shippingFee);
+  return Number(shippingFeeResult || 0);
+};
+
 export const showTotalPrice = (
   showTotalPriceInCart: number,
   shippingFee: number

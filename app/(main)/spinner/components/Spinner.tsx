@@ -15,6 +15,7 @@ import {
 import SpinnerFreeGiftModal from "./SpinnerFreeGiftModal";
 import { validPrizes } from "@/constants/appConstants";
 import useUserStore from "@/store/userStore";
+import SpinnerCashGiftModal from "./SpinnerCashGiftModal";
 
 interface SpinnerProps {
   uiSlices: PrizeType[]; // slices to show on the wheel
@@ -30,6 +31,7 @@ export function Spinner({ uiSlices, onClose, hasSpunToday }: SpinnerProps) {
   const userId = user?.id as string;
 
   const [showGiftModal, setShowGiftModal] = useState(false);
+  const [showCashModal, setShowCashModal] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState<{
@@ -102,9 +104,16 @@ export function Spinner({ uiSlices, onClose, hasSpunToday }: SpinnerProps) {
         setShowGiftModal(true); // Trigger modal after animation
       }
 
+      // Check if the prize is "CASH_GIFT" and show the modal
+      if (data?.data?.prize === "CASH_GIFT") {
+        setShowCashModal(true); // Trigger modal after animation
+      }
+
       const isPrizeAutoSaveToUser =
         validPrizes.includes(data?.data?.prize) &&
-        !["TRY_AGAIN", "SPIN_AGAIN", "FREE_GIFT"].includes(data?.data?.prize);
+        !["TRY_AGAIN", "SPIN_AGAIN", "FREE_GIFT", "CASH_GIFT"].includes(
+          data?.data?.prize
+        );
 
       if (isPrizeAutoSaveToUser) {
         submitSaveGiftToUserAccount(data?.data);
@@ -121,13 +130,6 @@ export function Spinner({ uiSlices, onClose, hasSpunToday }: SpinnerProps) {
   const isPrizeTryOrSpinAgain =
     validPrizes.includes(data?.data?.prize) &&
     !["TRY_AGAIN", "SPIN_AGAIN"].includes(data?.data?.prize);
-
-  // console.log("CKK", {
-  //   isPrizeTryOrSpinAgain,
-  //   isPrizeAutoSaveToUser,
-  //   data: data?.data,
-  //   result,
-  // });
 
   // This function will be triggered when user clicks Spin Now
   async function spin() {
@@ -213,6 +215,15 @@ export function Spinner({ uiSlices, onClose, hasSpunToday }: SpinnerProps) {
       {showGiftModal && (
         <SpinnerFreeGiftModal
           // triggerButton={<Button>Show Free Gift</Button>}
+          userId="user_id" // Pass the user ID if necessary
+          onClose={onClose}
+        />
+      )}
+
+      {/* Conditionally render SpinnerCashGiftModal after spin if prize is "CASH_GIFT" */}
+      {showCashModal && (
+        <SpinnerCashGiftModal
+          // triggerButton={<Button>Show Cash Gift</Button>}
           userId="user_id" // Pass the user ID if necessary
           onClose={onClose}
         />

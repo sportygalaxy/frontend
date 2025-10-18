@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { transformCartArray } from "@/utils/productUtils";
 import useUserStore from "@/store/userStore";
 import {
+  showShippingFeePrice,
   showSinglePriceInCart,
   showTotalPrice,
   showTotalPriceInCart,
@@ -44,6 +45,13 @@ const CartItem: React.FC<CartItemProps> = ({
   className,
 }) => {
   const { user } = useUserStore();
+  const shippingFee = showShippingFeePrice(
+    showSinglePriceInCart(cart),
+    SHIPPING_FEE
+  );
+  const amount =
+    formatCurrency(showTotalPrice(showSinglePriceInCart(cart), shippingFee)) ||
+    0;
   return (
     <div className={cn("flex gap-10 md:gap-16 h-[154px]", className)}>
       <div className="relative w-[40%] h-[100%] bg-[#E8EAEC] px-6 py-2">
@@ -73,9 +81,7 @@ const CartItem: React.FC<CartItemProps> = ({
           <p className="mt-1 font-medium text-mobile-3xl sm:text-3xl">
             {/* {formatCurrency(cart?.price || 0)} */}
             {/* {formatCurrency(cart?.variant?.prices)} */}
-            {formatCurrency(
-              showTotalPrice(showSinglePriceInCart(cart), SHIPPING_FEE)
-            ) || 0}
+            {amount}
           </p>
         </div>
         <div className="flex mt-2 h-10 items-center justify-center space-x-4 text-sm border w-fit rounded-lg border-[#DEE2E6] px-2">
