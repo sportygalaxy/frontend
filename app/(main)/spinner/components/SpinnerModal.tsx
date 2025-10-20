@@ -47,7 +47,7 @@ const SpinnerModal: React.FC<SpinnerModalProps> = ({ triggerButton }) => {
     setOpen(!hasSpunToday);
   }, [hasSpunToday]);
 
-  if (!open) return;
+  if (!open || !user) return;
 
   return (
     <Modal
