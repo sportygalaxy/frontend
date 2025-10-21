@@ -19,7 +19,7 @@ export type TCartWithoutQty = TCart;
 
 export type TCartState = {
   cart: TCart[];
-  addToCart: (service: TCartWithoutQty) => void;
+  addToCart: (service: TCartWithoutQty, submit?: boolean) => void;
   removeFromCart: (id: number) => void;
   incrementQty: (id: number) => void;
   decrementQty: (id: number) => void;

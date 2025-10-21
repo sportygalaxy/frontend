@@ -1,17 +1,25 @@
 "use client";
 import { fetchMe } from "@/lib/apiUser";
+import useUserStore from "@/store/userStore";
 import { PrizeType } from "@/types/spinner";
 import { useQuery } from "@tanstack/react-query";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 interface FreeGiftBannerProps {}
 const FreeGiftBanner: FC<FreeGiftBannerProps> = () => {
-  const { data, error, isLoading, refetch } = useQuery({
+  const { setUser, user } = useUserStore();
+  const { data, error, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchMe(),
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
+  useEffect(() => {
+    if (data?.success && data?.data && data?.data !== user) {
+      setUser(data?.data);
+    }
+  }, [data?.data, user, setUser, data?.success]);
 
   const gift = data?.data?.freeGift?.[0]?.giftName;
   const prizeType = data?.data?.freeGift?.[0]?.prizeType;
@@ -32,7 +40,7 @@ const FreeGiftBanner: FC<FreeGiftBannerProps> = () => {
 
   return (
     <>
-      {(giftCount ?? 0) >= 1 && isValidGift ? (
+      {(giftCount ?? 0) <= 1 && isValidGift ? (
         <div className="fixed flex w-full mx-auto text-center justify-center gap-0 py-2 z-10">
           <div className="bg-[#9c1c1c] rounded-full px-8 py-0 flex items-center justify-center">
             <p className="min-w-fit text-white capitalize">

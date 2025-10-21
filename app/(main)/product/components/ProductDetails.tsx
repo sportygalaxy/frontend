@@ -105,7 +105,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 
         // console.log("Form Submitted", values);
 
-        addToCart(payload);
+        addToCart(payload, true);
         NotifySuccess("Proceed to checkout");
         router.push(RoutesEnum.CHECKOUT);
       }}
@@ -302,7 +302,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                       ...valuePayload,
                       variant: valuePayload,
                     };
-                    addToCart(payload);
+                    addToCart(payload, true);
                   }}
                 >
                   {isItemInCart(product?.id) ? "Added to Cart!" : "Add to Cart"}

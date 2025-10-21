@@ -33,6 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import GlobalSearch from "./GlobalSearch";
+import { useRouter } from "next/navigation";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
@@ -40,6 +41,7 @@ interface TopNavbarDesktopProps {
 const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
   const { logoutUser, isPending } = useLogout();
+  const router = useRouter();
 
   const { cart } = useCartStore();
 
@@ -112,7 +114,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
       ),
       path: "notification",
       notification: { status: false, value: 0 },
-      type: null,
+      type: "link",
     },
     {
       id: 2,
@@ -266,6 +268,28 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
                           </ul>
                         </PopoverContent>
                       </Popover>
+                    );
+
+                  if (cta.type === "link")
+                    return (
+                      <>
+                        <span
+                          key={cta.id}
+                          onClick={() => router.push(RoutesEnum.NOTIFICATION)}
+                          className={cn(
+                            cta.name === "Notification" &&
+                              "p-2 md:p-4 border border-secondary rounded-full", "cursor-pointer"
+                          )}
+                        >
+                          {cta.icon}
+
+                          {cta?.notification?.status ? (
+                            <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                              {cta?.notification?.value}
+                            </span>
+                          ) : null}
+                        </span>
+                      </>
                     );
 
                   return (
