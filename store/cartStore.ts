@@ -6,7 +6,7 @@ const useCartStore = create<TCartState>()(
   persist(
     (set) => ({
       cart: [],
-      addToCart: (service: TCartWithoutQty) => {
+      addToCart: (service: TCartWithoutQty, isSubmit?: boolean) => {
         set((state) => {
           const existingItem = state.cart.find(
             (item) => item.id === service.id
@@ -16,7 +16,11 @@ const useCartStore = create<TCartState>()(
             return {
               cart: state.cart.map((item) =>
                 item.id === service.id
-                  ? { ...item, color: item.colors, qty: item.qty + 1 }
+                  ? {
+                      ...item,
+                      color: item.colors,
+                      ...(!!isSubmit ? { qty: item.qty } : { qty: item.qty + 1 }),
+                    }
                   : item
               ),
             };
