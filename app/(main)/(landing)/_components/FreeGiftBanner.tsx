@@ -13,13 +13,19 @@ const FreeGiftBanner: FC<FreeGiftBannerProps> = () => {
     queryFn: () => fetchMe(),
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    // refetchInterval: 1000 * 60, // Refresh every 1 minute
+    // refetchIntervalInBackground: true, // Continue refetching even when the component is not in the foreground
   });
 
   useEffect(() => {
-    if (data?.success && data?.data && data?.data !== user) {
-      setUser(data?.data);
+    refetch(); // Re-fetch data on mount
+  }, []);
+
+  useEffect(() => {
+    if (data?.success && data?.data) {
+      setUser(data?.data); // Update user state when data is successfully fetched
     }
-  }, [data?.data, user, setUser, data?.success]);
+  }, [data?.data, setUser]); // Update user whenever the data changes
 
   const gift = data?.data?.freeGift?.[0]?.giftName;
   const prizeType = data?.data?.freeGift?.[0]?.prizeType;

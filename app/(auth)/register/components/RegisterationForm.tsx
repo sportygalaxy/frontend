@@ -427,7 +427,7 @@ const RegistrationForm: React.FC = () => {
                       , (b) 
                       <span className="text-black">Terms of Use</span>, and (c) 
                       <span className="text-black">Privacy Policy</span>. I
-                      agree to receive more information from Alibaba.com about
+                      agree to receive more information from sportygalaxy.com about
                       its products and services.
                     </label>
                   </div>

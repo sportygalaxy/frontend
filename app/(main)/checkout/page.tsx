@@ -202,6 +202,29 @@ const Checkout = () => {
       };
       setIsGlobalLoading(true);
 
+      // NOTE: ENSURE cart total is not less than MINIMUM_CHECKOUT_AMOUNT
+      // if (
+      //   (calculatePaymentAmount(payloadToSubmit?.variant?.prices || 0) ||
+      //     calculatePaymentAmount()) < MINIMUM_CHECKOUT_AMOUNT
+      // ) {
+      //   const message = `A minimum of ${
+      //     formatCurrency(MINIMUM_CHECKOUT_AMOUNT) || 0
+      //   } worth of
+      //     item should be in your cart to proceed`;
+
+      //   console.log({
+      //     variant: calculatePaymentAmount(
+      //       payloadToSubmit?.variant?.prices || 0
+      //     ),
+      //     normal: calculatePaymentAmount(),
+      //     check:
+      //       (calculatePaymentAmount(payloadToSubmit?.variant?.prices || 0) ||
+      //         calculatePaymentAmount()) < MINIMUM_CHECKOUT_AMOUNT,
+      //   });
+
+      //   return NotifyError(message);
+      // }
+
       orderProduct({
         ...payloadToSubmit,
         ...(paymentOption === PAYMENT_OPTION.PARTIAL && {
@@ -317,6 +340,7 @@ const Checkout = () => {
       orderError?.message || "An error occurred during order creation."
     );
   }
+
   return (
     <section className="wrapper mt-10 bg-white">
       <Formik
