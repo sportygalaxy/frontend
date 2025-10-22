@@ -1,3 +1,4 @@
+import { MINIMUM_CHECKOUT_AMOUNT } from "@/app/(main)/products/ProductConstant";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import { initiatePayment } from "@/services/paymentService";
 import { PaystackTransaction } from "@/types/paystack";
@@ -55,6 +56,14 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
 
   const handlePayment = async () => {
     try {
+      // NOTE: ENSURE cart total is not less than MINIMUM_CHECKOUT_AMOUNT
+      // if (amount < MINIMUM_CHECKOUT_AMOUNT) {
+      //   const message = `Total is: ${formatCurrency(amount)}. A minimum of ${
+      //     formatCurrency(MINIMUM_CHECKOUT_AMOUNT) || 0
+      //   } worth of item should be in your cart to proceed.`;
+      //   return NotifyError(message);
+      // }
+
       setLoading(true);
 
       const paymentData = {
@@ -103,11 +112,14 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
 
   return (
     <>
-      {isAllowedToCheckoutOut && (
+      {isAllowedToCheckoutOut ? (
         <p className="text-red-600">
-          A minimum of {formatCurrency(30000) || 0} worth of item should be in
-          your cart to proceed
+          Total is: ${formatCurrency(amount)}. A minimum of $
+          {formatCurrency(MINIMUM_CHECKOUT_AMOUNT) || 0} worth of item should be
+          in your cart to proceed.
         </p>
+      ) : (
+        <p className="text-lg">Payable amount is: {formatCurrency(amount)}</p>
       )}
       <button
         className="w-full flex items-center justify-center text-white bg-black p-3 xs:p-5 rounded-md border-1 border-[#808080] disabled:bg-secondary disabled:text-secondary-foreground"
