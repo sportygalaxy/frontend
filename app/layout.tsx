@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import TopLoader from "@/common/Loaders/TopLoader";
 import {
   appDescription,
@@ -53,6 +53,22 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jost.className}`}>
         <ReactQueryProvider>
+          <Script
+            strategy="afterInteractive"
+            src="https://www.googletagmanager.com/gtag/js?id=G-Y0F6H3CQZL"
+          ></Script>
+          <Script
+            id="google-analytics"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Y0F6H3CQZL');
+    `,
+            }}
+          />
           <Script
             id="schema-organization"
             type="application/ld+json"

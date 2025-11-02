@@ -1,3 +1,5 @@
+import { formatDate } from "date-fns";
+
 export const PRODUCTS = [
   {
     id: 1,
@@ -65,38 +67,38 @@ export const PRODUCTS = [
 export const CATEGORIES = [
   {
     id: 1,
-    name: "list product",
-    date: "2024, 15 Sept",
+    name: "Basketball Gear",
+    date: formatDate(new Date(), "yyyy-MM-dd"),
     image: "https://utfs.io/f/OX5ramIp6AH4NCYwNBhL6LnOQMbHG78Ukh1gWeD0l9jpf4ux",
   },
   {
     id: 2,
-    name: "list product",
-    date: "2024, 15 Sept",
+    name: "Golf Essentials",
+    date: formatDate(new Date(), "MMM d, yyyy"),
     image: "https://utfs.io/f/OX5ramIp6AH4Z4F6s5KMECeXkWK9P6IRtmgLFlB5v2u7JAbi",
   },
   {
     id: 3,
-    name: "list product",
-    date: "2024, 15 Sept",
+    name: "Archery Kits",
+    date: formatDate(new Date(), "MMM d, yyyy"),
     image: "https://utfs.io/f/OX5ramIp6AH4IDNYugJaYK7so4ZDkJtpmr2qcdwAMixUOz5S",
   },
   {
     id: 4,
-    name: "list product",
-    date: "2024, 15 Sept",
+    name: "Table Tennis Sets",
+    date: formatDate(new Date(), "MMM d, yyyy"),
     image: "https://utfs.io/f/OX5ramIp6AH4JBaViIesDzriV8pZ04WKvHgby3wJmAQLMNfn",
   },
   {
     id: 5,
-    name: "list product",
-    date: "2024, 15 Sept",
+    name: "Tennis Equipment",
+    date: formatDate(new Date(), "MMM d, yyyy"),
     image: "https://utfs.io/f/OX5ramIp6AH4iBKjEMx4fZgyPvAF8U1NpjtEXVWoK9Radb4n",
   },
   {
     id: 6,
-    name: "list product",
-    date: "2024, 15 Sept",
+    name: "Badminton Gear",
+    date: formatDate(new Date(), "MMM d, yyyy"),
     image: "https://utfs.io/f/OX5ramIp6AH4Ydq9Z97pjsfC6oQDNzYrxLmUHTlPghA7i2KF",
   },
 ];
