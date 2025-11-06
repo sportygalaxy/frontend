@@ -53,6 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jost.className}`}>
         <ReactQueryProvider>
+          {/* Meta Pixel */}
           <Script
             id="meta-pixel"
             strategy="afterInteractive"
@@ -66,7 +67,7 @@ export default function RootLayout({
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document, 'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '2158765044666889');
+      fbq('init', '828613949547289');
       fbq('track', 'PageView');
     `,
             }}
@@ -79,13 +80,14 @@ export default function RootLayout({
         height="1"
         width="1"
         style="display:none"
-        src="https://www.facebook.com/tr?id=2158765044666889&ev=PageView&noscript=1"
+        src="https://www.facebook.com/tr?id=828613949547289&ev=PageView&noscript=1"
         alt="facebook-pixel"
       />
     `,
             }}
           />
 
+          {/* Google Tag */}
           <Script
             strategy="afterInteractive"
             src="https://www.googletagmanager.com/gtag/js?id=G-Y0F6H3CQZL"
