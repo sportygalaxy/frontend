@@ -6,8 +6,12 @@ import {
   EMAIL,
   PHONE_NUMBER,
   PHONE_NUMBER_3,
+  SIGNATURE,
   WEBSITE,
 } from "@/constants/appConstants";
+// import Signature from "/images/signature.png";
+import Image from "next/image";
+import SignatureFooter from "../_components/SignatureFooter";
 
 export default function CopyrightAndTrademarkDisclaimerPolicy() {
   // Reusable Heading Component
@@ -294,6 +298,8 @@ export default function CopyrightAndTrademarkDisclaimerPolicy() {
               of any material or brand asset belonging to Sporty Galaxy Limited
               may constitute a violation of intellectual property laws.
             </PolicyParagraph>
+
+            <SignatureFooter />
           </section>
         </div>
       </div>

@@ -1,5 +1,14 @@
 import BackButton from "@/common/BackButton";
-import { BUSINESS_ADDRESS, COUNTRY_CODE, EMAIL, PHONE_NUMBER, WEBSITE } from "@/constants/appConstants";
+import {
+  BUSINESS_ADDRESS,
+  COUNTRY_CODE,
+  EMAIL,
+  PHONE_NUMBER,
+  SIGNATURE,
+  WEBSITE,
+} from "@/constants/appConstants";
+import Image from "next/image";
+import SignatureFooter from "../_components/SignatureFooter";
 
 interface SectionHeadingProps {
   children: React.ReactNode;
@@ -355,13 +364,7 @@ export default function CustomerProtectionAndCustomerRightPolicy() {
             </PolicyParagraph>
           </section>
 
-          <footer className="text-center text-sm text-gray-500 mt-10">
-            <PolicyParagraph>
-              Signed: CHIBUEZE CHRISTOPHER OKONKWO
-            </PolicyParagraph>
-            <PolicyParagraph>Management, SPORTYGALAXY LIMITED</PolicyParagraph>
-            <PolicyParagraph>Date: 10-08-2025</PolicyParagraph>
-          </footer>
+          <SignatureFooter />
         </div>
       </div>
     </section>

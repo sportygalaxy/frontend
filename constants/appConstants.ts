@@ -13,6 +13,7 @@ export const BUSINESS_ADDRESS =
   "Alaba International Market, No 25 olojo drive ojo town Lagos";
 export const logoUrl =
   "https://utfs.io/f/OX5ramIp6AH4YSDqoO7pjsfC6oQDNzYrxLmUHTlPghA7i2KF"; // "/images/logo/sg_logo.svg"; // https://www.sportygalaxy.com/logo.png
+  export const SIGNATURE = "/images/signature.jpg";
 
 export const NAV_CONSTANT = {
   PHONE_NUMBER,
@@ -110,4 +111,27 @@ export const validPrizes: PrizeType[] = [
   "DISCOUNT_10",
   "DISCOUNT_20",
   "DISCOUNT_50",
+];
+
+export const faqs = [
+  {
+    question: "How long does shipping take?",
+    answer:
+      "Shipping typically takes 3–5 business days within the country. International orders may take up to 14 business days.",
+  },
+  {
+    question: "Can I return an item?",
+    answer:
+      "Yes, you can return any unused item within 7 days of delivery. Please ensure it's in its original packaging.",
+  },
+  {
+    question: "Do you offer bulk purchase discounts?",
+    answer:
+      "Absolutely! Contact our sales team for discounted pricing on bulk orders.",
+  },
+  {
+    question: "How can I track my order?",
+    answer:
+      "Once your order ships, you'll receive a tracking link via email. You can also check your order status in your account dashboard.",
+  },
 ];
