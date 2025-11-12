@@ -4,7 +4,10 @@ import {
   COUNTRY_CODE,
   EMAIL,
   PHONE_NUMBER,
+  SIGNATURE,
 } from "@/constants/appConstants";
+import Image from "next/image";
+import SignatureFooter from "../_components/SignatureFooter";
 
 // Define Prop Types for Reusable Components
 interface SectionHeadingProps {
@@ -347,6 +350,8 @@ export default function WarrantyAndReturnPolicy() {
               SPORTYGALAXY LIMITED - Quality You Can Trust, Service You Can Rely
               On.
             </PolicyParagraph>
+
+            <SignatureFooter />
           </section>
         </div>
       </div>

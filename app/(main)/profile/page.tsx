@@ -73,33 +73,24 @@ export default function Profile() {
     { id: 6, icon: <></>, path: "", name: "" },
   ];
 
-  // const profileInfoCtas = [
-  //   {
-  //     id: 1,
-  //     icon: <InfoCircle size="20" color="#292D32" />,
-  //     path: "help",
-  //     name: "Help",
-  //   },
-  //   {
-  //     id: 2,
-  //     icon: <MessageQuestion size="20" color="#828282" />,
-  //     path: "faq",
-  //     name: "FAQ",
-  //   },
-  //   {
-  //     id: 3,
-  //     icon: <ShoppingCart size="20" color="#828282" />,
-  //     path: "support",
-  //     name: "Support",
-  //   },
-  // ];
-
   const profileInfoCtas = [
     {
       id: 1,
       icon: <MessageQuestion size="20" color="#828282" />,
       path: "contact-us",
       name: "Contact Us",
+    },
+    {
+      id: 2,
+      icon: <MessageQuestion size="20" color="#828282" />,
+      path: "faq",
+      name: "FAQ",
+    },
+    {
+      id: 3,
+      icon: <InfoCircle size="20" color="#292D32" />,
+      path: "about-us",
+      name: "About Us",
     },
   ];
   const {
