@@ -83,7 +83,7 @@ export default function LandingPage() {
       {/* Mobile contents */}
       <>
         <div className="wrapper mt-9 sm:mt-0">
-          <MobileTitle title="Best selling" path={RoutesEnum.PRODUCTS} />
+          <MobileTitle title="New arrival" path={RoutesEnum.PRODUCTS} />
         </div>
         <div className="mobile-desktop-tablet-view wrapper mt-5 sm:mt-0">
           <ProductList
