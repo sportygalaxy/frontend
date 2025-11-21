@@ -8,7 +8,7 @@ export default function Footer() {
         <BottomNavbarDesktop />
       </section>
 
-      <section className="fixed bottom-0 h-20 flex sm:hidden w-full">
+      <section className="fixed bottom-0 h-20 flex sm:hidden w-full z-10">
         <BottomNavbarMobile />
       </section>
     </>
