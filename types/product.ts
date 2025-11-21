@@ -25,6 +25,7 @@ export type TProductQuery = {
     range: [number, number];
   };
   sort?: undefined | "asc" | "desc";
+  sortBy?: undefined | "price" | "createdAt" | string;
 
   createdAt?: string | null | undefined;
   updatedAt?: Date | null;
@@ -45,6 +46,7 @@ export type TProductQuery = {
       range?: [number, number];
     };
     sort?: undefined | "asc" | "desc";
+    sortBy?: undefined | "price" | "createdAt" | string;
     createdAt?: string | null | undefined;
     updatedAt?: Date | null;
   };

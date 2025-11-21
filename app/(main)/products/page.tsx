@@ -65,6 +65,7 @@ export default function Products() {
     category: searchParams.get("category") || (undefined as any),
 
     sort: searchParams.get("sort") || (undefined as any),
+    sortBy: searchParams.get("sortBy") || (undefined as any),
     createdAt: searchParams.get("createdAt") || (undefined as any),
 
     page: searchParams.get("page") || PAGINATION_DEFAULT.page,
@@ -106,6 +107,7 @@ export default function Products() {
     if (updatedFilter?.category) query.set("category", updatedFilter?.category);
 
     if (updatedFilter?.sort) query.set("sort", updatedFilter?.sort);
+    if (updatedFilter?.sortBy) query.set("sortBy", updatedFilter?.sortBy);
     if (updatedFilter?.createdAt)
       query.set("createdAt", updatedFilter?.createdAt);
 
@@ -121,7 +123,10 @@ export default function Products() {
     category,
     value,
   }: {
-    category: keyof Omit<typeof filter, "price" | "sort" | "createdAt">;
+    category: keyof Omit<
+      typeof filter,
+      "price" | "sort" | "sortBy" | "createdAt"
+    >;
     value: string;
   }) => {
     if (Array.isArray(filter[category])) {
@@ -163,6 +168,7 @@ export default function Products() {
       category: searchParams.get("category") || undefined,
 
       sort: searchParams.get("sort") || undefined,
+      sortBy: searchParams.get("sortBy") || undefined,
       createdAt: searchParams.get("createdAt") || undefined,
 
       // pagination
@@ -219,6 +225,7 @@ export default function Products() {
                       const updatedFilter = {
                         ...filter,
                         sort: option.value,
+                        sortBy: "price",
                         page: 1, // Reset to first page when limit changes
                       };
 
@@ -261,6 +268,8 @@ export default function Products() {
                     onClick={() => {
                       const updatedFilter = {
                         ...filter,
+                        // sort: option.value,
+                        // sortBy: "createdAt",
                         createdAt: option.value,
                         page: 1, // Reset to first page when limit changes
                       };
@@ -311,69 +320,6 @@ export default function Products() {
             updateUrlQuery={updateUrlQuery}
             _debouncedSubmit={_debouncedSubmit}
           />
-          {/* CATEGORY */}
-          {/* <div className="space-y-3">
-            <p className="uppercase font-normal text-sm">Categories</p>
-            <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-              {CATEGORIES.map((category) => (
-                <li key={category.name}>
-                  <button
-                    onClick={() => {
-                      const updatedFilter = {
-                        ...filter,
-                        category: category.name, // Set the subcategory in the filter
-                        page: 1, // Reset page to 1 when subcategory is selected
-                      };
-
-                      if (category?.name === "All") return;
-
-                      setFilter(updatedFilter);
-
-                      updateUrlQuery({ ...updatedFilter });
-
-                      _debouncedSubmit();
-                    }}
-                    disabled={!category.selected}
-                    className="disabled:cursor-not-allowed disabled:opacity-60 text-mobile-2xl md:text-xl font-bold text-left capitalize"
-                  >
-                    {category.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div> */}
-
-          {/* SUB CATEGORY */}
-          {/* <div className="space-y-3">
-            <p className="uppercase font-normal text-sm">Sub Categories</p>
-            <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-              {SUBCATEGORIES.map((category) => (
-                <li key={category.name}>
-                  <button
-                    onClick={() => {
-                      const updatedFilter = {
-                        ...filter,
-                        subcategory: category.name, // Set the subcategory in the filter
-                        page: 1, // Reset page to 1 when subcategory is selected
-                      };
-
-                      if (category?.name === "All") return;
-
-                      setFilter(updatedFilter);
-
-                      updateUrlQuery({ ...updatedFilter });
-
-                      _debouncedSubmit();
-                    }}
-                    disabled={!category.selected}
-                    className="disabled:cursor-not-allowed disabled:opacity-60 text-mobile-2xl md:text-xl font-bold text-left capitalize"
-                  >
-                    {category.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div> */}
 
           {/* ACCODIAN */}
           <div>
