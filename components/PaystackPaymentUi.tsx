@@ -66,9 +66,14 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
 
       setLoading(true);
 
+      const normalizedAmount = Number.isFinite(Number(amount))
+        ? Number(Number(amount).toFixed(2))
+        : 0;
+      const amountInKobo = Math.max(0, Math.round(normalizedAmount * 100));
+
       const paymentData = {
         userId,
-        amount,
+        amount: normalizedAmount,
         currency,
         gatewayName: "PAYSTACK",
         metadata: {
@@ -84,7 +89,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
         const handler = (window as any).PaystackPop?.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
           email,
-          amount: amount * 100, // Paystack processes amounts in kobo
+          amount: amountInKobo, // Paystack processes amounts in kobo
           currency,
           reference: data?.reference, // Backend-generated transaction reference
           callback: (response: PaystackTransaction) => {
@@ -114,7 +119,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
     <>
       {isAllowedToCheckoutOut ? (
         <p className="text-red-600">
-          Total is: ${formatCurrency(amount)}. A minimum of $
+          Total is: {formatCurrency(amount)}. A minimum of 
           {formatCurrency(MINIMUM_CHECKOUT_AMOUNT) || 0} worth of item should be
           in your cart to proceed.
         </p>

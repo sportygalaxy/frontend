@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import countryList from "react-select-country-list";
 import { cn } from "@/lib/utils";
 import {
   formatPhoneToCountry,
@@ -32,6 +31,7 @@ import {
   showShippingFeePrice,
   showTotalPrice,
   showTotalPriceInCart,
+  SHIPPING_STATE_OPTIONS,
 } from "@/helpers/cart";
 import { formatCurrency } from "@/utils/currencyUtils";
 import { parsePhoneNumberFromString } from "libphonenumber-js/min";
@@ -47,13 +47,13 @@ import {
   SHIPPING_FEE,
 } from "../products/ProductConstant";
 import { Button } from "@/components/ui/button";
-import { accumulateAmounts } from "@/helpers/accumulate-amounts";
 
 type FormValues = {
   userId: string;
   items: OrderItem[];
   email: string;
   address: string;
+  state: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -80,6 +80,7 @@ const getValidationSchema = (isLoggedInUser: boolean) =>
       ? Yup.string().email("Invalid email address").notRequired()
       : Yup.string().email("Invalid email address").required("Required"),
     address: Yup.string().required("Required"),
+    state: Yup.string().required("Required"),
     lastName: Yup.string().required("Required"),
     firstName: Yup.string().required("Required"),
     phoneNumber: Yup.string().required("Required"),
@@ -101,7 +102,6 @@ const Checkout = () => {
     decrementQty,
   } = useCartStore();
   const { user } = useUserStore();
-  const [countryOptions] = useState<[]>(countryList().getData());
   const [paymentOption, setPaymentOption] = useState<"FULL" | "PARTIAL">(
     "FULL"
   );
@@ -111,29 +111,32 @@ const Checkout = () => {
   const isLoggedInUser = !!user;
   const validationSchema = getValidationSchema(isLoggedInUser);
 
-  const shippingFee = showShippingFeePrice(
-    showTotalPriceInCart(cart),
-    SHIPPING_FEE
-  );
-  const checkoutAmount =
-    showTotalPrice(showTotalPriceInCart(cart), shippingFee) || 0;
-  const isAllowedToCheckoutOut = checkoutAmount < MINIMUM_CHECKOUT_AMOUNT;
-
   const handleTabChange = (option: "FULL" | "PARTIAL") => {
     setPaymentOption(option);
   };
 
-  const calculatePaymentAmount = (checkoutAmountToPay?: any) => {
-    let total = checkoutAmount;
-
+  const calculatePaymentAmount = (checkoutAmountToPay: number) => {
+    const normalizedAmount = Number(checkoutAmountToPay || 0);
     if (paymentOption === PAYMENT_OPTION.PARTIAL) {
-      // If checkoutAmountToPay is provided, use it. Otherwise, fallback to checkoutAmount
-      total =
-        ((checkoutAmountToPay || checkoutAmount) / 100) *
-        PARTIAL_PAYMENT_DISCOUNT;
+      return (normalizedAmount / 100) * PARTIAL_PAYMENT_DISCOUNT;
     }
+    return normalizedAmount || 0;
+  };
 
-    return total || 0; // In case total is undefined or null, return 0 as fallback
+  const computeCheckoutAmounts = (stateValue: string) => {
+    const cartTotal = showTotalPriceInCart(cart);
+    const shippingTarget = stateValue || SHIPPING_FEE;
+    const shippingFeeAmount = showShippingFeePrice(cartTotal, shippingTarget);
+    const checkoutAmount = showTotalPrice(cartTotal, shippingFeeAmount) || 0;
+    const paymentAmount = calculatePaymentAmount(checkoutAmount);
+    const isAllowedToCheckoutOut = checkoutAmount < MINIMUM_CHECKOUT_AMOUNT;
+
+    return {
+      shippingFeeAmount,
+      checkoutAmount,
+      paymentAmount,
+      isAllowedToCheckoutOut,
+    };
   };
 
   const {
@@ -184,11 +187,17 @@ const Checkout = () => {
     { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
+      const {
+        shippingFeeAmount,
+        checkoutAmount,
+        paymentAmount: amountToPay,
+      } = computeCheckoutAmounts(values.state);
       const payloadToSubmit = transformCartArray(String(user?.id), cart);
 
       const offlineUser = {
         email: values.email,
         address: values.address,
+        state: values.state,
         firstName: values.firstName,
         lastName: values.lastName,
         country: values.country,
@@ -231,14 +240,14 @@ const Checkout = () => {
           variant: {
             ...payloadToSubmit?.variant,
             paymentSplitValue: PARTIAL_PAYMENT_DISCOUNT,
-            amountToPay: calculatePaymentAmount(
-              payloadToSubmit?.variant?.prices || 0
-            ),
+            amountToPay,
           },
         }),
         offlineUser,
         paymentOption,
-        amountToPay: calculatePaymentAmount(),
+        amountToPay,
+        shippingFee: shippingFeeAmount,
+        shippingState: values.state,
         ...(!isLoggedInUser && userId),
       } as any);
       setSubmitting(false);
@@ -271,6 +280,7 @@ const Checkout = () => {
     items: [],
     email: user?.email || "",
     address: user?.address || "",
+    state: "",
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     country: formatPhoneToCountry(user?.phone ?? "")?.country || "",
@@ -349,20 +359,25 @@ const Checkout = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue, values, errors, touched, handleSubmit }) => {
+        {({ values, errors, touched, handleSubmit }) => {
+          const {
+            shippingFeeAmount: shippingFee,
+            checkoutAmount,
+            paymentAmount,
+            isAllowedToCheckoutOut,
+          } = computeCheckoutAmounts(values.state);
           const disableBtn = !(
             !values.firstName ||
             !values.lastName ||
             !values.email ||
             !values.address ||
+            !values.state ||
             !values.phoneNumber ||
             !values.countryCode ||
             isAllowedToCheckoutOut ||
             isOrderPending ||
             isGlobalLoading
           );
-
-          const paymentAmount = calculatePaymentAmount();
 
           // console.log("formik values ::", values);
 
@@ -375,6 +390,7 @@ const Checkout = () => {
             id: null,
             email: values.email,
             address: values.address,
+            state: values.state,
             firstName: values.firstName,
             lastName: values.lastName,
             countryCode: values.countryCode,
@@ -401,7 +417,10 @@ const Checkout = () => {
               items: transformCartArray(String(user?.id), cart),
               offlineUser,
               paymentOption,
-              amountToPay: calculatePaymentAmount(),
+              amountToPay: paymentAmount,
+              shippingFee,
+              shippingState: values.state,
+              checkoutAmount,
               ...(!isLoggedInUser && userId),
             },
             onSuccess: async (
@@ -473,14 +492,7 @@ const Checkout = () => {
             );
           };
 
-          const shippingFee = showShippingFeePrice(
-            showTotalPriceInCart(cart),
-            SHIPPING_FEE
-          );
-          const amount =
-            formatCurrency(
-              showTotalPrice(showTotalPriceInCart(cart), shippingFee)
-            ) || 0;
+          const amount = formatCurrency(checkoutAmount) || 0;
 
           return (
             <Form className="flex flex-col items-center justify-start w-full h-screen my-20 bg-background">
@@ -512,6 +524,36 @@ const Checkout = () => {
                         {errors.address && touched.address ? (
                           <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
                             {errors.address}
+                          </div>
+                        ) : null}
+                      </div>
+
+                      <div className="relative flex flex-col items-center gap-5 xs:flex-row">
+                        <label
+                          className="flex justify-start flex-1 w-full xs:justify-end"
+                          htmlFor="state"
+                        >
+                          * State
+                        </label>
+                        <Field
+                          as="select"
+                          className={cn(
+                            "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0 bg-white",
+                            placeholderClassName,
+                            focusClassName
+                          )}
+                          name="state"
+                        >
+                          <option value="">Select your state</option>
+                          {SHIPPING_STATE_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.state && touched.state ? (
+                          <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
+                            {errors.state}
                           </div>
                         ) : null}
                       </div>
@@ -691,6 +733,36 @@ const Checkout = () => {
                         ) : null}
                       </div>
 
+                      <div className="relative flex flex-col items-center gap-5 xs:flex-row">
+                        <label
+                          className="flex justify-start flex-1 w-full xs:justify-end"
+                          htmlFor="state"
+                        >
+                          * State
+                        </label>
+                        <Field
+                          as="select"
+                          className={cn(
+                            "flex flex-[3] justify-start border-1 lightDarkGrey w-full rounded-xl py-3 xs:py-4 px-4 xs:px-8 m-0 bg-white",
+                            placeholderClassName,
+                            focusClassName
+                          )}
+                          name="state"
+                        >
+                          <option value="">Select your state</option>
+                          {SHIPPING_STATE_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {errors.state && touched.state ? (
+                          <div className="absolute right-0 text-sm text-destructive top-24 xs:top-16">
+                            {errors.state}
+                          </div>
+                        ) : null}
+                      </div>
+
                       <div className="flex flex-col items-center gap-5 xs:flex-row">
                         <label
                           className="flex justify-start flex-1 w-full xs:justify-end"
@@ -827,7 +899,10 @@ const Checkout = () => {
                       ))}
 
                       <div className="mt-12 text-[#828282] space-y-8">
-                        <CartSummaryPrice paymentAmount={paymentAmount} />
+                        <CartSummaryPrice
+                          paymentAmount={paymentAmount}
+                          shippingState={values.state}
+                        />
 
                         <PaystackPaymentUi
                           {...paystackPaymentProps}
