@@ -9,29 +9,41 @@ import { SHIPPING_FEE } from "@/app/(main)/products/ProductConstant";
 
 interface CartSummaryPriceProps {
   paymentAmount?: number;
+  shippingState?: string;
 }
 const CartSummaryPrice: React.FC<CartSummaryPriceProps> = ({
   paymentAmount,
+  shippingState,
 }) => {
   const { cart } = useCartStore();
 
+  const shippingTarget =
+    shippingState === undefined || shippingState === null || shippingState === ""
+      ? SHIPPING_FEE
+      : shippingState;
+
   const shippingFee = showShippingFeePrice(
     showTotalPriceInCart(cart),
-    SHIPPING_FEE
+    shippingTarget
   );
 
   const totalPaymentPrice = () => {
-    let totalAmountToPay =
+    const totalAmountToPay =
       showTotalPrice(showTotalPriceInCart(cart), shippingFee) || 0;
 
-    if (paymentAmount)
-    return paymentAmount
-      ? paymentAmount || 0
-      : totalAmountToPay;
+    if (paymentAmount) {
+      return paymentAmount || 0;
+    }
 
     return totalAmountToPay;
   };
 
+  console.log("summary", {
+    paymentAmount,
+    shippingState,
+    shippingTarget,
+    shippingFee,
+  });
   return (
     <div>
       <CartSummaryRow
@@ -40,7 +52,8 @@ const CartSummaryPrice: React.FC<CartSummaryPriceProps> = ({
         underline
         onLabelClick={() => console.log("Label clicked")}
       />
-      <CartSummaryRow label="Shipping total" value={shippingFee || 0} />
+      {shippingFee}
+      <CartSummaryRow label="Shipping total" value={Number(shippingFee) || 0} />
       <CartSummaryRow
         label="Amount to Pay"
         value={totalPaymentPrice() || 0}

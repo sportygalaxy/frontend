@@ -50,7 +50,7 @@ const CartItem: React.FC<CartItemProps> = ({
     SHIPPING_FEE
   );
   const amount =
-    formatCurrency(showTotalPrice(showSinglePriceInCart(cart), shippingFee)) ||
+    formatCurrency(showTotalPrice(showSinglePriceInCart(cart), 0)) ||
     0;
   return (
     <div className={cn("flex gap-10 md:gap-16 h-[154px]", className)}>
