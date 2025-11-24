@@ -1,52 +1,50 @@
 "use client";
 
-import React, { useState } from "react";
-import { Formik, Field, Form, FormikHelpers } from "formik";
-import * as Yup from "yup";
-import { cn } from "@/lib/utils";
-import {
-  formatPhoneToCountry,
-  getDialingCodeByValue,
-} from "@/utils/countyUtils";
-import { useMutation } from "@tanstack/react-query";
-import { NotifyError, NotifySuccess } from "@/helpers/toasts";
-import { useRouter } from "next/navigation";
+import AppLoader from "@/common/Loaders/AppLoader";
+import CartItem from "@/components/cart/CartItem";
+import CartSummaryPrice from "@/components/cart/CartSummaryPrice";
+import PaystackPaymentUi from "@/components/PaystackPaymentUi";
+import { PAYMENT_OPTION } from "@/constants/appEnums";
 import { RoutesEnum } from "@/constants/routeEnums";
+import {
+  SHIPPING_STATE_OPTIONS,
+  showShippingFeePrice,
+  showTotalPrice,
+  showTotalPriceInCart,
+} from "@/helpers/cart";
+import { NotifyError, NotifySuccess } from "@/helpers/toasts";
+import { createOrderData } from "@/lib/apiOrder";
+import { cn } from "@/lib/utils";
+import { finalizePayment } from "@/services/paymentService";
+import useCartStore from "@/store/cartStore";
 import useUserStore from "@/store/userStore";
-import Link from "next/link";
+import { TCart } from "@/types/cart";
 import {
   ICreateOrderPayload,
   ICreateOrderResponse,
   OrderItem,
 } from "@/types/order";
-import { createOrderData } from "@/lib/apiOrder";
-import useCartStore from "@/store/cartStore";
-import { transformCartArray } from "@/utils/productUtils";
-import { Lock } from "iconsax-react";
-import CartItem from "@/components/cart/CartItem";
-import CartCheckoutItem from "@/components/cart/CartCheckoutItem";
-import { TCart } from "@/types/cart";
-import CartSummaryPrice from "@/components/cart/CartSummaryPrice";
-import {
-  showShippingFeePrice,
-  showTotalPrice,
-  showTotalPriceInCart,
-  SHIPPING_STATE_OPTIONS,
-} from "@/helpers/cart";
-import { formatCurrency } from "@/utils/currencyUtils";
-import { parsePhoneNumberFromString } from "libphonenumber-js/min";
-import PaystackPaymentUi from "@/components/PaystackPaymentUi";
-import { PaystackVerifyTransactionRes } from "@/types/paystack";
-import { finalizePayment } from "@/services/paymentService";
-import AppLoader from "@/common/Loaders/AppLoader";
 import { InitializePayment } from "@/types/payment";
-import { PAYMENT_OPTION } from "@/constants/appEnums";
+import { PaystackVerifyTransactionRes } from "@/types/paystack";
+import {
+  formatPhoneToCountry,
+  getDialingCodeByValue,
+} from "@/utils/countyUtils";
+import { formatCurrency } from "@/utils/currencyUtils";
+import { transformCartArray } from "@/utils/productUtils";
+import { useMutation } from "@tanstack/react-query";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Lock } from "iconsax-react";
+import { parsePhoneNumberFromString } from "libphonenumber-js/min";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import * as Yup from "yup";
 import {
   MINIMUM_CHECKOUT_AMOUNT,
   PARTIAL_PAYMENT_DISCOUNT,
   SHIPPING_FEE,
 } from "../products/ProductConstant";
-import { Button } from "@/components/ui/button";
 
 type FormValues = {
   userId: string;
@@ -145,8 +143,8 @@ const Checkout = () => {
     error: orderError,
     data: orderData,
   } = useMutation<ICreateOrderResponse, Error, ICreateOrderPayload>({
-    mutationFn: async (registerData: ICreateOrderPayload) => {
-      const result = await createOrderData(registerData);
+    mutationFn: async (orderData: ICreateOrderPayload) => {
+      const result = await createOrderData(orderData);
 
       if (!result?.success || result?.statusCode === 400) {
         NotifyError(result?.error as string);
@@ -245,7 +243,8 @@ const Checkout = () => {
         }),
         offlineUser,
         paymentOption,
-        amountToPay,
+        amountToPay: 0,
+        amountPaid: amountToPay,
         shippingFee: shippingFeeAmount,
         shippingState: values.state,
         ...(!isLoggedInUser && userId),

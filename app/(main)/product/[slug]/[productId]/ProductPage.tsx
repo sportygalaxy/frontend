@@ -1,23 +1,22 @@
 "use client";
 
-import React, { FC } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProductData } from "@/lib/apiProduct";
-import Divider from "@/common/Divider";
 import ProductMediaSliders from "@/app/(main)/product/components/ProductMediaSliders";
+import Divider from "@/common/Divider";
+import { fetchProductData } from "@/lib/apiProduct";
+import { useQuery } from "@tanstack/react-query";
+import { FC } from "react";
 import ProductDetails from "../../components/ProductDetails";
 
+import BackButton from "@/common/BackButton";
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 import { DesktopTitle } from "@/common/Title";
-import ProductSpecifications from "../../components/ProductSpecifications";
-import ProductKeyattributes from "../../components/ProductKeyattributes";
-import ProductRatings from "../../components/ProductRatings";
+import { PRODUCT_ID } from "@/constants/appConstants";
 import useBreakpoint from "@/hooks/useBreakpoint";
 import { cn } from "@/lib/utils";
-import { PRODUCT_ID } from "@/constants/appConstants";
+import ProductKeyattributes from "../../components/ProductKeyattributes";
 import ProductList from "../../components/ProductList";
-import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
-import BackButton from "@/common/BackButton";
-import { buildVariantArray } from "@/helpers/build-variant-array";
+import ProductRatings from "../../components/ProductRatings";
+import ProductSpecifications from "../../components/ProductSpecifications";
 
 interface ProductProps {
   params: { productId: string; slug?: string };
@@ -79,14 +78,16 @@ const ProductPage: FC<ProductProps> = (props) => {
             />
           </section>
 
-          <ProductKeyattributes keyattributes={productData?.keyattribute} />
+          <section className="space-y-6 md:space-y-4">
+            <ProductKeyattributes keyattributes={productData?.keyattribute} />
 
-          <ProductSpecifications
-            modelNumber={productData?.modelNumber}
-            specifications={productData?.specification}
-          />
+            <ProductSpecifications
+              modelNumber={productData?.modelNumber}
+              specifications={productData?.specification}
+            />
 
-          <ProductRatings productId={productId} />
+            <ProductRatings productId={productId} />
+          </section>
         </div>
       </ComponentStateWrapper>
     </div>

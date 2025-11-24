@@ -24,7 +24,7 @@ export const NAV_CONSTANT = {
   X_URL: "https://x.com/sportygalaxy?t=UXNdx7UaqL4WmjgAbTztWg&s=09",
   TIKTOK_URL: "https://www.tiktok.com/@sportygalaxy1?_t=ZM-8y1S0TY1Qbm&_r=1",
   INSTAGRAM_URL:
-    "https://www.instagram.com/sporty_galaxy?igsh=MXNzY2ZpazluNGhmaA==",
+    "https://www.instagram.com/sporty_galaxy1?igsh=cnI3YzB4ZGR4dXBq",
   LINKEDIN_URL: "",
   WHATSAPP_LINK: `https://api.whatsapp.com/send?phone=${COUNTRY_CODE}${PHONE_NUMBER}&text=Hello%Sporty%20galaxy,%20I%20am%20interested%20in%20buying%sport%20equipments`,
   CALL_LINK: `tel:+${COUNTRY_CODE}${PHONE_NUMBER}`,
@@ -117,7 +117,7 @@ export const faqs = [
   {
     question: "How long does shipping take?",
     answer:
-      "Shipping typically takes 3–5 business days within the country. International orders may take up to 14 business days.",
+      "We can deliver any item to most parts of lagos within 24 or 48 hours. We also deliver to other southerns states within 3 business days and northern states within 5 business days. Every item is shipped on the days of ordering. We accept payment on delivery within Lagos.",
   },
   {
     question: "Can I return an item?",
