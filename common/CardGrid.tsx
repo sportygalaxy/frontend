@@ -11,9 +11,9 @@ const CardGrid: React.FC<props> = ({ children, className }) => {
     <div
       className={cn(
         "grid w-full items-stretch gap-3 sm:gap-6",
-        "[grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]",
-        "xs:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]",
-        "sm:[grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]",
+        "[grid-template-columns:repeat(auto-fit,minmax(160px,1fr))]",
+        "xs:[grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]",
+        "sm:[grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]",
         "lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
         className
       )}
