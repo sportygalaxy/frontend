@@ -13,6 +13,8 @@ import { transformMatchDate } from "@/utils/dateUtils";
 import React, { FC, memo } from "react";
 import ReviewModal from "./components/ReviewModal";
 import AppLoader from "@/common/Loaders/AppLoader";
+import Image from "next/image";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
 
 interface OrderProps {}
 const Order: FC<OrderProps> = () => {
@@ -49,8 +51,8 @@ const Order: FC<OrderProps> = () => {
   }
 
   return (
-    <section className="wrapper mt-10 bg-white p-4">
-      <h1 className="text-xl font-bold mb-6">Order List</h1>
+    <section className="wrapper space-y-6 mt-6 sm:mt-10 ">
+      <h1 className="text-xl font-bold">Order List</h1>
       <ComponentStateWrapper
         isLoading={isLoading}
         error={error}
@@ -58,64 +60,79 @@ const Order: FC<OrderProps> = () => {
         refetch={() => refetch()}
         emptyMessage="No orders found."
       >
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-5">
           {orders?.map((orderResponse: any) =>
-            orderResponse?.items?.map((order: OrderItem) => (
-              <div
-                key={order?.orderId}
-                className="relative flex items-center justify-between p-4 border rounded-lg shadow-sm"
-              >
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={order?.product?.displayImage || ""}
-                    alt={order?.product?.name || ""}
-                    className="w-16 h-16 rounded object-cover"
-                  />
-                  <div>
-                    <h2 className="font-medium text-lg text-wrap max-w-[600px]">
-                      {order?.product?.name || ""}
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      Order {order?.orderId}
-                    </p>
-                    {order?.quantity && (
-                      <p className="text-sm text-gray-500">
-                        Quantity: {order?.quantity}
-                      </p>
-                    )}
+            orderResponse?.items?.map((order: OrderItem) => {
+              const imageSrc =
+                order?.product?.displayImage || DEFAULT_PRODUCT_IMAGE;
 
-                    <OrderStatus status={orderResponse?.status || "PENDING"} />
+              return (
+                <div
+                  key={`${order?.orderId}-${
+                    order?.product?.id || order?.productId
+                  }`}
+                  className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5"
+                >
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="flex w-full min-w-0 gap-3 sm:gap-4 md:w-auto md:flex-1">
+                      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-[#f5f5f7] sm:h-24 sm:w-24">
+                        <Image
+                          src={imageSrc}
+                          alt={order?.product?.name || "Product image"}
+                          fill
+                          sizes="(min-width: 1024px) 96px, (min-width: 640px) 88px, 80px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
+                        <h2 className="line-clamp-2 text-base font-semibold text-primary sm:text-lg">
+                          {order?.product?.name || ""}
+                        </h2>
+                        <p className="text-xs text-gray-600 sm:text-sm">
+                          Order {order?.orderId}
+                        </p>
+                        {order?.quantity && (
+                          <p className="text-xs text-gray-500 sm:text-sm">
+                            Quantity: {order?.quantity}
+                          </p>
+                        )}
+                        <div className="mt-1 flex flex-wrap items-center gap-2">
+                          <OrderStatus
+                            status={orderResponse?.status || "PENDING"}
+                          />
+                          <p className="text-xs text-gray-400 sm:text-sm">
+                            On {transformMatchDate(orderResponse?.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-                    <p className="text-sm text-gray-400 mt-1">
-                      On {transformMatchDate(orderResponse?.createdAt)}
-                    </p>
+                    <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center md:justify-end">
+                      <OrderReviewComponent order={order} />
+
+                      <a
+                        href={`/product/${order?.product?.name}/${order?.product?.id}`}
+                        className="inline-flex w-full items-center justify-center rounded-full border border-green-200 bg-green-50 px-4 py-2 text-sm font-semibold text-green-600 transition hover:border-green-300 hover:bg-green-100 md:w-auto"
+                      >
+                        See product
+                      </a>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-8">
-                  <OrderReviewComponent order={order} />
-
-                  <a
-                    href={`/product/${order?.product?.name}/${order?.product?.id}`}
-                    className="text-lg text-green-500 border border-green-100 py-2 px-4 font-semibold hover:underline min-w-[120px]"
-                  >
-                    See product
-                  </a>
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </ComponentStateWrapper>
 
       {totalPages > 1 && (
-        <div className="mt-16 flex items-center space-x-4">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={prevPage}
             disabled={currentPage === 1}
-            className="rotate-180 flex items-center w-fit p-2 md:p-4 border-none border-secondary rounded-full disabled:opacity-50"
+            className="flex w-10 items-center justify-center rounded-full border-none border-secondary p-2 md:w-11 md:p-3 disabled:opacity-50"
           >
-            <RightArrowIcon />
+            <RightArrowIcon className="rotate-180" />
           </button>
 
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -123,20 +140,18 @@ const Order: FC<OrderProps> = () => {
               key={page}
               onClick={() => goToPage(page)}
               className={cn(
-                "flex items-center w-fit p-2 md:p-4 rounded-full cursor-pointer hover:bg-secondary hover:text-primary",
+                "flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium cursor-pointer hover:bg-secondary hover:text-primary md:h-11 md:w-11",
                 page === currentPage ? "border border-secondary" : "border-none"
               )}
             >
-              <p className="flex items-center justify-center font-jost text-base font-normal text-primary w-8 h-8">
-                {page}
-              </p>
+              {page}
             </button>
           ))}
 
           <button
             onClick={nextPage}
             disabled={currentPage === totalPages}
-            className="flex items-center w-fit p-2 md:p-4 border-none border-secondary rounded-full disabled:opacity-50"
+            className="flex w-10 items-center justify-center rounded-full border-none border-secondary p-2 md:w-11 md:p-3 disabled:opacity-50"
           >
             <RightArrowIcon />
           </button>
@@ -146,12 +161,16 @@ const Order: FC<OrderProps> = () => {
   );
 };
 
-const OrderReviewComponent = ({ order }: { order: any }) => {
+const OrderReviewComponent = ({ order }: { order: OrderItem }) => {
   if (order?.productCompleted && !order?.reviewed) {
     return (
       <ReviewModal
         productId={order?.productId}
-        triggerButton={<Button variant="default">Add a Review</Button>}
+        triggerButton={
+          <Button className="w-full md:w-auto" variant="default">
+            Add a Review
+          </Button>
+        }
       />
     );
   }
@@ -159,7 +178,7 @@ const OrderReviewComponent = ({ order }: { order: any }) => {
   return (
     <>
       {order?.reviewed && (
-        <span className="absolute top-0 right-0 bg-green-100 border border-green-300 px-4 py-2">
+        <span className="absolute right-4 top-4 rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
           Reviewed
         </span>
       )}

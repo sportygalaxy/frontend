@@ -1,12 +1,12 @@
 "use client";
 import FacebookIcon from "@/assets/icons/pack/Facebook";
-import Logo from "./Logo";
 import InstagramIcon from "@/assets/icons/pack/Instagram";
-import XIcon from "@/assets/icons/pack/X";
 import TiktokIcon from "@/assets/icons/pack/Tiktok";
 import WhatsappIcon from "@/assets/icons/pack/Whatsapp";
-import Link from "next/link";
+import XIcon from "@/assets/icons/pack/X";
 import { NAV_CONSTANT } from "@/constants/appConstants";
+import Link from "next/link";
+import Logo from "./Logo";
 
 const BottomNavbarDesktop = () => {
   const navLinks = {
@@ -90,7 +90,7 @@ const BottomNavbarDesktop = () => {
               </p>
               <ul className="space-y-3 flex flex-col items-center justify-start">
                 {links.map((link, index) => (
-                  <li key={index} className="cursor-pointer">
+                  <li key={index} className="cursor-pointer text-center">
                     <Link
                       href={link.href}
                       className="text-primary-foreground font-normal text-xl hover:underline"

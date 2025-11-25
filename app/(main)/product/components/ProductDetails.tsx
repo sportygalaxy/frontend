@@ -1,27 +1,24 @@
 "use client";
 
-import React, { FC } from "react";
+import AddIcon from "@/assets/icons/pack/Add";
 import MinusOutlinedIcon from "@/assets/icons/pack/MinusOutlined";
 import { Button } from "@/components/ui/button";
-import AddIcon from "@/assets/icons/pack/Add";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import useCartStore from "@/store/cartStore";
-import { useRouter } from "next/navigation";
 import { RoutesEnum } from "@/constants/routeEnums";
-import { NotifySuccess } from "@/helpers/toasts";
-import { formatCurrency } from "@/utils/currencyUtils";
-import {
-  calculatePercentageDecrease,
-  getEffectivePrice,
-} from "@/helpers/product-discount";
-import clsx from "clsx";
+import { accumulateAmounts } from "@/helpers/accumulate-amounts";
 import { buildVariantArray } from "@/helpers/build-variant-array";
+import { calculatePercentageDecrease } from "@/helpers/product-discount";
+import { NotifySuccess } from "@/helpers/toasts";
+import useCartStore from "@/store/cartStore";
+import { formatCurrency } from "@/utils/currencyUtils";
+import clsx from "clsx";
+import { Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
+import { FC } from "react";
+import * as Yup from "yup";
 import ProductColors from "./ProductColors";
+import ProductDimensions from "./ProductDimensions";
 import ProductSizes from "./ProductSizes";
 import ProductWeights from "./ProductWeights";
-import ProductDimensions from "./ProductDimensions";
-import { accumulateAmounts } from "@/helpers/accumulate-amounts";
 
 const DEFAULT_QUANTITY = 1;
 
@@ -106,7 +103,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
         // console.log("Form Submitted", values);
 
         addToCart(payload, true);
-        NotifySuccess("Proceed to checkout");
+        NotifySuccess("Proceeding to checkout");
         router.push(RoutesEnum.CHECKOUT);
       }}
     >
@@ -175,7 +172,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
               <>
                 <div className="mt-8">
                   <div className="flex items-center gap-2">
-                    <p className="!text-gray-500 font-light text-mobile-xl md:text-xl line-through">
+                    <p className="!text-gray-500 font-light text-mobile-2xl md:text-xl line-through">
                       {formatCurrency(
                         accumulateAmounts([
                           product?.price,
@@ -189,7 +186,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                     <p
                       className={clsx(
                         !discountCap && "hidden",
-                        "bg-orange-400 rounded-md p-2 z-[2] text-sm"
+                        "bg-orange-400 rounded-md p-2 z-[2] text-white text-xs md:text-lg font-bold"
                       )}
                     >
                       {discountCap}
@@ -205,7 +202,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
                         values.weightPrice,
                       ]) * values.qty || 0
                     )}
-                    <span className="text-destructive text-sm">
+                    <span className="text-destructive pl-1 text-mobile-xl md:text-sm">
                       *{STOCK_COUNT} unit left
                     </span>
                   </p>

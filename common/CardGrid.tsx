@@ -10,7 +10,11 @@ const CardGrid: React.FC<props> = ({ children, className }) => {
   return (
     <div
       className={cn(
-        "grid gap-2 sm:gap-5 [@media(max-width:373px)]:justify-center justify-between [@media(max-width:372px)]:[grid-template-columns:repeat(auto-fill,230px)]  [@media(max-width:412px)]:[grid-template-columns:repeat(auto-fill,170px)] [grid-template-columns:repeat(auto-fill,190px)] sm:[grid-template-columns:repeat(auto-fill,295px)]",
+        "grid w-full items-stretch gap-3 sm:gap-6",
+        "[grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]",
+        "xs:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]",
+        "sm:[grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]",
+        "lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]",
         className
       )}
     >

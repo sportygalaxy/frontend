@@ -8,19 +8,21 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { RoutesEnum } from "@/constants/routeEnums";
+import { NotifySuccess } from "@/helpers/toasts";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import { XIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { FC } from "react";
 import useCartStore from "@/store/cartStore";
-import CartProductCard from "./CartProductCard";
-import CartEmpty from "./CartEmpty";
-import CartClearAll from "./CartClearAll";
+import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { NotifySuccess } from "@/helpers/toasts";
-import { RoutesEnum } from "@/constants/routeEnums";
+import { FC } from "react";
+import { Button } from "../ui/button";
+import CartClearAll from "./CartClearAll";
+import CartEmpty from "./CartEmpty";
+import CartProductCard from "./CartProductCard";
 import CartSummaryPrice from "./CartSummaryPrice";
+
+import CartIcon from "@/assets/icons/pack/Cart";
 
 type CartAddToCartDrawerProps<T> = {
   data: { color?: string };
@@ -39,7 +41,7 @@ function CartAddToCartDrawer<T>({
   const isDesktop = useMediaQuery("(min-width: 640px)");
 
   const handleCheckout = () => {
-    NotifySuccess("Proceed to checkout");
+    NotifySuccess("Proceeding to checkout");
     window.location.href = RoutesEnum.CHECKOUT;
   };
 
@@ -48,10 +50,13 @@ function CartAddToCartDrawer<T>({
       <DrawerTrigger asChild>
         <button
           className={cn(
-            isDesktop && "p-2 md:p-4 border border-secondary rounded-full"
+            // "relative flex items-center justify-center rounded-full border border-secondary p-2 transition-colors duration-200 hover:bg-background hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+            isDesktop && "md:p-4",
+            className
           )}
         >
-          {Component ? <Component {...data} className={cn(className)} /> : null}
+          <CartIcon color="#828282" />
+          {/* {Component ? <Component {...data} className={cn(className)} /> : null} */}
         </button>
       </DrawerTrigger>
 

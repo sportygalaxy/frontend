@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useCallback, FC } from "react";
-import { useRouter } from "next/navigation";
+import { TProduct } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
-import { TProduct } from "@/types/product";
+import { useRouter } from "next/navigation";
+import { FC, useCallback, useState } from "react";
 
-import { fetchProductsData } from "@/lib/apiProduct";
 import { Search } from "@/components/search";
-import ComponentStateWrapper from "./ComponentState/ComponentStateWrapper";
+import { fetchProductsData } from "@/lib/apiProduct";
 import { formatCurrency } from "@/utils/currencyUtils";
+import ComponentStateWrapper from "./ComponentState/ComponentStateWrapper";
 
 interface GlobalSearchProps {
   onClearClick?: () => void;

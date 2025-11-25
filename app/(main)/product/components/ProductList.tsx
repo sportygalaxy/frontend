@@ -1,15 +1,15 @@
 "use client";
 import CardGrid from "@/common/CardGrid";
-import React, { FC } from "react";
+import { FC } from "react";
 
 import { TProduct, TProductQuery } from "@/types/product";
 
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 import ProductCard from "@/components/product/ProductCard";
 import { ScrollAreaHorizontal } from "@/components/scroll";
 import { fetchProductsData } from "@/lib/apiProduct";
 import { useQuery } from "@tanstack/react-query";
-import { PAGINATION_DEFAULT } from "@/constants/appConstants";
-import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
+import ProductListSkeleton from "@/components/product/ProductCardSkeleton";
 
 interface Props {
   isMobile?: boolean;
@@ -47,6 +47,12 @@ const ProductList: FC<Props> = ({
         data={productList}
         refetch={refetch}
         emptyMessage="No products found."
+        CustomLoadingComponentProps={
+          <ProductListSkeleton
+            isHorizontalScroll={isHorizontalScroll}
+            isMobile={isMobile}
+          />
+        }
       >
         <div className="w-full">
           {isHorizontalScroll ? (

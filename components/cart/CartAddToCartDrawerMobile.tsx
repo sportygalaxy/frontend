@@ -1,15 +1,14 @@
 "use client";
-import { XIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import useCartStore from "@/store/cartStore";
-import CartProductCard from "./CartProductCard";
-import CartEmpty from "./CartEmpty";
-import CartClearAll from "./CartClearAll";
-import { Separator } from "../ui/separator";
-import { useRouter } from "next/navigation";
-import { NotifySuccess } from "@/helpers/toasts";
 import { RoutesEnum } from "@/constants/routeEnums";
-import Link from "next/link";
+import { NotifySuccess } from "@/helpers/toasts";
+import useCartStore from "@/store/cartStore";
+import { XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+import CartClearAll from "./CartClearAll";
+import CartEmpty from "./CartEmpty";
+import CartProductCard from "./CartProductCard";
 import CartSummaryPrice from "./CartSummaryPrice";
 
 type CartAddToCartDrawerMobileProps<T> = {
@@ -24,12 +23,12 @@ function CartAddToCartDrawerMobile<T>({
   const { cart } = useCartStore();
 
   const handleCheckout = async () => {
-    NotifySuccess("Proceed to checkout");
+    NotifySuccess("Proceeding to checkout");
     window.location.href = RoutesEnum.CHECKOUT;
   };
 
   return (
-    <div className="flex flex-col justify-end h-full bg-background overflow-scroll">
+    <div className="flex h-full flex-col bg-background overflow-hidden">
       {/* Header */}
       <div className="flex flex-col items-center justify-between p-4 bg-background rounded-tl-[12px] rounded-tr-[12px]">
         <div className="py-1">
@@ -52,12 +51,12 @@ function CartAddToCartDrawerMobile<T>({
 
       {/* Details */}
       {cart.length >= 1 ? (
-        <div className="flex flex-col">
-          <div className="max-h-[300px] h-fit overflow-auto">
-            <CartProductCard item={cart} />
+        <div className="flex h-full flex-col">
+          <div className="flex-1 overflow-auto px-4 pb-4 pt-2">
+            <CartProductCard item={cart} drawer />
           </div>
 
-          <div className="overflow-auto text-[#222] shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] pb-6 px-6">
+          <div className="sticky bottom-0 left-0 right-0 bg-background text-[#222] shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] px-6 pb-[calc(env(safe-area-inset-bottom,0px)+16px)] pt-4 space-y-3">
             <CartClearAll />
             <CartSummaryPrice />
 
@@ -71,7 +70,7 @@ function CartAddToCartDrawerMobile<T>({
             <Button
               onClick={handleCheckout}
               size={"lg"}
-              className="rounded-full font-bold min-h-[48px] flex-1 w-full mt-4"
+              className="mt-1 w-full min-h-[48px] flex-1 rounded-full font-bold"
             >
               Checkout now
             </Button>

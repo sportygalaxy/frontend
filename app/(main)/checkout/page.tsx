@@ -827,9 +827,9 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  <div className="bg-[#F0F0F0] py-14 px-32 flex flex-col items-center">
+                  <div className="bg-[#F0F0F0] py-8 px-4 md:py-14 md:px-16 flex flex-col items-center">
                     <div className="space-y-6 flex flex-col items-center">
-                      <p className="text-[#828282] font-bold text-mobile-3xl md:text-3xl">
+                      <p className="text-[#828282] font-bold text-mobile-3xl md:text-2xl">
                         Total amount
                       </p>
                       <p className="text-[#000] font-bold text-mobile-4xl md:text-7xl">
@@ -843,7 +843,7 @@ const Checkout = () => {
 
                       <div className="flex items-center gap-2">
                         <Lock size={24} />
-                        <p className="font-medium text-mobile-2xl md:text-2xl">
+                        <p className="font-medium text-mobile-2xl md:text-xl">
                           Secure Payment
                         </p>
                       </div>
@@ -854,48 +854,43 @@ const Checkout = () => {
                         Order Summary
                       </p>
 
-                      {cart?.map((cart: TCart) => (
-                        <div
-                          key={cart?.id}
-                          className="flex flex-col gap-4 max-w-2xl mt-8 border-none"
-                        >
-                          <CartItem
-                            cart={{
-                              ...cart,
-                            }}
-                            isProductInCart={isProductInCart}
-                            handleDecrement={(event, id) =>
-                              handleDecrement(event, cart?.id)
-                            }
-                            handleIncrement={(event, id) =>
-                              handleIncrement(event, cart?.id)
-                            }
-                            className=""
-                          />
+                  <div className="mt-8 max-h-[420px] overflow-auto pr-2 sm:pr-3">
+                    {cart?.map((cart: TCart) => (
+                      <div
+                        key={cart?.id}
+                        className="flex flex-col gap-4 max-w-2xl mb-8 last:mb-0 border-none"
+                      >
+                        <CartItem
+                          cart={{
+                            ...cart,
+                          }}
+                          isProductInCart={isProductInCart}
+                          handleDecrement={(event, id) =>
+                            handleDecrement(event, cart?.id)
+                          }
+                          handleIncrement={(event, id) =>
+                            handleIncrement(event, cart?.id)
+                          }
+                          className=""
+                        />
 
-                          <div className="mt-4 text-sm">
-                            {/* Display Colors */}
-                            <p className="font-medium text-[#828282]">
-                              Color: {cart?.colors || "N/A"}
-                            </p>
-
-                            {/* Display Sizes */}
-                            <p className="font-medium text-[#828282]">
-                              Size: {cart?.sizes || "N/A"}
-                            </p>
-
-                            {/* Display Weight */}
-                            <p className="font-medium text-[#828282]">
-                              Weight: {cart?.weights || "N/A"}
-                            </p>
-
-                            {/* Display Dimensions */}
-                            <p className="font-medium text-[#828282]">
-                              Dimensions: {cart?.dimensions || "N/A"}
-                            </p>
-                          </div>
+                        <div className="mt-2 text-sm">
+                          <p className="font-medium text-[#828282]">
+                            Color: {cart?.colors || "N/A"}
+                          </p>
+                          <p className="font-medium text-[#828282]">
+                            Size: {cart?.sizes || "N/A"}
+                          </p>
+                          <p className="font-medium text-[#828282]">
+                            Weight: {cart?.weights || "N/A"}
+                          </p>
+                          <p className="font-medium text-[#828282]">
+                            Dimensions: {cart?.dimensions || "N/A"}
+                          </p>
                         </div>
-                      ))}
+                      </div>
+                    ))}
+                  </div>
 
                       <div className="mt-12 text-[#828282] space-y-8">
                         <CartSummaryPrice

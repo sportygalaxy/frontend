@@ -2,7 +2,7 @@ import Order from "../order/page";
 
 export default function Notification() {
   return (
-    <section className="wrapper mt-10 bg-white">
+    <section className="wrapper py-2 md:py-6 bg-white">
       <Order />
     </section>
   );

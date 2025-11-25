@@ -26,14 +26,14 @@ import { getCookie } from "cookies-next";
 import useUserStore from "@/store/userStore";
 import SpinnerIcon from "@/assets/icons/pack/Spinner";
 import { useLogout } from "@/hooks/useLogout";
-import { LogoutCurve } from "iconsax-react";
+import { LogoutCurve, ShoppingBag } from "iconsax-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import GlobalSearch from "./GlobalSearch";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
@@ -42,6 +42,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
   const { logoutUser, isPending } = useLogout();
   const router = useRouter();
+  const pathname = usePathname();
 
   const { cart } = useCartStore();
 
@@ -55,6 +56,9 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     const AUTHENTIATED = getCookie("token");
     setAuthenticated(!!AUTHENTIATED);
   }, []);
+
+  const iconButtonClass =
+    "relative flex items-center justify-center rounded-full border border-secondary p-2 md:p-4 transition-colors duration-200 hover:bg-black hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
   const iconSize = {
     color: "grey",
@@ -100,12 +104,12 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
       name: "Notification",
       icon: (
         <>
-          <NotificationIcon
+          <ShoppingBag
             className="desktop-tablet-view"
             size={27}
             {...iconSize}
           />
-          <NotificationIcon
+          <ShoppingBag
             className="mobile-desktop-tablet-view"
             size={20}
             {...iconSize}
@@ -127,7 +131,13 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     {
       id: 3,
       name: "Cart",
-      icon: <CartAddToCartDrawer data={iconSize} component={CartIcon} />,
+      icon: (
+        <CartAddToCartDrawer
+          data={iconSize}
+          component={CartIcon}
+          className={iconButtonClass}
+        />
+      ),
       path: "cart",
       notification: showCartQtyValue(cart),
       type: null,
@@ -146,6 +156,11 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
+
+  const shouldShowGlobalSearch =
+    pathname === RoutesEnum.LANDING_PAGE ||
+    pathname.startsWith(RoutesEnum.PRODUCTS) ||
+    pathname.startsWith("/product/");
 
   return (
     <div className="relative flex-col w-full wrapper">
@@ -222,7 +237,9 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
               value={inputValue}
               onChange={handleChange}
             /> */}
-            <GlobalSearch onClearClick={handleCameraClick} />
+            {shouldShowGlobalSearch ? (
+              <GlobalSearch onClearClick={handleCameraClick} />
+            ) : null}
 
             {!!user || authenticated ? (
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">
@@ -231,9 +248,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
                     return (
                       <Popover key={cta.id}>
                         <PopoverTrigger
-                          className={cn(
-                            "p-2 md:p-4 border border-secondary rounded-full"
-                          )}
+                          className={cn(iconButtonClass)}
                         >
                           {cta.icon}
 
@@ -252,7 +267,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
                             </Link>
                             <Link href={RoutesEnum.ORDER}>
                               <li className="flex items-center gap-3 cursor-pointer hover:bg-secondary-foreground py-3 px-4">
-                                <UserIcon /> My Orders
+                                <ShoppingBag /> My Orders
                               </li>
                             </Link>
                             <li
@@ -272,38 +287,35 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
                   if (cta.type === "link")
                     return (
-                      <>
-                        <span
-                          key={cta.id}
-                          onClick={() => router.push(RoutesEnum.NOTIFICATION)}
-                          className={cn(
-                            cta.name === "Notification" &&
-                              "p-2 md:p-4 border border-secondary rounded-full", "cursor-pointer"
-                          )}
-                        >
-                          {cta.icon}
+                      <button
+                        key={cta.id}
+                        type="button"
+                        onClick={() => router.push(RoutesEnum.NOTIFICATION)}
+                        className={cn(iconButtonClass)}
+                        aria-label={cta.name}
+                      >
+                        {cta.icon}
 
-                          {cta?.notification?.status ? (
-                            <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
-                              {cta?.notification?.value}
-                            </span>
-                          ) : null}
-                        </span>
-                      </>
+                        {cta?.notification?.status ? (
+                          <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                            {cta?.notification?.value}
+                          </span>
+                        ) : null}
+                      </button>
                     );
 
                   return (
                     <span
                       key={cta.id}
                       className={cn(
-                        cta.name !== "Cart" &&
-                          "p-2 md:p-4 border border-secondary rounded-full"
+                        "relative inline-flex items-center justify-center",
+                        cta.name !== "Cart" && iconButtonClass
                       )}
                     >
                       {cta.icon}
 
                       {cta?.notification?.status ? (
-                        <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                        <span className="absolute -right-4 bottom-0 md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
                           {cta?.notification?.value}
                         </span>
                       ) : null}
