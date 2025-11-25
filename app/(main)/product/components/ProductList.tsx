@@ -1,15 +1,14 @@
 "use client";
 import CardGrid from "@/common/CardGrid";
-import React, { FC } from "react";
+import { FC } from "react";
 
 import { TProduct, TProductQuery } from "@/types/product";
 
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 import ProductCard from "@/components/product/ProductCard";
 import { ScrollAreaHorizontal } from "@/components/scroll";
 import { fetchProductsData } from "@/lib/apiProduct";
 import { useQuery } from "@tanstack/react-query";
-import { PAGINATION_DEFAULT } from "@/constants/appConstants";
-import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
 
 interface Props {
   isMobile?: boolean;

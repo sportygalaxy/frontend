@@ -1,47 +1,45 @@
 "use client";
 
+import BackButton from "@/common/BackButton";
+import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
+import AppLoader from "@/common/Loaders/AppLoader";
 import { DesktopTitle } from "@/common/Title";
-import ProductList from "../product/components/ProductList";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProductsData } from "@/lib/apiProduct";
-import { useCallback, useEffect, useState } from "react";
-import { TProductQuery } from "@/types/product";
-import { cn } from "@/lib/utils";
-import debounce from "lodash.debounce";
-import { useSearchParams, useRouter } from "next/navigation"; // Import Next.js hooks
-import { Filter } from "iconsax-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import {
-  DEFAULT_CUSTOM_PRICE,
-  SORT_OPTIONS,
-  SUBCATEGORIES,
-  COLOR_FILTERS,
-  SIZE_FILTERS,
-  TYPE_FILTERS,
-  PRICE_FILTERS,
-  PAGINATE_VIEW_OPTIONS,
-  CATEGORIES,
-  isFilterEmpty,
-  DATE_OPTIONS,
-} from "./ProductConstant";
 import { PAGINATION_DEFAULT } from "@/constants/appConstants";
-import { Button } from "@/components/ui/button";
+import { fetchProductsData } from "@/lib/apiProduct";
+import { cn } from "@/lib/utils";
+import { TProductQuery } from "@/types/product";
+import { useQuery } from "@tanstack/react-query";
+import { Filter } from "iconsax-react";
+import debounce from "lodash.debounce";
+import { ChevronDown } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation"; // Import Next.js hooks
+import { useCallback, useEffect, useState } from "react";
+import ProductList from "../product/components/ProductList";
 import CategoriesList from "./components/CategoriesList";
-import AppLoader from "@/common/Loaders/AppLoader";
-import ComponentStateWrapper from "@/common/ComponentState/ComponentStateWrapper";
-import BackButton from "@/common/BackButton";
+import {
+  COLOR_FILTERS,
+  DATE_OPTIONS,
+  DEFAULT_CUSTOM_PRICE,
+  isFilterEmpty,
+  PAGINATE_VIEW_OPTIONS,
+  PRICE_FILTERS,
+  SIZE_FILTERS,
+  SORT_OPTIONS,
+  TYPE_FILTERS,
+} from "./ProductConstant";
 
 export default function Products() {
   const router = useRouter();
@@ -297,16 +295,16 @@ export default function Products() {
           {/* CLEAR */}
           {isFilterEmpty(filter) ? null : (
             <Button
-              variant="destructive"
+              variant="link"
               onClick={() => {
                 const defaultFilter = {};
                 setFilter(defaultFilter);
                 updateUrlQuery(defaultFilter);
                 _debouncedSubmit();
               }}
-              className="mt-4 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+              className="mt-4 text-mobile-xl md:text-sm font-medium text-red-600 m-0 p-0"
             >
-              Clear Filters
+              Clear filter
             </Button>
           )}
         </div>
@@ -328,7 +326,7 @@ export default function Products() {
               {/* Color filter */}
               <AccordionItem value="color">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-md font-bold text-gray-900">
+                  <span className="text-mobile-xl md:text-sm font-bold text-gray-900">
                     Color
                   </span>
                 </AccordionTrigger>
@@ -351,7 +349,7 @@ export default function Products() {
                         />
                         <label
                           htmlFor={`color-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
                         >
                           {option.label}
                         </label>
@@ -364,7 +362,7 @@ export default function Products() {
               {/* Size filter */}
               <AccordionItem value="size">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-md font-bold  text-gray-900">
+                  <span className="text-mobile-xl md:text-sm font-bold  text-gray-900">
                     Size
                   </span>
                 </AccordionTrigger>
@@ -387,7 +385,7 @@ export default function Products() {
                         />
                         <label
                           htmlFor={`size-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
                         >
                           {option.label}
                         </label>
@@ -400,7 +398,7 @@ export default function Products() {
               {/* Type filter */}
               <AccordionItem value="type">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-md font-bold  text-gray-900">
+                  <span className="text-mobile-xl md:text-sm font-bold  text-gray-900">
                     Type
                   </span>
                 </AccordionTrigger>
@@ -423,7 +421,7 @@ export default function Products() {
                         />
                         <label
                           htmlFor={`type-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
                         >
                           {option.label}
                         </label>
@@ -436,7 +434,7 @@ export default function Products() {
               {/* Price filter */}
               <AccordionItem value="price">
                 <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-2xl md:text-md font-bold text-gray-900">
+                  <span className="text-mobile-xl md:text-sm font-bold text-gray-900">
                     Price
                   </span>
                 </AccordionTrigger>
@@ -475,7 +473,7 @@ export default function Products() {
                         />
                         <label
                           htmlFor={`price-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
                         >
                           {option.label}
                         </label>
@@ -510,15 +508,18 @@ export default function Products() {
                         />
                         <label
                           htmlFor={`price-${PRICE_FILTERS.options.length}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
                         >
                           Custom
                         </label>
                       </div>
 
-                      <div className="flex justify-between">
-                        <p className="font-medium">Price</p>
-                        <div>
+                      <div className="flex flex-col md:justify-between mt-4">
+                        <p className="font-normal text-mobile-xl md:text-xs">
+                          Price range
+                        </p>
+
+                        <div className="text-mobile-xl md:text-sm">
                           {filter?.price?.isCustom
                             ? minPrice?.toFixed(0)
                             : filter?.price?.range[0].toFixed(0)}{" "}

@@ -55,7 +55,7 @@ const ProductCard: FC<Props> = (props) => {
       <p
         className={clsx(
           !discountCap && "hidden",
-          "bg-orange-400 text-white font-bold rounded-md p-3 absolute w-fit z-[1]"
+          "bg-orange-400 text-white text-xs md:text-lg font-bold rounded-md p-1 md:p-3 absolute w-fit z-[1]"
         )}
       >
         {discountCap}

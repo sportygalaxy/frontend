@@ -1,15 +1,15 @@
 "use client";
 
-import { fetchCategoriesData, fetchCategoryData } from "@/lib/apiCategory";
-import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { Category, Subcategory } from "@/types/category"; // Import types for better typing
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { fetchCategoriesData, fetchCategoryData } from "@/lib/apiCategory";
+import { Category, Subcategory } from "@/types/category"; // Import types for better typing
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 interface CategoriesListProps {
   filter: any;
@@ -101,7 +101,7 @@ export default function CategoriesList({
         >
           <AccordionItem value={category?.id}>
             <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-              <p className="text-mobile-2xl md:text-xs font-bold text-gray-900 uppercase text-left">
+              <p className="text-mobile-xl md:text-sm font-bold text-gray-900 uppercase text-left">
                 {category?.name}
               </p>
             </AccordionTrigger>
@@ -110,9 +110,13 @@ export default function CategoriesList({
               {/* Only show subcategories if this category is selected */}
               {categoryId === category?.id && (
                 <div className="accordion-content">
-                  {categoryIsLoading && <div>Loading subcategories...</div>}
+                  {categoryIsLoading && (
+                    <div className="text-xs md:text-xs">
+                      Loading subcategories...
+                    </div>
+                  )}
                   {categoryError && (
-                    <div>
+                    <div className="text-xs md:text-xs">
                       Error loading subcategories: {categoryError?.message}
                     </div>
                   )}
@@ -122,7 +126,7 @@ export default function CategoriesList({
                       (subcategory: Subcategory) => (
                         <li key={subcategory?.id}>
                           <button
-                            className="hover:underline hover:text-black focus:text-blue-700 focus:font-bold ring-offset-2 text-xs text-gray-600 capitalize"
+                            className="hover:underline hover:text-black text-left focus:text-blue-700 focus:font-bold ring-offset-2 text-mobile-xl md:text-xs text-gray-600 capitalize"
                             onClick={(e) => {
                               e.stopPropagation(); // Prevent triggering category click event
                               handleSubcategoryClick(subcategory);

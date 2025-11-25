@@ -70,11 +70,11 @@ export const MobileTitle = ({ title, path }: MobileTitleProps) => {
   const router = useRouter();
   return (
     <div className="mobile-view sm:hidden flex items-center justify-between">
-      <p className="text-primary font-medium text-base">{title}</p>
+      <p className="text-primary font-bold text-lg">{title}</p>
 
       <Button
         variant="link"
-        className="text-secondary font-medium text-sm cursor-pointer"
+        className="text-secondary font-bold text-base cursor-pointer"
         onClick={() => router.push(path, { scroll: false })}
       >
         See all

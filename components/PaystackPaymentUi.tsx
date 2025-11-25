@@ -118,7 +118,7 @@ const PaystackPaymentUi: React.FC<PaystackPaymentUiProps> = ({
   return (
     <>
       {isAllowedToCheckoutOut ? (
-        <p className="text-red-600">
+        <p className="text-red-600 text-mobile-2xl md:text-sm">
           Total is: {formatCurrency(amount)}. A minimum of 
           {formatCurrency(MINIMUM_CHECKOUT_AMOUNT) || 0} worth of item should be
           in your cart to proceed.

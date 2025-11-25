@@ -1,20 +1,18 @@
-import { DesktopTitle, MobileTitle } from "@/common/Title";
 import Divider from "@/common/Divider";
+import { DesktopTitle, MobileTitle } from "@/common/Title";
 
 import Hero from "./_components/Hero";
 import Introduction from "./_components/Introduction";
 import NewsLetter from "./_components/NewsLetter";
 
-import Featured from "@/components/featured/Featured";
 import Categories from "@/components/category/Categories";
+import Featured from "@/components/featured/Featured";
+import { RoutesEnum } from "@/constants/routeEnums";
+import ProductList from "../product/components/ProductList";
+import SpinnerModal from "../spinner/components/SpinnerModal";
+import FreeGiftBanner from "./_components/FreeGiftBanner";
 import SeeAll from "./_components/SeeAll";
 import VerifyBanner from "./_components/VerifyBanner";
-import ProductList from "../product/components/ProductList";
-import { RoutesEnum } from "@/constants/routeEnums";
-import SpinnerModal from "../spinner/components/SpinnerModal";
-import SpinnerFreeGiftModal from "../spinner/components/SpinnerFreeGiftModal";
-import SpinnerCashGiftModal from "../spinner/components/SpinnerCashGiftModal";
-import FreeGiftBanner from "./_components/FreeGiftBanner";
 
 export default function LandingPage() {
   return (

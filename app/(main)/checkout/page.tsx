@@ -827,9 +827,9 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  <div className="bg-[#F0F0F0] py-14 px-32 flex flex-col items-center">
+                  <div className="bg-[#F0F0F0] py-8 px-4 md:py-14 md:px-16 flex flex-col items-center">
                     <div className="space-y-6 flex flex-col items-center">
-                      <p className="text-[#828282] font-bold text-mobile-3xl md:text-3xl">
+                      <p className="text-[#828282] font-bold text-mobile-3xl md:text-2xl">
                         Total amount
                       </p>
                       <p className="text-[#000] font-bold text-mobile-4xl md:text-7xl">
@@ -843,7 +843,7 @@ const Checkout = () => {
 
                       <div className="flex items-center gap-2">
                         <Lock size={24} />
-                        <p className="font-medium text-mobile-2xl md:text-2xl">
+                        <p className="font-medium text-mobile-2xl md:text-xl">
                           Secure Payment
                         </p>
                       </div>
