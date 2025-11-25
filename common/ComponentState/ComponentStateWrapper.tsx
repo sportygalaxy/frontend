@@ -30,11 +30,11 @@ const ComponentStateWrapper: React.FC<ComponentStateWrapperProps> = ({
   };
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        {CustomLoadingComponentProps || <SportygalaxyLoadingIndicator />}
-      </div>
-    );
+    if (CustomLoadingComponentProps) {
+      return <>{CustomLoadingComponentProps}</>;
+    }
+
+    return <SportygalaxyLoadingIndicator />;
   }
 
   if (error instanceof Error) {
