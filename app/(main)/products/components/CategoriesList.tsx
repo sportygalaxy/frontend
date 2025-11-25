@@ -52,8 +52,14 @@ export default function CategoriesList({
   });
 
   // Loading and error states for categories
-  if (categoriesIsLoading) return <div>Loading categories...</div>;
-  if (categoriesError) return <div>Error: {categoriesError?.message}</div>;
+  if (categoriesIsLoading)
+    return <div className="text-xs md:text-xs">Loading categories...</div>;
+  if (categoriesError)
+    return (
+      <div className="text-xs md:text-xs">
+        Error: {categoriesError?.message}
+      </div>
+    );
 
   const handleCategoryClick = (category: Category) => {
     setCategoryId(category?.id);
