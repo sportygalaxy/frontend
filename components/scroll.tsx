@@ -34,7 +34,7 @@ export const ScrollAreaHorizontal = <T,>({
           {data?.map((item, index) => (
             <div
               key={index}
-              className="relative w-[190px] md:w-[300px] h-[360px] md:h-[510px] flex-shrink-0 flex items-center justify-center bg-grey-gradient border-light rounded-md overflow-hidden group"
+              className="relative w-[180px] md:w-[270px] h-[360px] md:h-[510px] flex-shrink-0 flex items-center justify-center bg-grey-gradient border-light rounded-md overflow-hidden group"
             >
               {Component ? <Component item={item} /> : children}
             </div>

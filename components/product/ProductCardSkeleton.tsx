@@ -7,7 +7,7 @@ type ProductListSkeletonProps = {
 };
 
 const baseCardClasses =
-  "h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border border-gray-50 rounded-xl animate-pulse flex flex-col gap-4";
+  "h-[360px] sm:h-[510px] w-full max-w-[230px] sm:max-w-[320px] bg-white px-2 sm:px-6 py-2 sm:py-12 border border-gray-50 rounded-xl animate-pulse flex flex-col gap-4";
 
 const ProductCardSkeleton = ({ className }: { className?: string }) => (
   <div className={cn(baseCardClasses, className)}>
@@ -50,7 +50,7 @@ const ProductListSkeleton = ({
             {items.map((_, index) => (
               <div
                 key={`product-skeleton-horizontal-${index}`}
-                className="relative flex h-[360px] w-[190px] flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white md:h-[510px] md:w-[300px]"
+                className="relative flex h-[360px] w-[180px] flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white md:h-[510px] md:w-[270px]"
               >
                 <ProductCardSkeleton className="h-full w-full max-w-none px-3 sm:px-4" />
               </div>

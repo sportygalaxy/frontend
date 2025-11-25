@@ -50,7 +50,7 @@ const ProductCard: FC<Props> = (props) => {
   return (
     <Card
       key={item.id}
-      className={`h-[360px] sm:h-[510px] w-full max-w-[244px] sm:max-w-[344px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none group relative`}
+      className={`h-[360px] sm:h-[510px] w-full max-w-[230px] sm:max-w-[320px] bg-white px-2 sm:px-6 py-2 sm:py-12 border-none rounded-none shadow-none group relative`}
     >
       <p
         className={clsx(
