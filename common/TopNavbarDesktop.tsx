@@ -33,7 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import GlobalSearch from "./GlobalSearch";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface TopNavbarDesktopProps {
   isAuth: boolean;
@@ -42,6 +42,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const { isAuth } = props;
   const { logoutUser, isPending } = useLogout();
   const router = useRouter();
+  const pathname = usePathname();
 
   const { cart } = useCartStore();
 
@@ -103,12 +104,12 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
       name: "Notification",
       icon: (
         <>
-          <NotificationIcon
+          <ShoppingBag
             className="desktop-tablet-view"
             size={27}
             {...iconSize}
           />
-          <NotificationIcon
+          <ShoppingBag
             className="mobile-desktop-tablet-view"
             size={20}
             {...iconSize}
@@ -155,6 +156,11 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
+
+  const shouldShowGlobalSearch =
+    pathname === RoutesEnum.LANDING_PAGE ||
+    pathname.startsWith(RoutesEnum.PRODUCTS) ||
+    pathname.startsWith("/product/");
 
   return (
     <div className="relative flex-col w-full wrapper">
@@ -231,7 +237,9 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
               value={inputValue}
               onChange={handleChange}
             /> */}
-            <GlobalSearch onClearClick={handleCameraClick} />
+            {shouldShowGlobalSearch ? (
+              <GlobalSearch onClearClick={handleCameraClick} />
+            ) : null}
 
             {!!user || authenticated ? (
               <div className="items-center justify-between hidden gap-2 sm:flex sm:gap-4 xl:gap-10">

@@ -7,6 +7,8 @@ import useToggle from "@/hooks/useToggle";
 import useUserStore from "@/store/userStore";
 import { getCookie } from "cookies-next";
 import GlobalSearch from "./GlobalSearch";
+import { usePathname } from "next/navigation";
+import { RoutesEnum } from "@/constants/routeEnums";
 
 interface TopNavbarMobileProps {
   isAuth: boolean;
@@ -15,6 +17,7 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
   const { isAuth } = props;
   const { user } = useUserStore();
   const [authenticated, setAuthenticated] = useState(false);
+  const pathname = usePathname();
 
   const [openUploadModal, toggleUploadModal] = useToggle();
   const [inputValue, setInputValue] = useState("");
@@ -37,6 +40,11 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
     setInputValue(event.target.value);
   };
 
+  const shouldShowGlobalSearch =
+    pathname === RoutesEnum.LANDING_PAGE ||
+    pathname.startsWith(RoutesEnum.PRODUCTS) ||
+    pathname.startsWith("/product/");
+
   return (
     <div className="relative flex flex-col w-full gap-3 wrapper">
       <div className="flex flex-col gap-2">
@@ -57,7 +65,7 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
       </div>
 
       {isAuth ? null : (
-        <div className="mt-7">
+        <div className="mt-2">
           {/* <Search
             placeholder="Search.."
             onSearchClick={handleSearchClick}
@@ -66,7 +74,9 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
             onChange={handleChange}
             onClose={toggleUploadModal}
           /> */}
-          <GlobalSearch onClearClick={handleCameraClick} />
+          {shouldShowGlobalSearch ? (
+            <GlobalSearch onClearClick={handleCameraClick} />
+          ) : null}
         </div>
       )}
 
