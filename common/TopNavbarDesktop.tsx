@@ -56,6 +56,9 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     setAuthenticated(!!AUTHENTIATED);
   }, []);
 
+  const iconButtonClass =
+    "relative flex items-center justify-center rounded-full border border-secondary p-2 md:p-4 transition-colors duration-200 hover:bg-black hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+
   const iconSize = {
     color: "grey",
   };
@@ -127,7 +130,13 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     {
       id: 3,
       name: "Cart",
-      icon: <CartAddToCartDrawer data={iconSize} component={CartIcon} />,
+      icon: (
+        <CartAddToCartDrawer
+          data={iconSize}
+          component={CartIcon}
+          className={iconButtonClass}
+        />
+      ),
       path: "cart",
       notification: showCartQtyValue(cart),
       type: null,
@@ -231,9 +240,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
                     return (
                       <Popover key={cta.id}>
                         <PopoverTrigger
-                          className={cn(
-                            "p-2 md:p-4 border border-secondary rounded-full"
-                          )}
+                          className={cn(iconButtonClass)}
                         >
                           {cta.icon}
 
@@ -272,38 +279,35 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
                   if (cta.type === "link")
                     return (
-                      <>
-                        <span
-                          key={cta.id}
-                          onClick={() => router.push(RoutesEnum.NOTIFICATION)}
-                          className={cn(
-                            cta.name === "Notification" &&
-                              "p-2 md:p-4 border border-secondary rounded-full", "cursor-pointer"
-                          )}
-                        >
-                          {cta.icon}
+                      <button
+                        key={cta.id}
+                        type="button"
+                        onClick={() => router.push(RoutesEnum.NOTIFICATION)}
+                        className={cn(iconButtonClass)}
+                        aria-label={cta.name}
+                      >
+                        {cta.icon}
 
-                          {cta?.notification?.status ? (
-                            <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
-                              {cta?.notification?.value}
-                            </span>
-                          ) : null}
-                        </span>
-                      </>
+                        {cta?.notification?.status ? (
+                          <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                            {cta?.notification?.value}
+                          </span>
+                        ) : null}
+                      </button>
                     );
 
                   return (
                     <span
                       key={cta.id}
                       className={cn(
-                        cta.name !== "Cart" &&
-                          "p-2 md:p-4 border border-secondary rounded-full"
+                        "relative inline-flex items-center justify-center",
+                        cta.name !== "Cart" && iconButtonClass
                       )}
                     >
                       {cta.icon}
 
                       {cta?.notification?.status ? (
-                        <span className="absolute right-0 bottom-[-10px] md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
+                        <span className="absolute -right-4 bottom-0 md:bottom-6 bg-destructive rounded-full p-4 text-white h-6 w-6 flex items-center justify-center text-base font-bold">
                           {cta?.notification?.value}
                         </span>
                       ) : null}
