@@ -54,7 +54,7 @@ const CartItem: React.FC<CartItemProps> = ({
     0;
   return (
     <div className={cn("flex gap-10 md:gap-16 h-[154px]", className)}>
-      <div className="relative w-[40%] h-[100%] bg-[#E8EAEC] px-6 py-2">
+      <div className="relative w-[40%] h-[100%] px-6 py-2">
         <Image
           fill
           sizes="100%"

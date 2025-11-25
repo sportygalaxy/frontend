@@ -92,7 +92,18 @@ const BottomNavbarMobile: FC = () => {
         open={isOpen}
         onClose={toggleDrawer}
         direction="bottom"
-        size={isOpen === true && cart.length >= 1 ? "100%" : "50%"}
+        size={
+          !isOpen
+            ? "50%"
+            : cart.length === 0
+            ? "55%"
+            : cart.length > 3
+            ? "90%"
+            : "75%"
+        }
+        overlayOpacity={0.35}
+        overlayColor="#000"
+        lockBackgroundScroll={false}
       >
         <CartAddToCartDrawerMobile onClose={toggleDrawer} />
       </Drawer>

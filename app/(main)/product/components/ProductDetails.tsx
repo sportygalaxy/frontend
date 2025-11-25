@@ -103,7 +103,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
         // console.log("Form Submitted", values);
 
         addToCart(payload, true);
-        NotifySuccess("Proceed to checkout");
+        NotifySuccess("Proceeding to checkout");
         router.push(RoutesEnum.CHECKOUT);
       }}
     >

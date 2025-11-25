@@ -41,7 +41,7 @@ function CartAddToCartDrawer<T>({
   const isDesktop = useMediaQuery("(min-width: 640px)");
 
   const handleCheckout = () => {
-    NotifySuccess("Proceed to checkout");
+    NotifySuccess("Proceeding to checkout");
     window.location.href = RoutesEnum.CHECKOUT;
   };
 
