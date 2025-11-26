@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Jost } from "next/font/google";
-import "@/styles/globals.css";
-import TopLoader from "@/common/Loaders/TopLoader";
 import {
   appDescription,
   appSeoKeywords,
   appTitle,
   webBaseUrl,
 } from "@/api/constants";
-import getPageTitle from "@/helpers/getPageTitle";
-import { logoUrl, NAV_CONSTANT } from "@/constants/appConstants";
-import Script from "next/script";
-import getScriptJson from "@/helpers/getScriptJson";
-import { Suspense } from "react";
-import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
-import ReactQueryProvider from "../providers/ReactQueryProvider";
-import { Toaster } from "sonner";
 import LenisScroll from "@/common/LenisScroll";
+import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
+import TopLoader from "@/common/Loaders/TopLoader";
+import { logoUrl, NAV_CONSTANT } from "@/constants/appConstants";
+import getPageTitle from "@/helpers/getPageTitle";
+import getScriptJson from "@/helpers/getScriptJson";
+import "@/styles/globals.css";
+import type { Metadata } from "next";
+import { Jost } from "next/font/google";
+import Script from "next/script";
+import { Suspense } from "react";
+import { Toaster } from "sonner";
+import ReactQueryProvider from "../providers/ReactQueryProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(webBaseUrl),
@@ -67,7 +67,7 @@ export default function RootLayout({
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document, 'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '828613949547289');
+      fbq('init', '3150760568418130');
       fbq('track', 'PageView');
     `,
             }}
@@ -80,7 +80,7 @@ export default function RootLayout({
         height="1"
         width="1"
         style="display:none"
-        src="https://www.facebook.com/tr?id=828613949547289&ev=PageView&noscript=1"
+        src="https://www.facebook.com/tr?id=3150760568418130&ev=PageView&noscript=1"
         alt="facebook-pixel"
       />
     `,
