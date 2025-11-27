@@ -11,6 +11,7 @@ import { showCartQtyValue } from "@/helpers/cart";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import CartAddToCartDrawerMobile from "@/components/cart/CartAddToCartDrawerMobile";
+import { ShoppingBag } from "iconsax-react";
 
 interface CtaLink {
   id: number;
@@ -52,8 +53,8 @@ const BottomNavbarMobile: FC = () => {
     },
     {
       id: 3,
-      name: "Notification",
-      Icon: (props) => <NotificationIcon {...props} />,
+      name: "Orders",
+      Icon: (props) => <ShoppingBag {...props} />,
       path: RoutesEnum.NOTIFICATION,
     },
     {
