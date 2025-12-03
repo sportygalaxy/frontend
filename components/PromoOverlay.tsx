@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import promoGif from "@/assets/images/promo.jpg";
 import Modal from "@/common/Modal";
 import useUserStore from "@/store/userStore";
-import promoGif from "@/assets/gif/promo.gif";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 type PromoStorage = {
   weekStart: string;
@@ -81,7 +81,10 @@ const PromoOverlay = () => {
       onOpenChange={setOpen}
       className="max-w-3xl border-none bg-transparent p-0 shadow-none sm:max-w-4xl"
     >
-      <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-transparent">
+      <div
+        onClick={() => setOpen(false)}
+        className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-transparent"
+      >
         <Image
           src={promoGif}
           alt="Sporty Galaxy promo"
