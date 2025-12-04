@@ -1,7 +1,6 @@
 import Footer from "@/common/Footer";
 import SportygalaxyLoadingIndicator from "@/common/Loaders/SportygalaxyLoadingIndicator";
 import Navbar from "@/common/Navbar";
-import PromoOverlay from "@/components/PromoOverlay";
 import "@/styles/globals.css";
 import { Suspense } from "react";
 
@@ -25,7 +24,7 @@ export default function RootLayout({
           {children}
 
           {/* TODO: activate promo overlay */}
-          <PromoOverlay />
+          {/* <PromoOverlay /> */}
         </Suspense>
       </main>
 
