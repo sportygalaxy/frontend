@@ -43,7 +43,13 @@ export const metadata: Metadata = {
 };
 
 const jost = Jost({ subsets: ["latin"] });
-const tiktokPixelId = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
+const tiktokPixelIds = [
+  "D4OP2IBC77UA1JCQ6M1G",
+  "D4OVECBC77U4IAHDU1L0",
+].filter(Boolean);
+const tiktokLoadCalls = tiktokPixelIds
+  .map((id) => `ttq.load('${id}');`)
+  .join("\n");
 
 export default function RootLayout({
   children,
@@ -54,9 +60,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jost.className}`}>
         <ReactQueryProvider>
-          {/* TikTok Pixel 1 */}
+          {/* TikTok Pixels */}
           <Script
-            id="tiktok-pixel"
+            id="tiktok-pixels"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
@@ -90,50 +96,7 @@ export default function RootLayout({
                       pixelId = d.getElementsByTagName("script")[0];
                       pixelId.parentNode.insertBefore(config, pixelId);
                     };
-                    ttq.load('D4OP2IBC77UA1JCQ6M1G');
-                    ttq.page();
-                  }(window, document, 'ttq');
-                `,
-            }}
-          />
-
-          {/* TikTok Pixel 2 */}
-          <Script
-            id="tiktok-pixel"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                  !function (w, d, t) {
-                    w.TiktokAnalyticsObject = t;
-                    var ttq = (w[t] = w[t] || []);
-                    ttq.methods = ["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"];
-                    ttq.setAndDefer = function (obj, method) {
-                      obj[method] = function () {
-                        obj.push([method].concat(Array.prototype.slice.call(arguments, 0)));
-                      };
-                    };
-                    for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
-                    ttq.instance = function (id) {
-                      for (var inst = ttq._i[id] || [], n = 0; n < ttq.methods.length; n++) ttq.setAndDefer(inst, ttq.methods[n]);
-                      return inst;
-                    };
-                    ttq.load = function (pixelId, config) {
-                      var url = "https://analytics.tiktok.com/i18n/pixel/events.js";
-                      ttq._i = ttq._i || {};
-                      ttq._i[pixelId] = [];
-                      ttq._i[pixelId]._u = url;
-                      ttq._t = ttq._t || {};
-                      ttq._t[pixelId] = +new Date();
-                      ttq._o = ttq._o || {};
-                      ttq._o[pixelId] = config || {};
-                      config = d.createElement("script");
-                      config.type = "text/javascript";
-                      config.async = true;
-                      config.src = url + "?sdkid=" + pixelId + "&lib=" + t;
-                      pixelId = d.getElementsByTagName("script")[0];
-                      pixelId.parentNode.insertBefore(config, pixelId);
-                    };
-                    ttq.load('D4OVECBC77U4IAHDU1L0');
+                    ${tiktokLoadCalls}
                     ttq.page();
                   }(window, document, 'ttq');
                 `,
