@@ -37,7 +37,7 @@ const ProductList: FC<Props> = ({
     ? data?.data?.results || []
     : productData || [];
 
-  const productList: TProduct[] = isMobile ? products?.slice(0, 4) : products;
+  const productList: TProduct[] = isMobile ? products?.slice(0, 6) : products;
 
   return (
     <>

@@ -10,14 +10,14 @@ export default function Navbar(props: NavbarProps) {
   const { isAuth } = props;
   return (
     <>
-      <DesktopNavbar className="sticky top-0 z-10 bg-white">
+      <DesktopNavbar className="sticky top-0 z-40 bg-white">
         <section className="items-center justify-center hidden w-full sm:flex">
           <TopNavbarDesktop isAuth={isAuth} />
         </section>
       </DesktopNavbar>
 
-      <MobileNavbar className="sticky top-0 z-10 bg-background">
-        <section className="flex w-full sm:hidden mt-14">
+      <MobileNavbar className="sticky top-0 z-40 bg-background">
+        <section className="flex w-full sm:hidden mt-8 md:mt-14">
           <TopNavbarMobile isAuth={isAuth} />
         </section>
       </MobileNavbar>

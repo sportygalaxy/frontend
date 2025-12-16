@@ -48,6 +48,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
 
   const { user } = useUserStore();
   const [authenticated, setAuthenticated] = useState(false);
+  const [isCondensed, setIsCondensed] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
   const [openUploadModal, toggleUploadModal] = useToggle();
@@ -55,6 +56,28 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
   useEffect(() => {
     const AUTHENTIATED = getCookie("token");
     setAuthenticated(!!AUTHENTIATED);
+  }, []);
+
+  useEffect(() => {
+    let ticking = false;
+    const updateCondensed = () => {
+      const shouldCondense = window.scrollY > 120;
+      setIsCondensed((prev) =>
+        prev === shouldCondense ? prev : shouldCondense
+      );
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateCondensed);
+        ticking = true;
+      }
+    };
+
+    updateCondensed();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const iconButtonClass =
@@ -162,9 +185,30 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
     pathname.startsWith(RoutesEnum.PRODUCTS) ||
     pathname.startsWith("/product/");
 
+  const containerClasses = cn(
+    "relative flex-col w-full wrapper transition-all duration-300",
+    isCondensed
+      ? "py-2 bg-white/95 backdrop-blur-md shadow-sm supports-[backdrop-filter]:backdrop-blur"
+      : "py-4"
+  );
+
+  const topMetaClasses = cn(
+    "flex items-center justify-between gap-4 overflow-hidden transition-[max-height,opacity,margin] duration-300",
+    isCondensed ? "max-h-0 opacity-0 -my-2" : "max-h-24 opacity-100 py-3"
+  );
+
+  const mainRowClasses = cn(
+    "flex items-center justify-between gap-8 transition-[padding,gap] duration-300",
+    isAuth && "w-fit",
+    isCondensed ? "py-2 gap-4" : "py-4"
+  );
+
   return (
-    <div className="relative flex-col w-full wrapper">
-      <section className="flex items-center justify-between gap-4 py-4">
+    <div
+      className={containerClasses}
+      data-condensed={isCondensed ? "true" : "false"}
+    >
+      <section className={topMetaClasses} aria-hidden={isCondensed}>
         <ol className="flex gap-6 md:gap-16">
           {NavLink.map((link) => (
             <li
@@ -207,12 +251,7 @@ const TopNavbarDesktop: FC<TopNavbarDesktopProps> = (props) => {
         )}
       </section>
 
-      <section
-        className={cn(
-          "flex items-center justify-between gap-8",
-          isAuth && "w-fit"
-        )}
-      >
+      <section className={mainRowClasses}>
         <Logo />
 
         {isAuth ? (

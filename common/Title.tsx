@@ -1,11 +1,12 @@
 "use client";
 
+import Ribbon from "@/assets/images/ribbon.png";
 import { Button } from "@/components/ui/button";
-import React, { FC } from "react";
-import Divider from "./Divider";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import BackButton from "./BackButton";
+import { FC } from "react";
+import Divider from "./Divider";
 
 interface Props {}
 
@@ -49,13 +50,25 @@ export const DesktopTitle = ({
     <>
       <div
         className={cn(
-          "sm:mt-20 flex items-end gap-1 w-full",
+          "sm:mt-20 flex w-full items-center gap-3",
           general ? "" : "desktop-tablet-view "
         )}
       >
-        <h1 className="min-w-[190px] text-xl md:text-3xl font-bold">{title}</h1>
+        <h1 className="whitespace-nowrap text-xl md:text-3xl font-bold">
+          {title}
+        </h1>
         {noLine ? null : (
-          <Divider className="bg-gray-200 border-[0.2px] border-[#e7e7e7]" />
+          <div className="relative flex w-full items-center gap-3">
+            <Divider className="flex-1 bg-gray-200 border-[0.2px] border-[#e7e7e7]" />
+            <Image
+              src={Ribbon}
+              alt="Festive ribbon"
+              className="hidden flex-shrink-0 sm:block object-contain"
+              sizes="(min-width: 1280px) 96px, (min-width: 768px) 72px, 56px"
+              width={96}
+              height={96}
+            />
+          </div>
         )}
       </div>
     </>

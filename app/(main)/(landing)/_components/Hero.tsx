@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { RoutesEnum } from "@/constants/routeEnums";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 const Hero = () => {
   const router = useRouter();
