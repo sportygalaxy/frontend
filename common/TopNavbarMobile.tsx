@@ -18,6 +18,7 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
   const { user } = useUserStore();
   const [authenticated, setAuthenticated] = useState(false);
   const pathname = usePathname();
+  const [isCondensed, setIsCondensed] = useState(false);
 
   const [openUploadModal, toggleUploadModal] = useToggle();
   const [inputValue, setInputValue] = useState("");
@@ -25,6 +26,28 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
   useEffect(() => {
     const AUTHENTIATED = getCookie("token");
     setAuthenticated(!!AUTHENTIATED);
+  }, []);
+
+  useEffect(() => {
+    let ticking = false;
+    const updateCondensed = () => {
+      const shouldCondense = window.scrollY > 80;
+      setIsCondensed((prev) =>
+        prev === shouldCondense ? prev : shouldCondense
+      );
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateCondensed);
+        ticking = true;
+      }
+    };
+
+    updateCondensed();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleSearchClick = () => {
@@ -46,13 +69,23 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
     pathname.startsWith("/product/");
 
   return (
-    <div className="relative flex flex-col w-full gap-3 wrapper">
-      <div className="flex flex-col gap-2">
-        {/* logged in
-         */}
+    <div
+      className={`relative flex flex-col w-full gap-3 wrapper transition-all duration-300 ${
+        isCondensed
+          ? "bg-white/95 backdrop-blur-md shadow-sm supports-[backdrop-filter]:backdrop-blur py-3"
+          : "py-5"
+      }`}
+      data-condensed={isCondensed ? "true" : "false"}
+    >
+      <div className="flex items-center justify-between">
         <Logo />
+      </div>
 
-        {/* not logged in */}
+      <div
+        className={`flex flex-col gap-2 overflow-hidden transition-[max-height,opacity,margin] duration-300 ${
+          isCondensed ? "max-h-0 opacity-0 -my-2" : "max-h-20 opacity-100"
+        }`}
+      >
         {!!user || authenticated ? (
           <p className="text-xl font-medium capitalize">
             Hello {user?.firstName},
@@ -65,7 +98,11 @@ const TopNavbarMobile: FC<TopNavbarMobileProps> = (props) => {
       </div>
 
       {isAuth ? null : (
-        <div className="mt-2">
+        <div
+          className={`transition-[margin,opacity] duration-300 ${
+            isCondensed ? "mt-0" : "mt-2"
+          }`}
+        >
           {/* <Search
             placeholder="Search.."
             onSearchClick={handleSearchClick}

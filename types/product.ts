@@ -26,6 +26,7 @@ export type TProductQuery = {
   };
   sort?: undefined | "asc" | "desc";
   sortBy?: undefined | "price" | "createdAt" | string;
+  random?: boolean;
 
   createdAt?: string | null | undefined;
   updatedAt?: Date | null;

@@ -1,15 +1,20 @@
+import NewsletterBg from "@/assets/images/newsletter.png";
 import { Button } from "@/components/ui/button";
-import React from "react";
 
 const NewsLetter = () => {
   return (
-    <div className="w-full bg-[#292D32] py-20 flex items-start justify-center bg-fixed">
-      <div className="bg-primary rounded-3xl max-w-4xl py-20 px-36 flex flex-col items-center justify-center gap-24">
+    <div
+      className="relative isolate flex w-full items-start justify-center bg-fixed bg-cover bg-center bg-no-repeat py-20"
+      style={{ backgroundImage: `url(${NewsletterBg.src})` }}
+    >
+      {/* <div className="absolute inset-0 bg-black/55" /> */}
+
+      <div className="relative z-10 flex max-w-4xl flex-col items-center justify-center gap-24 rounded-3xl bg-primary py-20 px-6 sm:px-12 lg:px-36">
         <div className="flex flex-col items-center justify-center">
-          <p className="text-mobile-3xl md:text-3xl font-normal text-secondary">
+          <p className="text-mobile-3xl md:text-3xl font-normal font-jost text-secondary">
             Our Newsletter
           </p>
-          <p className="text-mobile-5xl md:text-5xl font-bold text-primary-foreground">
+          <p className="text-mobile-5xl md:text-5xl font-bold text-primary-foreground font-jost">
             Get the latest updates
           </p>
         </div>

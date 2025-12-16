@@ -1,20 +1,21 @@
 "use client";
+import Bubble from "@/assets/images/bubble.png";
 import Add from "@/common/Add";
 import LinkComponent from "@/common/Link";
+import Minus from "@/common/Minus";
 import TooltipWrapper from "@/components/tooltip";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
+import { calculatePercentageDecrease } from "@/helpers/product-discount";
 import { useHydration } from "@/hooks/useHydration";
 import useToggle from "@/hooks/useToggle";
 import { cn } from "@/lib/utils";
 import useCartStore from "@/store/cartStore";
 import { TProduct } from "@/types/product";
-import Image from "next/image";
-import React, { FC } from "react";
-import Minus from "@/common/Minus";
-import { DEFAULT_PRODUCT_IMAGE } from "@/constants/appConstants";
 import { formatCurrency } from "@/utils/currencyUtils";
-import { calculatePercentageDecrease } from "@/helpers/product-discount";
 import clsx from "clsx";
+import Image from "next/image";
+import { FC } from "react";
 
 interface Props {
   item: TProduct;
@@ -62,6 +63,12 @@ const ProductCard: FC<Props> = (props) => {
       </p>
       <LinkComponent {...contentProps}>
         <CardHeader className="relative w-full h-[65%] bg-[#f5f5f7] overflow-hidden">
+          <Image
+            src={Bubble}
+            alt="Festive baubles"
+            className="absolute left-2 top-4 w-14 sm:w-20 md:w-24 h-auto pointer-events-none select-none drop-shadow-md z-10"
+            priority
+          />
           <Image
             fill
             sizes="100%"
