@@ -144,7 +144,7 @@ const RegistrationForm: React.FC = () => {
         return (
           <Form className="flex flex-col items-center justify-start w-full h-screen my-20 bg-background">
             <div className="flex flex-col items-center justify-start w-full">
-              <div className="w-full mx-auto md:max-w-screen-sm space-y-11">
+              <div className="w-full mx-auto md:max-w-screen-sm space-y-6 md:space-y-11">
                 <div className="relative flex flex-col items-center gap-5 xs:flex-row">
                   <label
                     className="flex justify-start flex-1 w-full xs:justify-end"
@@ -427,8 +427,8 @@ const RegistrationForm: React.FC = () => {
                       , (b) 
                       <span className="text-black">Terms of Use</span>, and (c) 
                       <span className="text-black">Privacy Policy</span>. I
-                      agree to receive more information from sportygalaxy.com about
-                      its products and services.
+                      agree to receive more information from sportygalaxy.com
+                      about its products and services.
                     </label>
                   </div>
                 </div>

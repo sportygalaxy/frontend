@@ -24,7 +24,7 @@ import { TProductQuery } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
 import { Filter } from "iconsax-react";
 import debounce from "lodash.debounce";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation"; // Import Next.js hooks
 import { useCallback, useEffect, useState } from "react";
 import ProductList from "../product/components/ProductList";
@@ -72,6 +72,7 @@ export default function Products() {
 
   // Initialize filter state from URL query params
   const [filter, setFilter] = useState<TProductQuery>(defaultFilter);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["products", filter],
@@ -194,6 +195,271 @@ export default function Products() {
   const CustomError = () => <div>An Error Occured...</div>;
   const CustomEmpty = () => <div>No result found...</div>;
 
+  const filterContent = (
+    <div className="space-y-4">
+      <CategoriesList
+        filter={filter}
+        setFilter={setFilter}
+        updateUrlQuery={updateUrlQuery}
+        _debouncedSubmit={_debouncedSubmit}
+      />
+
+      {/* ACCODIAN */}
+      <div>
+        <p className="text-sm font-normal uppercase">Filter</p>
+        <Accordion type="multiple" className="animate-none">
+          {/* Color filter */}
+          <AccordionItem value="color">
+            <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+              <span className="text-mobile-xl md:text-sm font-bold text-gray-900">
+                Color
+              </span>
+            </AccordionTrigger>
+
+            <AccordionContent className="animate-none pt-6">
+              <ul className="space-y-4">
+                {COLOR_FILTERS.options.map((option, optionIdx) => (
+                  <li key={option.value} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`color-${optionIdx}`}
+                      onChange={() => {
+                        applyArrayFilter({
+                          category: "color",
+                          value: option.value,
+                        });
+                      }}
+                      checked={filter?.color?.includes(option.value)}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <label
+                      htmlFor={`color-${optionIdx}`}
+                      className="ml-3 text-mobile-xl md:text-xs text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Size filter */}
+          <AccordionItem value="size">
+            <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+              <span className="text-mobile-xl md:text-sm font-bold  text-gray-900">
+                Size
+              </span>
+            </AccordionTrigger>
+
+            <AccordionContent className="animate-none pt-6">
+              <ul className="space-y-4">
+                {SIZE_FILTERS.options.map((option, optionIdx) => (
+                  <li key={option.value} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`size-${optionIdx}`}
+                      onChange={() => {
+                        applyArrayFilter({
+                          category: "size",
+                          value: option.value,
+                        });
+                      }}
+                      checked={filter?.size?.includes(option.value)}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <label
+                      htmlFor={`size-${optionIdx}`}
+                      className="ml-3 text-mobile-xl md:text-xs text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Type filter */}
+          <AccordionItem value="type">
+            <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+              <span className="text-mobile-xl md:text-sm font-bold  text-gray-900">
+                Type
+              </span>
+            </AccordionTrigger>
+
+            <AccordionContent className="animate-none pt-6">
+              <ul className="space-y-4">
+                {TYPE_FILTERS.options.map((option, optionIdx) => (
+                  <li key={option.value} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`type-${optionIdx}`}
+                      onChange={() => {
+                        applyArrayFilter({
+                          category: "type",
+                          value: option.value,
+                        });
+                      }}
+                      checked={filter?.type?.includes(option.value)}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <label
+                      htmlFor={`type-${optionIdx}`}
+                      className="ml-3 text-mobile-xl md:text-xs text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Price filter */}
+          <AccordionItem value="price">
+            <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
+              <span className="text-mobile-xl md:text-sm font-bold text-gray-900">
+                Price
+              </span>
+            </AccordionTrigger>
+
+            <AccordionContent className="animate-none pt-6">
+              <ul className="space-y-4">
+                {PRICE_FILTERS.options.map((option, optionIdx) => (
+                  <li key={option.label} className="flex items-center">
+                    <input
+                      type="radio"
+                      id={`price-${optionIdx}`}
+                      onChange={() => {
+                        const updatedFilter = {
+                          ...filter,
+                          price: {
+                            isCustom: false,
+                            range: [...(option.value as [number, number])],
+                          },
+                          page: 1, // Reset page to 1 when filters are updated
+                        };
+
+                        setFilter(updatedFilter as any);
+
+                        // Sync the new price filter with the URL
+                        updateUrlQuery(updatedFilter as any);
+
+                        // Debounced submit to refetch data with new filters
+                        _debouncedSubmit();
+                      }}
+                      checked={
+                        !filter?.price?.isCustom &&
+                        filter?.price?.range[0] === option.value[0] &&
+                        filter?.price?.range[1] === option.value[1]
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <label
+                      htmlFor={`price-${optionIdx}`}
+                      className="ml-3 text-mobile-xl md:text-xs text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </li>
+                ))}
+
+                <li className="flex flex-col gap-2">
+                  <div>
+                    <input
+                      type="radio"
+                      id={`price-${PRICE_FILTERS.options.length}`}
+                      onChange={() => {
+                        const updatedFilter = {
+                          ...filter,
+                          price: {
+                            isCustom: true,
+                            range: [0, 100],
+                          },
+                          page: 1, // Reset page to 1 when filters are updated
+                        };
+
+                        setFilter(updatedFilter as any);
+
+                        // Sync custom price filter with the URL
+                        updateUrlQuery(updatedFilter as any);
+
+                        // Debounced submit to refetch data with new filters
+                        _debouncedSubmit();
+                      }}
+                      checked={filter?.price?.isCustom}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <label
+                      htmlFor={`price-${PRICE_FILTERS.options.length}`}
+                      className="ml-3 text-mobile-xl md:text-xs text-gray-600"
+                    >
+                      Custom
+                    </label>
+                  </div>
+
+                  <div className="mt-2 flex flex-col md:justify-between">
+                    <p className="text-mobile-xl md:text-xs font-normal">
+                      Price range
+                    </p>
+
+                    <div className="text-mobile-xl md:text-sm">
+                      {filter?.price?.isCustom
+                        ? minPrice?.toFixed(0)
+                        : filter?.price?.range[0].toFixed(0)}{" "}
+                      ₦ -{" "}
+                      {filter?.price?.isCustom
+                        ? maxPrice?.toFixed(0)
+                        : filter?.price?.range[1].toFixed(0)}{" "}
+                      ₦
+                    </div>
+                  </div>
+
+                  <Slider
+                    className={cn({
+                      "opacity-50": !filter?.price?.isCustom,
+                    })}
+                    disabled={!filter?.price?.isCustom}
+                    onValueChange={(range) => {
+                      const [newMin, newMax] = range;
+
+                      const updatedFilter = {
+                        ...filter,
+                        price: {
+                          isCustom: true,
+                          range: [newMin, newMax] as [number, number],
+                        },
+                        page: 1, // Reset page to 1 when filters are updated
+                      };
+
+                      setFilter(updatedFilter);
+
+                      // Sync the custom price range with the URL
+                      updateUrlQuery(updatedFilter);
+
+                      // Debounced submit to refetch data with new filters
+                      _debouncedSubmit();
+                    }}
+                    value={
+                      filter?.price?.isCustom
+                        ? filter?.price?.range
+                        : DEFAULT_CUSTOM_PRICE
+                    }
+                    min={DEFAULT_CUSTOM_PRICE[0]}
+                    defaultValue={DEFAULT_CUSTOM_PRICE}
+                    max={DEFAULT_CUSTOM_PRICE[1]}
+                    step={5}
+                  />
+                </li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  );
+
   return (
     <div className="wrapper">
       <div className="relative">
@@ -247,9 +513,9 @@ export default function Products() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <button className="-m-2 ml-2 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+              {/* <button className="-m-2 ml-2 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
                 <Filter color="#000" className="h-4 w-4" />
-              </button>
+              </button> */}
             </div>
 
             <div className="flex items-center">
@@ -295,7 +561,14 @@ export default function Products() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <button className="-m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+              <button
+                className="flex items-center gap-2 -m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                onClick={() => setShowMobileFilters(true)}
+                aria-label="Open filters"
+              >
+                <p className="inline-flex justify-center text-mobile-2xl md:text-xl font-bold text-gray-700 hover:text-gray-900">
+                  Filter
+                </p>
                 <Filter color="#000" className="h-4 w-4" />
               </button>
             </div>
@@ -319,271 +592,14 @@ export default function Products() {
         </div>
       </div>
 
-      <div className="flex gap-4 mt-10">
-        <div className="block space-y-4">
-          <CategoriesList
-            filter={filter}
-            setFilter={setFilter}
-            updateUrlQuery={updateUrlQuery}
-            _debouncedSubmit={_debouncedSubmit}
-          />
-
-          {/* ACCODIAN */}
-          <div>
-            <p className="uppercase font-normal text-sm">Filter</p>
-            <Accordion type="multiple" className="animate-none">
-              {/* Color filter */}
-              <AccordionItem value="color">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-xl md:text-sm font-bold text-gray-900">
-                    Color
-                  </span>
-                </AccordionTrigger>
-
-                <AccordionContent className="pt-6 animate-none">
-                  <ul className="space-y-4">
-                    {COLOR_FILTERS.options.map((option, optionIdx) => (
-                      <li key={option.value} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`color-${optionIdx}`}
-                          onChange={() => {
-                            applyArrayFilter({
-                              category: "color",
-                              value: option.value,
-                            });
-                          }}
-                          checked={filter?.color?.includes(option.value)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <label
-                          htmlFor={`color-${optionIdx}`}
-                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
-                        >
-                          {option.label}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Size filter */}
-              <AccordionItem value="size">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-xl md:text-sm font-bold  text-gray-900">
-                    Size
-                  </span>
-                </AccordionTrigger>
-
-                <AccordionContent className="pt-6 animate-none">
-                  <ul className="space-y-4">
-                    {SIZE_FILTERS.options.map((option, optionIdx) => (
-                      <li key={option.value} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`size-${optionIdx}`}
-                          onChange={() => {
-                            applyArrayFilter({
-                              category: "size",
-                              value: option.value,
-                            });
-                          }}
-                          checked={filter?.size?.includes(option.value)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <label
-                          htmlFor={`size-${optionIdx}`}
-                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
-                        >
-                          {option.label}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Type filter */}
-              <AccordionItem value="type">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-xl md:text-sm font-bold  text-gray-900">
-                    Type
-                  </span>
-                </AccordionTrigger>
-
-                <AccordionContent className="pt-6 animate-none">
-                  <ul className="space-y-4">
-                    {TYPE_FILTERS.options.map((option, optionIdx) => (
-                      <li key={option.value} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`type-${optionIdx}`}
-                          onChange={() => {
-                            applyArrayFilter({
-                              category: "type",
-                              value: option.value,
-                            });
-                          }}
-                          checked={filter?.type?.includes(option.value)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <label
-                          htmlFor={`type-${optionIdx}`}
-                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
-                        >
-                          {option.label}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Price filter */}
-              <AccordionItem value="price">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="text-mobile-xl md:text-sm font-bold text-gray-900">
-                    Price
-                  </span>
-                </AccordionTrigger>
-
-                <AccordionContent className="pt-6 animate-none">
-                  <ul className="space-y-4">
-                    {PRICE_FILTERS.options.map((option, optionIdx) => (
-                      <li key={option.label} className="flex items-center">
-                        <input
-                          type="radio"
-                          id={`price-${optionIdx}`}
-                          onChange={() => {
-                            const updatedFilter = {
-                              ...filter,
-                              price: {
-                                isCustom: false,
-                                range: [...(option.value as [number, number])],
-                              },
-                              page: 1, // Reset page to 1 when filters are updated
-                            };
-
-                            setFilter(updatedFilter as any);
-
-                            // Sync the new price filter with the URL
-                            updateUrlQuery(updatedFilter as any);
-
-                            // Debounced submit to refetch data with new filters
-                            _debouncedSubmit();
-                          }}
-                          checked={
-                            !filter?.price?.isCustom &&
-                            filter?.price?.range[0] === option.value[0] &&
-                            filter?.price?.range[1] === option.value[1]
-                          }
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <label
-                          htmlFor={`price-${optionIdx}`}
-                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
-                        >
-                          {option.label}
-                        </label>
-                      </li>
-                    ))}
-
-                    <li className="flex justify-center flex-col gap-2">
-                      <div>
-                        <input
-                          type="radio"
-                          id={`price-${PRICE_FILTERS.options.length}`}
-                          onChange={() => {
-                            const updatedFilter = {
-                              ...filter,
-                              price: {
-                                isCustom: true,
-                                range: [0, 100],
-                              },
-                              page: 1, // Reset page to 1 when filters are updated
-                            };
-
-                            setFilter(updatedFilter as any);
-
-                            // Sync custom price filter with the URL
-                            updateUrlQuery(updatedFilter as any);
-
-                            // Debounced submit to refetch data with new filters
-                            _debouncedSubmit();
-                          }}
-                          checked={filter?.price?.isCustom}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <label
-                          htmlFor={`price-${PRICE_FILTERS.options.length}`}
-                          className="ml-3 text-mobile-xl md:text-xs text-gray-600"
-                        >
-                          Custom
-                        </label>
-                      </div>
-
-                      <div className="flex flex-col md:justify-between mt-4">
-                        <p className="font-normal text-mobile-xl md:text-xs">
-                          Price range
-                        </p>
-
-                        <div className="text-mobile-xl md:text-sm">
-                          {filter?.price?.isCustom
-                            ? minPrice?.toFixed(0)
-                            : filter?.price?.range[0].toFixed(0)}{" "}
-                          ₦ -{" "}
-                          {filter?.price?.isCustom
-                            ? maxPrice?.toFixed(0)
-                            : filter?.price?.range[1].toFixed(0)}{" "}
-                          ₦
-                        </div>
-                      </div>
-
-                      <Slider
-                        className={cn({
-                          "opacity-50": !filter?.price?.isCustom,
-                        })}
-                        disabled={!filter?.price?.isCustom}
-                        onValueChange={(range) => {
-                          const [newMin, newMax] = range;
-
-                          const updatedFilter = {
-                            ...filter,
-                            price: {
-                              isCustom: true,
-                              range: [newMin, newMax] as [number, number],
-                            },
-                            page: 1, // Reset page to 1 when filters are updated
-                          };
-
-                          setFilter(updatedFilter);
-
-                          // Sync the custom price range with the URL
-                          updateUrlQuery(updatedFilter);
-
-                          // Debounced submit to refetch data with new filters
-                          _debouncedSubmit();
-                        }}
-                        value={
-                          filter?.price?.isCustom
-                            ? filter?.price?.range
-                            : DEFAULT_CUSTOM_PRICE
-                        }
-                        min={DEFAULT_CUSTOM_PRICE[0]}
-                        defaultValue={DEFAULT_CUSTOM_PRICE}
-                        max={DEFAULT_CUSTOM_PRICE[1]}
-                        step={5}
-                      />
-                    </li>
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
+      <div className="mt-10 flex flex-col gap-6 lg:flex-row">
+        {/* Filter section */}
+        <div className="hidden w-[280px] flex-shrink-0 lg:block">
+          {filterContent}
         </div>
 
-        <section className="flex flex-col w-full">
+        {/* Product List section */}
+        <section className="flex w-full flex-col">
           <ComponentStateWrapper
             isLoading={isLoading}
             error={error}
@@ -658,9 +674,9 @@ export default function Products() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+                {/* <button className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
                   <Filter className="h-5 w-5" />
-                </button>
+                </button> */}
               </div>
             </section>
 
@@ -679,6 +695,50 @@ export default function Products() {
           </section>
         </section>
       </div>
+
+      {/* Mobile filter drawer */}
+      {showMobileFilters ? (
+        <div className="fixed inset-0 z-50 bg-black/40 px-0 lg:hidden">
+          <div className="absolute inset-0 overflow-y-auto bg-white p-4 pb-[calc(env(safe-area-inset-bottom,0px)+24px)]">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-lg font-semibold">Filters</p>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowMobileFilters(false)}
+                aria-label="Close filters"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {filterContent}
+
+            <div className="mt-6 flex items-center justify-end gap-3">
+              {!isFilterEmpty(filter) ? (
+                <Button
+                  variant="outline"
+                  className="text-sm"
+                  onClick={() => {
+                    const defaultFilter = {};
+                    setFilter(defaultFilter);
+                    updateUrlQuery(defaultFilter);
+                    _debouncedSubmit();
+                  }}
+                >
+                  Clear all
+                </Button>
+              ) : null}
+              <Button
+                className="text-sm"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                Apply
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
