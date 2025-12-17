@@ -64,6 +64,7 @@ export const MobileNavbar = <T,>({
         "col-span-12 mx-auto w-full flex justify-center items-center",
         className
       )}
+      data-mobile-navbar
     >
       {Component ? <Component /> : children}
     </header>

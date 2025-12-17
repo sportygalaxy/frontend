@@ -66,7 +66,7 @@ const ProductCard: FC<Props> = (props) => {
           <Image
             src={Bubble}
             alt="Festive baubles"
-            className="absolute left-2 top-4 w-14 sm:w-20 md:w-24 h-auto pointer-events-none select-none drop-shadow-md z-10"
+            className="absolute left-2 top-4 w-14 sm:w-20 md:w-24 h-auto pointer-events-none select-none drop-shadow-md z-[2]"
             priority
           />
           <Image
