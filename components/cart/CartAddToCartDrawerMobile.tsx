@@ -4,6 +4,7 @@ import { NotifySuccess } from "@/helpers/toasts";
 import useCartStore from "@/store/cartStore";
 import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import CartClearAll from "./CartClearAll";
@@ -22,41 +23,58 @@ function CartAddToCartDrawerMobile<T>({
   const router = useRouter();
   const { cart } = useCartStore();
 
+  useEffect(() => {
+    const mobileNav = document.querySelector("[data-mobile-navbar]");
+    if (mobileNav) {
+      mobileNav.classList.add("cart-drawer-nav-open");
+    }
+
+    return () => {
+      if (mobileNav) {
+        mobileNav.classList.remove("cart-drawer-nav-open");
+      }
+    };
+  }, []);
+
   const handleCheckout = async () => {
     NotifySuccess("Proceeding to checkout");
     window.location.href = RoutesEnum.CHECKOUT;
   };
 
   return (
-    <div className="flex h-full flex-col bg-background overflow-hidden">
+    <div
+      className="flex h-full max-h-[calc(100vh-64px)] sm:max-h-[calc(100vh-80px)] flex-col overflow-hidden rounded-t-2xl bg-background pt-[env(safe-area-inset-top,0px)]"
+      // style={{ zIndex: 1000 }}
+    >
       {/* Header */}
-      <div className="flex flex-col items-center justify-between p-4 bg-background rounded-tl-[12px] rounded-tr-[12px]">
-        <div className="py-1">
-          <Separator
-            className="text-[#000] bg-black w-44 h-1 rounded-md"
-            orientation="horizontal"
-          />
-        </div>
+      <div className="sticky top-0 z-10 flex flex-col items-center justify-between rounded-t-2xl border-b border-black/5 bg-background/95 px-4 pb-3 pt-4 backdrop-blur">
+        <Separator
+          className="mb-3 h-1 w-16 rounded-full bg-black/40"
+          orientation="horizontal"
+        />
 
-        <div className="flex items-center justify-between w-full">
-          <p className="text-mobile-3xl md:text-3xl">Cart</p>
+        <div className="flex w-full items-center justify-between">
+          <p className="text-lg font-semibold text-foreground">Cart</p>
 
-          <div>
-            <Button onClick={onClose} variant={"ghost"} size={"icon"}>
-              <XIcon />
-            </Button>
-          </div>
+          <Button
+            onClick={onClose}
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10"
+          >
+            <XIcon />
+          </Button>
         </div>
       </div>
 
       {/* Details */}
       {cart.length >= 1 ? (
         <div className="flex h-full flex-col">
-          <div className="flex-1 overflow-auto px-4 pb-4 pt-2">
+          <div className="flex-1 overflow-y-auto px-4 pb-20 pt-3 sm:pb-24">
             <CartProductCard item={cart} drawer />
           </div>
 
-          <div className="sticky bottom-0 left-0 right-0 bg-background text-[#222] shadow-[0_-10px_10px_-10px_hsla(0,0%,69%,.5)] px-6 pb-[calc(env(safe-area-inset-bottom,0px)+16px)] pt-4 space-y-3">
+          <div className="sticky bottom-0 left-0 right-0 space-y-3 bg-background/95 px-6 pb-[calc(env(safe-area-inset-bottom,0px)+16px)] pt-4 text-[#222] shadow-[0_-10px_18px_-10px_rgba(0,0,0,0.25)] backdrop-blur">
             <CartClearAll />
             <CartSummaryPrice />
 
