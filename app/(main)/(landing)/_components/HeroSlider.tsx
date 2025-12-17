@@ -96,7 +96,7 @@ const HeroSlider = () => {
 
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slideCount);
-    }, 6000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [isPaused, slideCount]);
