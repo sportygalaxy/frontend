@@ -498,7 +498,7 @@ const Checkout = () => {
               <div className="flex w-full flex-col gap-10">
                 <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
                   {isLoggedInUser ? (
-                    <div className="mx-auto w-full space-y-4 md:space-y-11 md:max-w-screen-sm">
+                    <div className="mx-auto w-full space-y-6 md:space-y-11 md:max-w-screen-sm">
                       <h2 className="text-mobile-3xl font-bold md:text-3xl">
                         Customer Information
                       </h2>
