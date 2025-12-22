@@ -155,6 +155,20 @@ export default function RootLayout({
             }}
           />
           <Script
+            id="google-purchase-conversion"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+      window.addEventListener('sg:purchase', function (event) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+        var detail = (event && event.detail) || {};
+        window.gtag('event', 'conversion_event_purchase_2', detail);
+      });
+    `,
+            }}
+          />
+          <Script
             id="schema-organization"
             type="application/ld+json"
             dangerouslySetInnerHTML={{
