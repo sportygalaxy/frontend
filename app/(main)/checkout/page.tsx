@@ -38,7 +38,7 @@ import { Lock } from "iconsax-react";
 import { parsePhoneNumberFromString } from "libphonenumber-js/min";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import * as Yup from "yup";
 import {
   MINIMUM_CHECKOUT_AMOUNT,
@@ -58,6 +58,53 @@ type FormValues = {
   country: string;
   countryCode: string;
 };
+
+type PurchaseItem = {
+  item_id: string;
+  item_name: string;
+  price: number;
+  quantity: number;
+  item_variant?: string;
+};
+
+type PurchaseEventDetail = {
+  currency: string;
+  value: number;
+  transaction_id?: string;
+  items?: PurchaseItem[];
+  shipping?: number;
+  payment_type?: string;
+};
+
+const parsePriceValue = (value: string | number) => {
+  if (typeof value === "number") {
+    return value;
+  }
+
+  if (!value) {
+    return 0;
+  }
+
+  const normalized = String(value).replace(/[^0-9.-]+/g, "");
+  const parsed = Number(normalized);
+
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const buildPurchaseItems = (cartItems: TCart[]): PurchaseItem[] =>
+  cartItems.map((item) => {
+    const variantParts = [item.sizes, item.colors].filter(Boolean);
+    const itemVariant =
+      variantParts.length > 0 ? variantParts.join(" / ") : undefined;
+
+    return {
+      item_id: String(item.id),
+      item_name: item.name,
+      price: parsePriceValue(item.price),
+      quantity: item.qty,
+      ...(itemVariant ? { item_variant: itemVariant } : {}),
+    };
+  });
 
 const getValidationSchema = (isLoggedInUser: boolean) =>
   Yup.object({
@@ -104,6 +151,8 @@ const Checkout = () => {
     "FULL"
   );
   const [isGlobalLoading, setIsGlobalLoading] = useState<boolean>(false);
+  const purchaseEventRef = useRef<PurchaseEventDetail | null>(null);
+  const lastPaymentReferenceRef = useRef<string | null>(null);
   const router = useRouter();
 
   const isLoggedInUser = !!user;
@@ -157,6 +206,22 @@ const Checkout = () => {
     onSuccess: (data) => {
       if (data?.data) {
         NotifySuccess(data?.message as string);
+        if (typeof window !== "undefined" && purchaseEventRef.current) {
+          const fallbackTransactionId = data?.data?.items?.[0]?.orderId;
+          const eventDetail = {
+            ...purchaseEventRef.current,
+            ...(!purchaseEventRef.current.transaction_id &&
+            fallbackTransactionId
+              ? { transaction_id: fallbackTransactionId }
+              : {}),
+          };
+
+          window.dispatchEvent(
+            new CustomEvent("sg:purchase", { detail: eventDetail })
+          );
+        }
+        purchaseEventRef.current = null;
+        lastPaymentReferenceRef.current = null;
         clearCart();
         router.push(RoutesEnum.LANDING_PAGE);
       }
@@ -232,6 +297,16 @@ const Checkout = () => {
       //   return NotifyError(message);
       // }
 
+      purchaseEventRef.current = {
+        currency: "NGN",
+        value: amountToPay,
+        shipping: shippingFeeAmount,
+        payment_type: paymentOption,
+        items: buildPurchaseItems(cart),
+        ...(lastPaymentReferenceRef.current
+          ? { transaction_id: lastPaymentReferenceRef.current }
+          : {}),
+      };
       orderProduct({
         ...payloadToSubmit,
         ...(paymentOption === PAYMENT_OPTION.PARTIAL && {
@@ -427,6 +502,8 @@ const Checkout = () => {
               reference: any,
               handleSubmit: () => void
             ) => {
+              lastPaymentReferenceRef.current =
+                response?.reference || reference || null;
               const initializePaymentPayload: InitializePayment = {
                 reference: response?.reference,
                 backendReference: reference,
