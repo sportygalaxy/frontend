@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   description: appDescription,
   keywords: appSeoKeywords,
   creator: "Sportygalaxy",
+  verification: {
+    google: "c93L82XdNeMdF_fbyTde0ZOYZVP1W9TgRM_BUwVKnQk",
+  },
   openGraph: {
     title: appTitle,
     description: appDescription,
